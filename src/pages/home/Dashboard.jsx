@@ -2,6 +2,8 @@ import { CiFilter } from "react-icons/ci";
 import Requests from "./Requests";
 import { useContext, useState } from "react";
 import { RequestContext } from "../../context/RequestContext";
+import { FaCircleUser } from "react-icons/fa6";
+import Tooltip from "../../Elements/Tooltip";
 
 function Dashboard() {
   const { RequestData } = useContext(RequestContext);
@@ -78,7 +80,51 @@ function Dashboard() {
               <Requests FilteredData={FilteredData} />
             </div>
           </div>
-          <div className="border border-green-600 p-2 bg-white h-full"></div>
+          <div className="border border-green-600 p-2">
+            <div className="new-request-button">
+              <button className="px-2 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm w-full">
+                Submit a New Request
+              </button>
+            </div>
+            <div className="key-contacts shadow-sm shadow-black/20 rounded-sm py-1 px-2 mt-4 bg-white">
+              <h1 className="text-xl border-b pb-1 flex">
+                Key Contacts <Tooltip/>
+              </h1>
+              <div className="flex py-1 pt-1 leading-4">
+                <span className="text-slate-500">
+                  <FaCircleUser />
+                </span>
+                <div className="px-2">
+                  <p className="text-md">QA User 8</p>
+                  <p className="text-[0.7rem] text-slate-600 px-1">
+                    testingqa614@gmail.com
+                  </p>
+                </div>
+              </div>
+              <div className="flex py-1 leading-4">
+                <span className="text-slate-500">
+                  <FaCircleUser />
+                </span>
+                <div className="px-2">
+                  <p className="text-md">QA5</p>
+                  <p className="text-[0.7rem] text-slate-600 px-1">
+                    testingqa614@gmail.com
+                  </p>
+                </div>
+              </div>
+              <div className="flex py-1 leading-4">
+                <span className="text-slate-500">
+                  <FaCircleUser />
+                </span>
+                <div className="px-2">
+                  <p className="text-md">QA9</p>
+                  <p className="text-[0.7rem] text-slate-600 px-1">
+                    testingqa614@gmail.com
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>
