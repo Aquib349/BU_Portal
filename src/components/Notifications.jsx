@@ -78,4 +78,4 @@ Notification.propTypes = {
   setShowModal: PropType.func.isRequired,
 };
 
-export default Notification;
+export default Notification

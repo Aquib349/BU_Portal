@@ -1,14 +1,11 @@
 import { FaEye } from "react-icons/fa";
 import { RiStickyNoteAddFill } from "react-icons/ri";
 import { MdOutlineDoubleArrow } from "react-icons/md";
-// import { useContext } from "react";
-// import { RequestContext } from "../../context/RequestContext";
 import PropTypes from "prop-types";
 import React from "react";
 import Status from "./Status";
 
 function Requests({ toggleModal,currentItems }) {
-  // const { RequestData } = useContext(RequestContext);
 
   return (
     <>
@@ -16,7 +13,7 @@ function Requests({ toggleModal,currentItems }) {
         <div className="overflow-y-auto h-[400px] w-full no-scrollbar">
           <table className="w-full border-collapse">
             <thead className="sticky top-0">
-              <tr className="bg-blue-500 text-sm">
+              <tr className="bg-blue-500 text-white text-sm">
                 <th className="p-1">Sl No.</th>
                 <th className="p-1">Requests</th>
                 <th className="p-1">Status</th>
@@ -64,11 +61,11 @@ function Requests({ toggleModal,currentItems }) {
                         key={rel.id}
                         className={`${
                           val.related ? "static" : "hidden"
-                        } bg-gray-200 text-[0.8rem] text-center`}
+                        } bg-gray-200 text-[0.8rem] text-center text-red-600`}
                       >
                         {/* Columns for additional row */}
                         <td className="">
-                          <span className="flex text-[0.8rem] justify-center items-center text-blue-600">
+                          <span className="flex text-[0.8rem] justify-center items-center">
                             <MdOutlineDoubleArrow />
                           </span>
                         </td>
@@ -79,12 +76,12 @@ function Requests({ toggleModal,currentItems }) {
                         <td className="">{rel.user}</td>
                         <td className="">{rel.due_date}</td>
                         <td className=" text-sm cursor-pointer">
-                          <span className="flex justify-center items-center text-blue-600">
+                          <span className="flex justify-center items-center">
                             <FaEye />
                           </span>
                         </td>
                         <td className="text-sm cursor-pointer">
-                          <span className="flex justify-center items-center text-blue-600">
+                          <span className="flex justify-center items-center">
                             <RiStickyNoteAddFill onClick={toggleModal} />
                           </span>
                         </td>

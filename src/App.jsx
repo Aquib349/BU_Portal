@@ -1,7 +1,7 @@
 import Header from "./components/Header";
 import RequestProvider from "./context/RequestContext";
 import Dashboard from "./pages/home/Dashboard";
-import Home from "./pages/home/Home";
+// import Home from "./pages/home/Home";
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
         <Header />
         <RequestProvider>
           {/* <Home /> */}
-          <Dashboard/>
+          <Dashboard />
         </RequestProvider>
       </div>
     </>
