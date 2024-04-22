@@ -8,7 +8,7 @@ function Header() {
   const [showModal, setShowModal] = useState(false);
   return (
     <>
-      <div className="Header-component border-b border-slate-300 h-16 flex items-center bg-white sticky top-0">
+      <div className="Header-component border-b border-slate-300 h-16 flex items-center bg-white sticky top-0 z-20">
         <div className="main w-[95%] m-auto">
           <div className="grid grid-cols-4 items-center">
             <div className="dropdown-menu flex items-center gap-4">

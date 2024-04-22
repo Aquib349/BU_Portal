@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 function Modal({ toggleModal }) {
     return (
         <>
@@ -10,25 +12,11 @@ function Modal({ toggleModal }) {
                                 ×
                             </div>
                             <h2 className="text-md font-semibold px-2 text-gray-800">
-                                Edit User
+                                Add Note
                             </h2>
                         </div>
                         <span className="text-red-500 text-[0.7rem] px-5">All the ( * ) are compulsory</span>
                         <form className="modal-body px-4 pb-3 text-black flex flex-col gap-3">
-                            <div className="hospital_name">
-                                <label className="text-[0.8rem] px-1 font-semibold ">Hopital Name</label>
-                                <input
-                                    className="border border-slate-400 w-full p-2 rounded-md bg-transparent text-[0.9rem] text-medium outline-none" readOnly />
-                            </div>
-
-                            <div className="user_name">
-                                <label className="text-[0.8rem] px-1 font-semibold ">User Name <span className="text-red-500">*</span></label>
-                                <input
-                                    type="text"
-                                    name="username"
-                                    className="border border-slate-400 w-full p-2 rounded-md bg-transparent text-[0.9rem] text-medium" />
-                            </div>
-
                             <div className="hospital_name">
                                 <label className="text-[0.8rem] px-1 font-semibold ">Start Date <span className="text-red-500">*</span></label>
                                 <input
@@ -54,6 +42,10 @@ function Modal({ toggleModal }) {
             </div>
         </>
     )
+}
+
+Modal.propTypes = {
+    toggleModal : PropTypes.func.isRequired
 }
 
 export default Modal

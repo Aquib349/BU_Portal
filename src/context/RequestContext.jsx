@@ -35,6 +35,22 @@ const RequestProvider = ({ children }) => {
         status: "Cancel",
         user: "Window User",
         due_date: "11/27/2023",
+        related: [
+          {
+            id: 1,
+            requests: "Request for PPA/02",
+            status: "Cancel",
+            user: "Window User",
+            due_date: "11/27/2023",
+          },
+          {
+            id: 2,
+            requests: "Request for MSA/02",
+            status: "New",
+            user: "Window User",
+            due_date: "11/27/2023",
+          },
+        ],
       },
       {
         id: 5,
@@ -50,7 +66,59 @@ const RequestProvider = ({ children }) => {
         user: "Linux User",
         due_date: "11/07/2023",
       },
+      {
+        id: 7,
+        requests: "Request for Usability Testing [2]",
+        status: "Request Completed",
+        user: "Window User",
+        due_date: "12/04/2023",
+        related: [
+          {
+            id: 1,
+            requests: "Request for PPA/02",
+            status: "Cancel",
+            user: "Window User",
+            due_date: "11/27/2023",
+          },
+        ],
+      },
+      {
+        id: 8,
+        requests: "Request for Usability Testing [1]",
+        status: "Awaiting Approval",
+        user: "Linus User",
+        due_date: "12/04/2023",
+      },
+      {
+        id: 9,
+        requests: "Request for MSA/02",
+        status: "New",
+        user: "Window User",
+        due_date: "11/27/2023",
+      },
+      {
+        id: 10,
+        requests: "Request for PPA/02",
+        status: "Cancel",
+        user: "Window User",
+        due_date: "11/27/2023",
+      },
+      {
+        id: 11,
+        requests: "Request for NDA",
+        status: "Approved",
+        user: "Linux User",
+        due_date: "11/27/2023",
+      },
+      {
+        id: 12,
+        requests: "Request for NCRDA",
+        status: "On Hold",
+        user: "Linux User",
+        due_date: "11/07/2023",
+      },
     ];
+
     setRequestData(requests);
   }, []);
 
