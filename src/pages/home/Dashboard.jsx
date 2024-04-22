@@ -4,11 +4,23 @@ import { useContext, useState } from "react";
 import { RequestContext } from "../../context/RequestContext";
 import { FaCircleUser } from "react-icons/fa6";
 import Tooltip from "../../Elements/Tooltip";
+import Modal from "../../Elements/Modal";
 
 function Dashboard() {
   const { RequestData } = useContext(RequestContext);
   const [SearchInput, setSearchInput] = useState("");
   const [FilteredData, setFilteredData] = useState([]);
+  const [show, setShow] = useState(false);
+
+  // Function to toggle the modal and apply/remove the class to the body
+  const toggleModal = () => {
+    setShow(!show);
+    if (!show) {
+        document.body.classList.add('overflow-hidden');
+    } else {
+        document.body.classList.remove('overflow-hidden');
+    }
+};
 
   function SearchRequests(e) {
     const inputValue = e.target.value.toLowerCase(); // Convert input to lowercase
@@ -28,6 +40,7 @@ function Dashboard() {
 
   return (
     <>
+      {show && <Modal toggleModal={toggleModal}/>}
       <div className="dashboard-component">
         <div className="border border-black p-2 grid grid-cols-4">
           <div className="col-span-3 border border-red-500 px-10 pt-6">
@@ -74,10 +87,10 @@ function Dashboard() {
                   />
                 </div>
                 <div className="text-3xl text-blue-600 font-bold flex justify-end">
-                  <CiFilter className="border border-slate-400 rounded-md p-1 cursor-pointer bg-gray-50" />
+                  <CiFilter className="border border-slate-400 rounded-md p-1 cursor-pointer bg-gray-50"/>
                 </div>
               </div>
-              <Requests FilteredData={FilteredData} />
+              <Requests FilteredData={FilteredData} toggleModal={toggleModal}/>
             </div>
           </div>
           <div className="border border-green-600 p-2">
@@ -88,7 +101,7 @@ function Dashboard() {
             </div>
             <div className="key-contacts shadow-sm shadow-black/20 rounded-sm py-1 px-2 mt-4 bg-white">
               <h1 className="text-xl border-b pb-1 flex">
-                Key Contacts <Tooltip/>
+                Key Contacts <Tooltip />
               </h1>
               <div className="flex py-1 pt-1 leading-4">
                 <span className="text-slate-500">

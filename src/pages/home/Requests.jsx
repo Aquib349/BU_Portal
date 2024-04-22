@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { RequestContext } from "../../context/RequestContext";
 import PropTypes from 'prop-types'
 
-function Requests({FilteredData}) {
+function Requests({FilteredData,toggleModal}) {
   const { RequestData } = useContext(RequestContext);
   
   return (
@@ -81,7 +81,7 @@ function Requests({FilteredData}) {
                   </td>
                   <td className="py-2 border-b text-lg cursor-pointer border-l">
                     <span className="flex justify-center items-center text-slate-600">
-                      <RiStickyNoteAddFill />
+                      <RiStickyNoteAddFill onClick={toggleModal}/>
                     </span>
                   </td>
                 </tr>

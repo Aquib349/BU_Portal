@@ -30,3 +30,31 @@ body {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* css for the modal */
+.animation-zoomIn {
+  animation-name: zoomIn;
+  animation-duration: 0.7s
+}
+.animation-zoomOut {
+  animation-name: zoomOut;
+  animation-duration: 0.7s
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes zoomOut {
+  from {
+    trnasform: scale(1)
+  }
+  to{
+    transform: scale(0)
+  }
+}
