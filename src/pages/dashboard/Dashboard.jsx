@@ -4,6 +4,7 @@ import Modal from "../../Elements/Modal";
 import PortalInformation from "./PortalInformation";
 import FilterRequests from "./FilterRequests";
 import Pagination from "../../Elements/Pagination";
+import { Link } from "react-router-dom";
 
 function Dashboard() {
   const { RequestData } = useContext(RequestContext);
@@ -39,7 +40,7 @@ function Dashboard() {
 
   return (
     <>
-      {show && <Modal toggleModal={toggleModal} />}
+      {show && <Modal toggleModal={toggleModal} heading="Add Note"/>}
       <div className="dashboard-component">
         <div className="border border-black p-2 grid grid-cols-4">
           <div className="col-span-3 border border-red-500 pt-6">
@@ -102,9 +103,11 @@ function Dashboard() {
           {/* Portal Information Sidebar */}
           <div className="border border-green-600 p-2">
             <div className="new-request-button">
-              <button className="px-2 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm w-full">
-                Submit a New Request
-              </button>
+              <Link to={"newRequest"}>
+                <button className="px-2 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm w-full">
+                  Submit a New Request
+                </button>
+              </Link>
               <PortalInformation />
             </div>
           </div>

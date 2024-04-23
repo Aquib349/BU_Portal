@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import ReactPaginate from "react-paginate";
 import PropTypes from "prop-types";
-import Requests from "../pages/home/Requests";
+import Requests from "../pages/dashboard/Requests";
 import { RequestContext } from "../context/RequestContext";
 
 function Pagination({ itemsPerPage, FilteredData, toggleModal }) {

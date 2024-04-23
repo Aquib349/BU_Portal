@@ -1,14 +1,8 @@
 import { FaCircleUser } from "react-icons/fa6";
 import Tooltip from "../../Elements/Tooltip";
 import Accordion from "../../Elements/Accordion";
+
 function PortalInformation() {
-  const content = [
-    {
-      id: 1,
-      detail:
-        '"BU Portal" is a specific term mentioned in a contract, you should refer to the contract itself or any related documentation to understand its meaning. Look for sections or clauses that discuss the portal, its purpose, and the rights and responsibilities of the parties involved.',
-    },
-  ];
   return (
     <>
       <div className="portal-information-component">
@@ -59,7 +53,15 @@ function PortalInformation() {
               FAQS
               <Tooltip message="Materials and resources to help you to use eContracts" />
             </h1>
-            <Accordion heading="What BU Portal ?" content={content} />
+            <Accordion heading="What BU Portal ?" checked={true}>
+              <p className="text-[0.75rem] p-2 leading-4">
+                &quot;BU Portal&quot; is a specific term mentioned in a
+                contract, you should refer to the contract itself or any related
+                documentation to understand its meaning. Look for sections or
+                clauses that discuss the portal, its purpose, and the rights and
+                responsibilities of the parties involved.
+              </p>
+            </Accordion>
           </div>
         </div>
       </div>

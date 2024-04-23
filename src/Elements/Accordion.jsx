@@ -1,26 +1,26 @@
 import { IoIosArrowDown } from "react-icons/io";
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 
-function Accordion({ heading, content }) {
+function Accordion({ heading, children, checked }) {
   return (
     <>
-      <div className={`relative overflow-hidden`}>
+      <div className={`relative overflow-hidden border-b`}>
         <input
           type="checkbox"
           className="absolute top-0 inset-x-0 w-full h-10 opacity-0 peer"
+          defaultChecked={checked}
         />
-        <div className="text-slate-600 text-[0.8rem]">
+        <div className="">
           <span className="flex items-center h-[40px]">{heading}</span>
         </div>
         <div className="absolute top-3 right-3 transition-transform duration-300 rotate-0 peer-checked:rotate-180">
           <IoIosArrowDown />
         </div>
         <div
-          className={`rounded-b-md max-h-0 overflow-auto peer-checked:max-h-[200px] transition-all ease-in-out duration-500 no-scrollbar`}
+          className={`max-h-0 overflow-auto peer-checked:max-h-[200px] 
+          transition-all ease-in-out duration-500 no-scrollbar bg-slate-100`}
         >
-          {content.map((val) => {
-            return<p key={val.id} className="text-[0.8rem] px-1 pb-2 leading-4">{val.detail}</p>;
-          })}
+          {children}
         </div>
       </div>
     </>
@@ -28,8 +28,9 @@ function Accordion({ heading, content }) {
 }
 
 Accordion.propTypes = {
-    heading : PropTypes.string.isRequired,
-    content : PropTypes.array.isRequired
-}
+  heading: PropTypes.string.isRequired,
+  children: PropTypes.object.isRequired,
+  checked: PropTypes.bool.isRequired,
+};
 
 export default Accordion;

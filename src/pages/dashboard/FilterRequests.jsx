@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { CiFilter } from "react-icons/ci";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import Datepicker from "../../form-components/DatePicker";
 
 function FilterRequests() {
   const [show, setShow] = useState(false);
-  const [date, setDate] = useState();
+  const [date, setDate] = useState(new Date());
   return (
     <>
       <div className="relative inline-block text-left">
@@ -34,7 +33,7 @@ function FilterRequests() {
                   list="request"
                   name="request-status"
                   placeholder="Request Status"
-                  className="border text-[0.8rem] p-2 rounded-md border-slate-400 w-full bg-transparent outline-none"
+                  className="border text-[0.8rem] p-2 rounded-md border-slate-400 w-full bg-transparent outline-none text-white"
                 />
 
                 <datalist id="request">
@@ -55,7 +54,7 @@ function FilterRequests() {
                   list="request"
                   name="request-status"
                   placeholder="Request Status"
-                  className="border text-[0.8rem] p-2 rounded-md border-slate-400 w-full bg-transparent outline-none"
+                  className="border text-[0.8rem] p-2 rounded-md border-slate-400 w-full bg-transparent outline-none text-white"
                 />
 
                 <datalist id="request">
@@ -76,7 +75,7 @@ function FilterRequests() {
                   list="request"
                   name="request-status"
                   placeholder="Request Status"
-                  className="border text-[0.8rem] p-2 rounded-md border-slate-400 w-full bg-transparent outline-none"
+                  className="border text-[0.8rem] p-2 rounded-md border-slate-400 w-full bg-transparent outline-none text-white"
                 />
 
                 <datalist id="request">
@@ -93,12 +92,7 @@ function FilterRequests() {
                 >
                   Request Status
                 </label>
-                <DatePicker
-                  className="p-2 text-sm text-white bg-transparent border border-slate-300 rounded-md w-full"
-                  placeholderText="Required by"
-                  selected={date}
-                  onChange={(date) => setDate(date)}
-                />
+                <Datepicker date={date} setDate={setDate} />
               </div>
             </form>
           </div>
