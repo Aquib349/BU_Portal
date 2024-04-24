@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { RequestContext } from "../../context/RequestContext";
 import Modal from "../../Elements/Modal";
 import PortalInformation from "./PortalInformation";
-import FilterRequests from "./FilterRequests";
+import FilterRequests from "./requests/FilterRequests";
 import Pagination from "../../Elements/Pagination";
 import { Link } from "react-router-dom";
 
@@ -28,11 +28,11 @@ function Dashboard() {
 
     if (inputValue.length === 0) {
       // If search input is empty, show all data
-      setFilteredData(RequestData);
+      setFilteredData(RequestData?.SubmittedRequests);
     } else {
       // Filter data based on search input
-      const filteredData = RequestData.filter((val) =>
-        val.requests.toLowerCase().includes(inputValue)
+      const filteredData = RequestData?.SubmittedRequests?.filter((val) =>
+        val.RequestTitle?.toLowerCase()?.includes(inputValue)
       );
       setFilteredData(filteredData);
     }
@@ -40,11 +40,11 @@ function Dashboard() {
 
   return (
     <>
-      {show && <Modal toggleModal={toggleModal} heading="Add Note"/>}
-      <div className="dashboard-component">
-        <div className="border border-black p-2 grid grid-cols-4">
-          <div className="col-span-3 border border-red-500 pt-6">
-            <div className="flex px-10">
+      {show && <Modal toggleModal={toggleModal} heading="Add Note" />}
+      <div className="dashboard-component px-14">
+        <div className="p-2 grid grid-cols-4">
+          <div className="col-span-3 pt-6">
+            <div className="flex px-1">
               <div>
                 <h1 className="text-3xl heading">
                   Welcome to the eContracts Portal !
@@ -91,6 +91,16 @@ function Dashboard() {
                   <FilterRequests />
                 </div>
               </div>
+              <div className="flex gap-8 p-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-red-600"></div>
+                  <small>Related Contracts</small>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-blue-600"></div>
+                  <small>Created Contracts</small>
+                </div>
+              </div>
               {/* requests */}
               <Pagination
                 FilteredData={FilteredData}
@@ -101,7 +111,7 @@ function Dashboard() {
           </div>
 
           {/* Portal Information Sidebar */}
-          <div className="border border-green-600 p-2">
+          <div className="p-2">
             <div className="new-request-button">
               <Link to={"newRequest"}>
                 <button className="px-2 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm w-full">

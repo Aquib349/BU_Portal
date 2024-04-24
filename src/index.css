@@ -102,3 +102,9 @@ body {
   cursor: not-allowed;
   border: none;
 }
+
+
+.PhoneInputInput {
+  padding: 0.5rem;
+  outline: none;
+}

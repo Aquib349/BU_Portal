@@ -17,7 +17,7 @@ function Header() {
             </div>
             <div className="global-search col-span-2 flex justify-center items-center">
               <input
-                type="text"
+                type="search"
                 name="search"
                 id="global-search"
                 placeholder="Search with Contract, Document or Counterparty name"

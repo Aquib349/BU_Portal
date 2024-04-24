@@ -1,125 +1,35 @@
 import { createContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
 
 export const RequestContext = createContext();
 
 const RequestProvider = ({ children }) => {
   const [RequestData, setRequestData] = useState([]);
+  const api = import.meta.env.VITE_API_URL;
+  const user_key = import.meta.env.VITE_USER_KEY;
+
+  const fetchData = async () => {
+    try {
+      const headers = {
+        "Content-Type": "application/json",
+        "eContracts-ApiKey":
+          "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
+      };
+
+      const response = await axios.post(
+        `${api}/api/accounts/${user_key}/portal/submittedRequests?username=Santosh Dutta`,
+        {},
+        { headers }
+      );
+      setRequestData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    const requests = [
-      {
-        id: 1,
-        requests: "Request for Usability Testing [2]",
-        status: "Request Completed",
-        user: "Window User",
-        due_date: "12/04/2023",
-      },
-      {
-        id: 2,
-        requests: "Request for Usability Testing [1]",
-        status: "Awaiting Approval",
-        user: "Linus User",
-        due_date: "12/04/2023",
-      },
-      {
-        id: 3,
-        requests: "Request for MSA/02",
-        status: "New",
-        user: "Window User",
-        due_date: "11/27/2023",
-      },
-      {
-        id: 4,
-        requests: "Request for PPA/02",
-        status: "Cancel",
-        user: "Window User",
-        due_date: "11/27/2023",
-        related: [
-          {
-            id: 1,
-            requests: "Request for PPA/02",
-            status: "Cancel",
-            user: "Window User",
-            due_date: "11/27/2023",
-          },
-          {
-            id: 2,
-            requests: "Request for MSA/02",
-            status: "New",
-            user: "Window User",
-            due_date: "11/27/2023",
-          },
-        ],
-      },
-      {
-        id: 5,
-        requests: "Request for NDA",
-        status: "Approved",
-        user: "Linux User",
-        due_date: "11/27/2023",
-      },
-      {
-        id: 6,
-        requests: "Request for NCRDA",
-        status: "On Hold",
-        user: "Linux User",
-        due_date: "11/07/2023",
-      },
-      {
-        id: 7,
-        requests: "Request for Usability Testing [2]",
-        status: "Request Completed",
-        user: "Window User",
-        due_date: "12/04/2023",
-        related: [
-          {
-            id: 1,
-            requests: "Request for PPA/02",
-            status: "Cancel",
-            user: "Window User",
-            due_date: "11/27/2023",
-          },
-        ],
-      },
-      {
-        id: 8,
-        requests: "Request for Usability Testing [1]",
-        status: "Awaiting Approval",
-        user: "Linus User",
-        due_date: "12/04/2023",
-      },
-      {
-        id: 9,
-        requests: "Request for MSA/02",
-        status: "New",
-        user: "Window User",
-        due_date: "11/27/2023",
-      },
-      {
-        id: 10,
-        requests: "Request for PPA/02",
-        status: "Cancel",
-        user: "Window User",
-        due_date: "11/27/2023",
-      },
-      {
-        id: 11,
-        requests: "Request for NDA",
-        status: "Approved",
-        user: "Linux User",
-        due_date: "11/27/2023",
-      },
-      {
-        id: 12,
-        requests: "Request for NCRDA",
-        status: "On Hold",
-        user: "Linux User",
-        due_date: "11/07/2023",
-      },
-    ];
-
-    setRequestData(requests);
+    fetchData();
   }, []);
 
   return (

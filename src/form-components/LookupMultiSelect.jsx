@@ -1,9 +1,29 @@
-const LookupMultiSelect = () => {
-  return (
-    <div>
-      <div>lookup multi select</div>
-    </div>
-  )
-}
+import { useState } from "react";
+import Select from "react-select";
+import PropTypes from "prop-types";
 
-export default LookupMultiSelect
+const LookupMultiSelect = ({ multi, options, title }) => {
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  return (
+    <>
+      <div>
+        <label className="test-sm">{title}</label>
+        <Select
+          defaultValue={selectedOption}
+          onChange={setSelectedOption}
+          options={options}
+          isMulti={multi}
+        />
+      </div>
+    </>
+  );
+};
+
+LookupMultiSelect.propTypes = {
+  multi: PropTypes.bool.isRequired,
+  options: PropTypes.array.isRequired,
+  title: PropTypes.string.isRequired,
+};
+
+export default LookupMultiSelect;

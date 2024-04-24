@@ -3,19 +3,31 @@ import Modal from "../../Elements/Modal";
 import BusinessAreaPicker from "./BusinessAreaPicker";
 import MultiChoiceDropdown from "../../form-components/MultiChoiceDropdown";
 import ChoiceField from "../../form-components/ChoiceField";
+import Datepicker from "../../form-components/DatePicker";
+import SingleLineTextField from "../../form-components/SingleLineTextField";
+import MultiLineTextField from "../../form-components/MultiLineTextField";
+import UserField from "../../form-components/UserField";
+import FileUpload from "../../form-components/FileUpload";
+import ValueFinancialsField from "../../form-components/ValueFinancialsField";
+import LookupField from "../../form-components/LookupField";
+import LookupMultiSelect from "../../form-components/LookupMultiSelect";
+import NumberField from "../../form-components/NumberField";
+import PhoneNumberField from "../../form-components/PhoneNumberField";
+import EmailField from "../../form-components/EmailField";
+import HyperLinkField from "../../form-components/HyperLinkField";
+import RadioField from "../../form-components/RadioField";
 
 const NewRequest = () => {
   const [showModal, setShowModal] = useState(false);
   const [BusinessArea, setBusinessArea] = useState("");
   const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
   ];
 
   function toggleModal() {
     setShowModal(!showModal);
-    console.log(showModal);
   }
 
   return (
@@ -94,10 +106,22 @@ const NewRequest = () => {
           </div>
         </div>
 
-
         {/* test for the form components */}
-        <MultiChoiceDropdown multi={true} options={options}/>
-        <ChoiceField options={options}/>
+        {/* <MultiChoiceDropdown multi={true} options={options} title="title" />
+        <ChoiceField options={options} title="title" />
+        <Datepicker title="title" />
+        <SingleLineTextField title="title" name="name" value="value" />
+        <MultiLineTextField title="title" name="name" value="value" />
+        <UserField options={options} multi={true} title="title" />
+        <FileUpload title="title" name="name" />
+        <ValueFinancialsField title="title" name="name" value={0} />
+        <LookupField title="title" options={options} />
+        <LookupMultiSelect title="title" multi={true} options={options} />
+        <NumberField title="title" value={0} name="name" />
+        <PhoneNumberField title="title" />
+        <EmailField title="title" name="name" value="value" />
+        <HyperLinkField title="title" name="name" value="value" />
+        <RadioField title="title"/> */}
       </div>
     </>
   );

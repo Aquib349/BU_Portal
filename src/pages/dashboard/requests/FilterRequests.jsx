@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CiFilter } from "react-icons/ci";
-import Datepicker from "../../form-components/DatePicker";
+import Datepicker from "../../../form-components/DatePicker";
 
 function FilterRequests() {
   const [show, setShow] = useState(false);
@@ -85,14 +85,12 @@ function FilterRequests() {
                   <option value="type 4" />
                 </datalist>
               </div>
-              <div className="flex flex-col">
-                <label
-                  htmlFor="request_status"
-                  className="text-sm font-nedium my-1 text-white"
-                >
-                  Request Status
-                </label>
-                <Datepicker date={date} setDate={setDate} />
+              <div className="text-white">
+                <Datepicker
+                  date={date}
+                  setDate={setDate}
+                  title="Request Status"
+                />
               </div>
             </form>
           </div>

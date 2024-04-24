@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import ReactPaginate from "react-paginate";
 import PropTypes from "prop-types";
-import Requests from "../pages/dashboard/Requests";
+import Requests from "../pages/dashboard/requests/Requests";
 import { RequestContext } from "../context/RequestContext";
 
 function Pagination({ itemsPerPage, FilteredData, toggleModal }) {
@@ -11,20 +11,20 @@ function Pagination({ itemsPerPage, FilteredData, toggleModal }) {
   const endOffset = itemOffset + itemsPerPage;
 
   const currentItems = (
-    FilteredData.length > 0 ? FilteredData : RequestData
-  ).slice(itemOffset, endOffset);
+    FilteredData.length > 0 ? FilteredData : RequestData?.SubmittedRequests
+  )?.slice(itemOffset, endOffset);
+
   const pageCount = Math.ceil(
-    (FilteredData.length > 0 ? FilteredData : RequestData).length / itemsPerPage
+    (FilteredData.length > 0 ? FilteredData : RequestData?.SubmittedRequests)
+      ?.length / itemsPerPage
   );
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset =
       (event.selected * itemsPerPage) %
-      (FilteredData.length > 0 ? FilteredData : RequestData).length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
+      (FilteredData.length > 0 ? FilteredData : RequestData.SubmittedRequests)
+        .length;
     setItemOffset(newOffset);
   };
   return (
