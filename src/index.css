@@ -34,11 +34,11 @@ body {
 /* css for the modal */
 .animation-zoomIn {
   animation-name: zoomIn;
-  animation-duration: 0.7s
+  animation-duration: 0.7s;
 }
 .animation-zoomOut {
   animation-name: zoomOut;
-  animation-duration: 0.7s
+  animation-duration: 0.7s;
 }
 
 @keyframes zoomIn {
@@ -52,10 +52,10 @@ body {
 }
 @keyframes zoomOut {
   from {
-    trnasform: scale(1)
+    trnasform: scale(1);
   }
-  to{
-    transform: scale(0)
+  to {
+    transform: scale(0);
   }
 }
 
@@ -103,8 +103,13 @@ body {
   border: none;
 }
 
-
 .PhoneInputInput {
   padding: 0.5rem;
   outline: none;
+}
+
+.css-control {
+  .css-13cymwt-control {
+    background-color: transparent;
+  }
 }

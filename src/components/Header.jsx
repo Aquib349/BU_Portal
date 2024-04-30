@@ -13,7 +13,31 @@ function Header() {
           <div className="grid grid-cols-4 items-center">
             <div className="dropdown-menu flex items-center gap-4">
               <img src="/assets/logo.gif" alt="logo" className="w-[130px]" />
-              <Dropdown title="Navigate To" />
+              <Dropdown title="Navigate To">
+                <div className="py-1">
+                  <a
+                    href="#"
+                    className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-100"
+                    id="menu-item-0"
+                  >
+                    My Dashboard
+                  </a>
+                  <a
+                    href="#"
+                    className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-100"
+                    id="menu-item-1"
+                  >
+                    Admin Dashboard
+                  </a>
+                  <a
+                    href="#"
+                    className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-100"
+                    id="menu-item-2"
+                  >
+                    Global Insights
+                  </a>
+                </div>
+              </Dropdown>
             </div>
             <div className="global-search col-span-2 flex justify-center items-center">
               <input

@@ -5,6 +5,7 @@ import PortalInformation from "./PortalInformation";
 import FilterRequests from "./requests/FilterRequests";
 import Pagination from "../../Elements/Pagination";
 import { Link } from "react-router-dom";
+import Bookmarks from "./bookmark/Bookmarks";
 
 function Dashboard() {
   const { RequestData } = useContext(RequestContext);
@@ -74,8 +75,8 @@ function Dashboard() {
                   Your submitted contract request
                 </p>
               </div>
-              <div className="search-filter grid grid-cols-3 items-center p-2">
-                <div className="col-span-2">
+              <div className="search-filter grid grid-cols-6 gap-2 items-center p-2">
+                <div className="col-span-4">
                   <input
                     type="search"
                     name="search"
@@ -86,19 +87,32 @@ function Dashboard() {
                     onChange={SearchRequests}
                   />
                 </div>
-                <div className="flex justify-end items-center">
+                <div
+                  className="flex justify-center items-center border border-slate-400 rounded-md cursor-pointer
+                 bg-gray-50 p-2"
+                >
                   {/* filter */}
                   <FilterRequests />
+                </div>
+                <div className="">
+                  <Link to={"newRequest"}>
+                    <button
+                      className="py-2 px-0 border border-blue-500 hover:bg-blue-600 hover:text-white 
+                    rounded-md text-sm w-full"
+                    >
+                      + New Request
+                    </button>
+                  </Link>
                 </div>
               </div>
               <div className="flex gap-8 p-2">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-red-600"></div>
-                  <small>Related Contracts</small>
+                  <div className="w-3 h-3 bg-red-600 border-2 border-red-400 rounded-sm"></div>
+                  <small className="text-red-600">Related Contracts</small>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-blue-600"></div>
-                  <small>Created Contracts</small>
+                  <div className="w-3 h-3 bg-blue-600 border-2 border-blue-400 rounded-sm"></div>
+                  <small className="text-blue-600">Created Contracts</small>
                 </div>
               </div>
               {/* requests */}
@@ -108,18 +122,14 @@ function Dashboard() {
                 itemsPerPage={10}
               />
             </div>
+
+            {/* All Bookmarks */}
+            <Bookmarks />
           </div>
 
           {/* Portal Information Sidebar */}
           <div className="p-2">
-            <div className="new-request-button">
-              <Link to={"newRequest"}>
-                <button className="px-2 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm w-full">
-                  Submit a New Request
-                </button>
-              </Link>
-              <PortalInformation />
-            </div>
+            <PortalInformation />
           </div>
         </div>
       </div>

@@ -1,33 +1,75 @@
+import { IoIosArrowDown } from "react-icons/io";
+import MultiBusinessAreaRoute from "./MultiBusinessAreaRoute";
+import usePortalConfig from "../../customhooks/usePortalConfig";
+import axios from "axios";
 import { useState } from "react";
-import Modal from "../../Elements/Modal";
-import BusinessAreaPicker from "./BusinessAreaPicker";
-import MultiChoiceDropdown from "../../form-components/MultiChoiceDropdown";
-import ChoiceField from "../../form-components/ChoiceField";
-import Datepicker from "../../form-components/DatePicker";
-import SingleLineTextField from "../../form-components/SingleLineTextField";
-import MultiLineTextField from "../../form-components/MultiLineTextField";
-import UserField from "../../form-components/UserField";
-import FileUpload from "../../form-components/FileUpload";
-import ValueFinancialsField from "../../form-components/ValueFinancialsField";
-import LookupField from "../../form-components/LookupField";
-import LookupMultiSelect from "../../form-components/LookupMultiSelect";
-import NumberField from "../../form-components/NumberField";
-import PhoneNumberField from "../../form-components/PhoneNumberField";
-import EmailField from "../../form-components/EmailField";
-import HyperLinkField from "../../form-components/HyperLinkField";
-import RadioField from "../../form-components/RadioField";
+import DynamicForms from "../../components/DynamicForms";
+import NewRequestShimmer from "../../shimmer/NewRequestShimmer";
+import toast, { Toaster } from "react-hot-toast";
 
 const NewRequest = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [BusinessArea, setBusinessArea] = useState("");
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
+  const api = import.meta.env.VITE_API_URL;
+  const account_id = import.meta.env.VITE_USER_KEY;
+  const { ConfigData, loading } = usePortalConfig();
+  const [DynamicForm, setDynamicForm] = useState([]);
+  const filteredData = DynamicForm.filter(
+    (item) => item.FieldDisplayName !== "Request Type"
+  );
 
-  function toggleModal() {
-    setShowModal(!showModal);
+  // function to handle the request-types
+  async function handleRequestType(event) {
+    const headers = {
+      "Content-Type": "application/json",
+      "eContracts-ApiKey":
+        "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
+    };
+
+    try {
+      const response = await axios.get(
+        `${api}/api/accounts/${account_id}/Requests/requesttypes/metadatas?requesttypename=${event.target.value}`,
+        { headers }
+      );
+
+      const promise = toast.promise(
+        new Promise((resolve, reject) => {
+          if (response.status === 200) {
+            resolve(true);
+          } else {
+            reject(
+              new Error(
+                "Could not create. There might be some issue with the API"
+              )
+            );
+          }
+        }),
+        {
+          loading: "Creating...",
+          success: <b>Successfully Created!</b>,
+          error: <b>Could not create. There might some issue with API</b>,
+        },
+        {
+          position: "top-center",
+          style: {
+            backgroundColor: "black",
+            color: "white",
+            fontSize: "0.8rem",
+          },
+        }
+      );
+      await promise;
+      setDynamicForm(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  if (loading) {
+    return (
+      <>
+        <NewRequestShimmer />
+      </>
+    );
   }
 
   return (
@@ -41,88 +83,92 @@ const NewRequest = () => {
                 Submit a New Request to Legal
               </small>
             </div>
-            <div className="primary-fields px-4 py-2 pb-8 bg-black/80 shadow-md text-white rounded-md">
-              <h1 className="px-1 py-2 text-xl">Primary Fields</h1>
-              <form>
-                <div className="browse-input">
-                  <label className="px-1">Business Area</label>
-                  <div className="flex">
-                    <input
-                      type="text"
-                      value={BusinessArea}
-                      className="border border-slate-300 text-sm p-2 rounded-l-md w-full outline-blue-200 text-black"
-                      readOnly
-                    />
-                    <button type="button">
-                      <span
-                        className="text-blue-600 text-sm py-2 px-6 rounded-r-md border border-blue-500 bg-blue-50"
-                        onClick={() => setShowModal(!showModal)}
-                      >
-                        Browse
-                      </span>
-                      {/* modal */}
-                      <div
-                        className={`${
-                          showModal ? "static" : "hidden"
-                        } text-black`}
-                      >
-                        <Modal
-                          toggleModal={toggleModal}
-                          heading="Business Area Picker"
-                        >
-                          <BusinessAreaPicker
-                            setBusinessArea={setBusinessArea}
-                            showModal={showModal}
-                            setShowModal={setShowModal}
-                          />
-                        </Modal>
-                      </div>
-                    </button>
+            <div className="bg-white p-2">
+              {ConfigData.map((val) => (
+                <div key={val.RowKey} className={`relative overflow-hidden`}>
+                  <input
+                    type="checkbox"
+                    className="absolute top-0 inset-x-0 w-full h-10 opacity-0 peer"
+                    defaultChecked={true}
+                  />
+                  <div className="px-2">
+                    <span className="flex items-center h-[40px] text-lg">
+                      Primary Fields
+                    </span>
                   </div>
-                  <small className="px-1 text-slate-300">
-                    This field is used to map each Request to an item in the
-                    organization&apos;s business areas hierachy
-                  </small>
-                </div>
-                <div className="flex flex-col py-2">
-                  <label className="px-1">
-                    Request Type
-                    <span className="text-red-500 font-bold">*</span>
-                  </label>
-                  <select
-                    name="request_type"
-                    className="text-sm p-2 rounded-md border border-slate-300 outline-blue-300 text-black"
+                  <div className="absolute top-3 right-3 transition-transform duration-300 rotate-0 peer-checked:rotate-180">
+                    <IoIosArrowDown />
+                  </div>
+                  <div
+                    className={`max-h-0 peer-checked:max-h-full
+          transition-all ease-in-out duration-500 bg-slate-100 overflow-hidden`}
                   >
-                    <option value="value1">value1</option>
-                    <option value="value2">value2</option>
-                    <option value="value3">value3</option>
-                  </select>
-                  <small className="px-1 text-slate-300">
-                    Type of contract or related document requested
-                  </small>
+                    <div className="primary-fields px-4 py-2 pb-2 bg-white shadow-sm">
+                      <form>
+                        {/* multi business area route */}
+                        <MultiBusinessAreaRoute
+                          isMultiArea={val.IsMultiBusinessAreaRoute}
+                          RequestBusinessAreas={val.RequestBusinessAreas}
+                        />
+                        <div className="flex flex-col py-2">
+                          <label>
+                            Request Type
+                            <span className="text-red-500 font-bold">*</span>
+                          </label>
+                          <select
+                            name="request_type"
+                            className="text-sm p-2 rounded-md border border-slate-300 outline-blue-300 text-black"
+                            onChange={handleRequestType}
+                          >
+                            <option>-select-</option>
+                            {val.RequestTypes.map((req) => (
+                              <option key={req.id} value={req.type}>
+                                {req.type}
+                              </option>
+                            ))}
+                          </select>
+                          <small className="px-1 text-slate-500">
+                            Type of contract or related document requested
+                          </small>
+                        </div>
+
+                        {/* dynamic forms */}
+                        {filteredData.map((val) => {
+                          return (
+                            <DynamicForms
+                              key={val.FieldName}
+                              condition={val.FieldName}
+                              title={val.FieldDisplayName}
+                              baseline={val.HelpText ? val.HelpText : ""}
+                              required={val.Required}
+                            />
+                          );
+                        })}
+
+                        <div className="submit-button flex items-center gap-4 justify-end mt-4 text-sm">
+                          <button
+                            type="button"
+                            className="flex justify-center items-center px-8 py-2 bg-slate-500 text-white rounded-sm"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="submit"
+                            className="flex justify-center items-center px-8 py-2 bg-blue-500 text-white rounded-sm"
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
                 </div>
-              </form>
+              ))}
             </div>
           </div>
         </div>
-
-        {/* test for the form components */}
-        {/* <MultiChoiceDropdown multi={true} options={options} title="title" />
-        <ChoiceField options={options} title="title" />
-        <Datepicker title="title" />
-        <SingleLineTextField title="title" name="name" value="value" />
-        <MultiLineTextField title="title" name="name" value="value" />
-        <UserField options={options} multi={true} title="title" />
-        <FileUpload title="title" name="name" />
-        <ValueFinancialsField title="title" name="name" value={0} />
-        <LookupField title="title" options={options} />
-        <LookupMultiSelect title="title" multi={true} options={options} />
-        <NumberField title="title" value={0} name="name" />
-        <PhoneNumberField title="title" />
-        <EmailField title="title" name="name" value="value" />
-        <HyperLinkField title="title" name="name" value="value" />
-        <RadioField title="title"/> */}
       </div>
+      <Toaster />
     </>
   );
 };

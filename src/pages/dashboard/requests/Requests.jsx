@@ -6,6 +6,7 @@ import Status from "../Status";
 import { RequestContext } from "../../../context/RequestContext";
 import CreatedContracts from "./CreatedContracts";
 import RelatedContracts from "./RelatedContracts";
+import { Link } from "react-router-dom";
 
 function Requests({ toggleModal, currentItems }) {
   const { RequestData } = useContext(RequestContext);
@@ -16,9 +17,9 @@ function Requests({ toggleModal, currentItems }) {
         <div className="overflow-y-auto h-[400px] w-full no-scrollbar">
           <table className="w-full border-collapse">
             <thead className="sticky top-0">
-              <tr className="bg-blue-600 text-white text-sm">
+              <tr className="bg-blue-500 text-white text-sm">
                 <th className="p-1">Sl No.</th>
-                <th className="p-1">Requests</th>
+                <th className="p-1">Title</th>
                 <th className="p-1">Status</th>
                 <th className="p-1">Assigned To</th>
                 <th className="p-1">Due Date</th>
@@ -49,7 +50,9 @@ function Requests({ toggleModal, currentItems }) {
                       <td className="">{dateObject.toLocaleDateString()}</td>
                       <td className="text-lg cursor-pointer">
                         <span className="flex justify-center items-center text-slate-600">
-                          <FaEye />
+                          <Link to={`requestDetail/${val.RowKey}`}>
+                            <FaEye />
+                          </Link>
                         </span>
                       </td>
                       <td className="py-2 text-lg cursor-pointer">

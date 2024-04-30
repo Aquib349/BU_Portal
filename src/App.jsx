@@ -3,6 +3,7 @@ import NewRequest from "./pages/new request/NewRequest";
 import RequestProvider from "./context/RequestContext";
 import Dashboard from "./pages/dashboard/Dashboard";
 import { createBrowserRouter, Outlet } from "react-router-dom";
+import ViewRequestDetail from "./pages/dashboard/view request detail/ViewRequestDetail";
 
 function App() {
   return (
@@ -32,6 +33,10 @@ const Router = createBrowserRouter([
         path: "newRequest",
         element: <NewRequest />,
       },
+      {
+        path : 'requestDetail/:RowKey',
+        element : <ViewRequestDetail/>
+      }
     ],
   },
 ]);

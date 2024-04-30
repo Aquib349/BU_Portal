@@ -3,15 +3,23 @@ import PhoneInput from "react-phone-number-input";
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const PhoneNumberField = ({ title }) => {
+const PhoneNumberField = ({ title, baseline, required }) => {
   const [value, setValue] = useState();
 
   return (
     <>
-      <div>
-        <label className="text-sm">{title}</label>
+      <div className="pb-3">
+        <label className="text-sm">
+          {title}
+          <span
+            className={`text-red-500 font-bold ${
+              required ? "static" : "hidden"
+            }`}
+          >
+            *
+          </span>
+        </label>
         <PhoneInput
-          placeholder="Enter phone number"
           value={value}
           onChange={setValue}
           style={{
@@ -22,6 +30,7 @@ const PhoneNumberField = ({ title }) => {
             outline: "none",
           }}
         />
+        <small className="text-slate-500">{baseline}</small>
       </div>
     </>
   );
@@ -29,6 +38,8 @@ const PhoneNumberField = ({ title }) => {
 
 PhoneNumberField.propTypes = {
   title: PropTypes.string.isRequired,
+  baseline: PropTypes.string.isRequired,
+  required: PropTypes.bool.isRequired,
 };
 
 export default PhoneNumberField;

@@ -1,16 +1,20 @@
 import { FaCircleUser } from "react-icons/fa6";
 import Tooltip from "../../Elements/Tooltip";
 import Accordion from "../../Elements/Accordion";
+import { CiCircleInfo } from "react-icons/ci";
 
 function PortalInformation() {
   return (
     <>
       <div className="portal-information-component">
         <div className="main">
-          <div className="key-contacts shadow-sm shadow-black/20 rounded-sm py-1 px-2 mt-4 bg-white">
+          <div className="key-contacts shadow-sm shadow-black/20 rounded-sm px-2 mt-4 bg-white">
             <h1 className="text-xl border-b pb-1 flex">
               Key Contacts
-              <Tooltip message="Key legal contact information for any questions" />
+              <Tooltip
+                message="Key legal contact information for any questions"
+                header={<CiCircleInfo />}
+              />
             </h1>
             <div className="flex py-1 pt-1 leading-4">
               <span className="text-slate-500">
@@ -51,7 +55,10 @@ function PortalInformation() {
           <div className="key-contacts shadow-sm shadow-black/20 rounded-sm py-1 px-2 mt-2 bg-white">
             <h1 className="text-xl border-b pb-1 flex">
               FAQS
-              <Tooltip message="Materials and resources to help you to use eContracts" />
+              <Tooltip
+                message="Materials and resources to help you to use eContracts"
+                header={<CiCircleInfo />}
+              />
             </h1>
             <Accordion heading="What BU Portal ?" checked={true}>
               <p className="text-[0.75rem] p-2 leading-4">

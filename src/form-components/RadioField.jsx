@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const RadioField = ({ title }) => {
+const RadioField = ({ title, required }) => {
   // State to track the selected radio button value
   const [selectedOption, setSelectedOption] = useState("");
 
@@ -12,7 +12,14 @@ const RadioField = ({ title }) => {
 
   return (
     <>
-      <label className="text-sm px-1">{title}</label>
+      <label className="text-sm px-1">
+        {title}
+        <span
+          className={`text-red-500 font-bold ${required ? "static" : "hidden"}`}
+        >
+          *
+        </span>
+      </label>
       <div className="py-2 text-sm flex justify-between items-center">
         <div className="flex px-2 items-center gap-8">
           <label className="flex gap-1 items-center">
@@ -54,6 +61,7 @@ const RadioField = ({ title }) => {
 
 RadioField.propTypes = {
   title: PropTypes.string.isRequired,
+  required: PropTypes.bool.isRequired,
 };
 
 export default RadioField;

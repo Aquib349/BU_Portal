@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect, useState, useRef } from "react";
 
-function Dropdown({ title }) {
+function Dropdown({ title, children }) {
   const [show, setShow] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -13,11 +13,10 @@ function Dropdown({ title }) {
     };
     document.addEventListener("click", closeDropdown);
 
-    // cleaning the eventListener interval 
+    // cleaning the eventListener interval
     return () => {
       document.removeEventListener("click", closeDropdown);
     };
-
   }, []);
 
   return (
@@ -51,29 +50,7 @@ function Dropdown({ title }) {
                      show ? "static" : "hidden"
                    }`}
         >
-          <div className="py-1">
-            <a
-              href="#"
-              className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-100"
-              id="menu-item-0"
-            >
-              My Dashboard
-            </a>
-            <a
-              href="#"
-              className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-100"
-              id="menu-item-1"
-            >
-              Admin Dashboard
-            </a>
-            <a
-              href="#"
-              className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-100"
-              id="menu-item-2"
-            >
-              Global Insights
-            </a>
-          </div>
+          {children}
         </div>
       </div>
     </>
@@ -82,6 +59,7 @@ function Dropdown({ title }) {
 
 Dropdown.propTypes = {
   title: PropTypes.string.isRequired,
+  children: PropTypes.object.isRequired,
 };
 
 export default Dropdown;
