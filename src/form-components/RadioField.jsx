@@ -14,11 +14,7 @@ const RadioField = ({ title, required }) => {
     <>
       <label className="text-sm px-1">
         {title}
-        <span
-          className={`text-red-500 font-bold ${required ? "static" : "hidden"}`}
-        >
-          *
-        </span>
+        {required && <span className={`text-red-500 font-bold`}>*</span>}
       </label>
       <div className="py-2 text-sm flex justify-between items-center">
         <div className="flex px-2 items-center gap-8">

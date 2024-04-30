@@ -2,7 +2,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import MultiBusinessAreaRoute from "./MultiBusinessAreaRoute";
 import usePortalConfig from "../../customhooks/usePortalConfig";
 import axios from "axios";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import DynamicForms from "../../components/DynamicForms";
 import NewRequestShimmer from "../../shimmer/NewRequestShimmer";
 import toast, { Toaster } from "react-hot-toast";
@@ -12,57 +12,62 @@ const NewRequest = () => {
   const account_id = import.meta.env.VITE_USER_KEY;
   const { ConfigData, loading } = usePortalConfig();
   const [DynamicForm, setDynamicForm] = useState([]);
-  const filteredData = DynamicForm.filter(
-    (item) => item.FieldDisplayName !== "Request Type"
-  );
 
   // function to handle the request-types
-  async function handleRequestType(event) {
-    const headers = {
-      "Content-Type": "application/json",
-      "eContracts-ApiKey":
-        "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
-    };
+  const handleRequestType = useCallback(
+    async (event) => {
+      const headers = {
+        "Content-Type": "application/json",
+        "eContracts-ApiKey":
+          "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
+      };
 
-    try {
-      const response = await axios.get(
-        `${api}/api/accounts/${account_id}/Requests/requesttypes/metadatas?requesttypename=${event.target.value}`,
-        { headers }
-      );
+      try {
+        const response = await axios.get(
+          `${api}/api/accounts/${account_id}/Requests/requesttypes/metadatas?requesttypename=${event.target.value}`,
+          { headers }
+        );
 
-      const promise = toast.promise(
-        new Promise((resolve, reject) => {
-          if (response.status === 200) {
-            resolve(true);
-          } else {
-            reject(
-              new Error(
-                "Could not create. There might be some issue with the API"
-              )
-            );
-          }
-        }),
-        {
-          loading: "Creating...",
-          success: <b>Successfully Created!</b>,
-          error: <b>Could not create. There might some issue with API</b>,
-        },
-        {
-          position: "top-center",
-          style: {
-            backgroundColor: "black",
-            color: "white",
-            fontSize: "0.8rem",
+        const promise = toast.promise(
+          new Promise((resolve, reject) => {
+            if (response.status === 200) {
+              resolve(true);
+            } else {
+              reject(
+                new Error(
+                  "Could not create. There might be some issue with the API"
+                )
+              );
+            }
+          }),
+          {
+            loading: "Creating...",
+            success: <b>Successfully Created!</b>,
+            error: <b>Could not create. There might some issue with API</b>,
           },
-        }
-      );
-      await promise;
-      setDynamicForm(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+          {
+            position: "top-center",
+            style: {
+              backgroundColor: "black",
+              color: "white",
+              fontSize: "0.8rem",
+            },
+          }
+        );
+        await promise;
+        const Data = response.data;
+        const filteredData = Data.filter(
+          (item) =>
+            item.FieldDisplayName !== "Request Type" &&
+            item.FieldDisplayName !== "Business Area"
+        );
+        setDynamicForm(filteredData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [setDynamicForm]
+  );
 
   if (loading) {
     return (
@@ -133,17 +138,8 @@ const NewRequest = () => {
                         </div>
 
                         {/* dynamic forms */}
-                        {filteredData.map((val) => {
-                          return (
-                            <DynamicForms
-                              key={val.FieldName}
-                              condition={val.FieldName}
-                              title={val.FieldDisplayName}
-                              baseline={val.HelpText ? val.HelpText : ""}
-                              required={val.Required}
-                            />
-                          );
-                        })}
+
+                        <DynamicForms DynamicFormData={DynamicForm} />
 
                         <div className="submit-button flex items-center gap-4 justify-end mt-4 text-sm">
                           <button

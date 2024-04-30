@@ -8,13 +8,7 @@ const Datepicker = ({ date, setDate, title, baseline, required }) => {
       <div className="flex flex-col pb-3">
         <label className="text-sm">
           {title}
-          <span
-            className={`text-red-500 font-bold ${
-              required ? "static" : "hidden"
-            }`}
-          >
-            *
-          </span>
+          {required && <span className={`text-red-500 font-bold`}>*</span>}
         </label>
         <DatePicker
           className="p-2 text-sm text-white bg-transparent outline-blue-500

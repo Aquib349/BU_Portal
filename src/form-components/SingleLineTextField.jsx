@@ -5,13 +5,11 @@ const SingleLineTextField = ({ title, name, value, baseline, required }) => {
   return (
     <>
       <div className="flex flex-col pb-3">
-        <label className="text-sm">{title}<span
-            className={`text-red-500 font-bold ${
-              required ? "static" : "hidden"
-            }`}
-          >
-            *
-          </span></label>
+        <label className="text-sm">
+          {title}
+          {required && <span className={`text-red-500 font-bold`}>*</span>}
+        </label>
+
         <input
           type="text"
           name={name}
@@ -29,7 +27,7 @@ SingleLineTextField.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   baseline: PropTypes.string.isRequired,
-  required : PropTypes.bool.isRequired
+  required: PropTypes.bool.isRequired,
 };
 
 export default SingleLineTextField;

@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+
+// Import your components here
 import Taxonomy from "../form-components/Taxonomy";
 import LookupField from "../form-components/LookupField";
 import SingleLineTextField from "../form-components/SingleLineTextField";
@@ -12,35 +14,38 @@ import FileUpload from "../form-components/FileUpload";
 const componentMap = {
   BusinessArea: {
     component: Taxonomy,
-    props: { options: [], multi: false }
+    props: { options: [], multi: false },
   },
   RequestType: {
     component: LookupField,
-    props: { options: [] }
+    props: { options: [] },
   },
   RequestTitle: {
     component: SingleLineTextField,
+    props: { name: "", value: "" },
   },
   Description: {
     component: MultiLineTextField,
+    props: { name: "", value: "" },
   },
   RequestNumber: {
     component: SingleLineTextField,
+    props: { name: "", value: "" },
   },
   Requestor: {
     component: UserField,
-    props: { options: [], multi: true }
+    props: { options: [], multi: true },
   },
   DesiredSignatureDate: {
     component: Datepicker,
   },
   "Assigned To": {
     component: UserField,
-    props: { options: [], multi: true }
+    props: { options: [], multi: true },
   },
   Counterparty: {
     component: LookupField,
-    props: { options: [] }
+    props: { options: [] },
   },
   CounterpartyMailingAddress: {
     component: MultiLineTextField,
@@ -65,36 +70,48 @@ const componentMap = {
   },
   Project: {
     component: LookupField,
-    props: { options: [] }
+    props: { options: [] },
   },
   Approvers: {
     component: UserField,
-    props: { options: [], multi: true }
+    props: { options: [], multi: true },
   },
 };
 
-function DynamicForms({ condition, title, baseline, required }) {
-  const [ComponentToRender, setComponentToRender] = useState(null);
+function DynamicForms({ DynamicFormData }) {
+  // Use state for component rendering
+  const [componentsToRender, setComponentsToRender] = useState([]);
 
-  // Function to set the component based on the condition
-  useState(() => {
-    const componentInfo = componentMap[condition];
-    if (componentInfo) {
-      const { component: Component, props } = componentInfo;
-      setComponentToRender(<Component title={title} baseline={baseline} required={required} {...props} />);
-    } else {
-      setComponentToRender(null);
-    }
-  }, [condition, title, baseline, required]);
+  // Trigger re-render when DynamicFormData changes
+  useEffect(() => {
+    const components = DynamicFormData?.map((val) => {
+      const { FieldName, FieldDisplayName, HelpText, Required } = val;
+      const componentInfo = componentMap[FieldName];
+      if (componentInfo) {
+        const { component: Component, props } = componentInfo;
+        const componentProps = {
+          title: FieldDisplayName,
+          baseline: HelpText ? HelpText : "",
+          required: Required,
+          ...props,
+        };
+        return (
+          <div key={FieldName}>
+            <Component {...componentProps} />
+          </div>
+        );
+      } else {
+        return null;
+      }
+    });
+    setComponentsToRender(components);
+  }, [DynamicFormData]);
 
-  return <div>{ComponentToRender}</div>;
+  return <>{componentsToRender}</>;
 }
 
 DynamicForms.propTypes = {
-  condition: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  baseline: PropTypes.string.isRequired,
-  required: PropTypes.bool.isRequired,
+  DynamicFormData: PropTypes.array.isRequired,
 };
 
 export default DynamicForms;

@@ -11,13 +11,7 @@ const PhoneNumberField = ({ title, baseline, required }) => {
       <div className="pb-3">
         <label className="text-sm">
           {title}
-          <span
-            className={`text-red-500 font-bold ${
-              required ? "static" : "hidden"
-            }`}
-          >
-            *
-          </span>
+          {required && <span className={`text-red-500 font-bold`}>*</span>}
         </label>
         <PhoneInput
           value={value}
