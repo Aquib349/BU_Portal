@@ -2,7 +2,7 @@ import { FaEye } from "react-icons/fa";
 import { RiStickyNoteAddFill } from "react-icons/ri";
 import PropTypes from "prop-types";
 import React, { useContext } from "react";
-import Status from "../Status";
+import Status from "./Status";
 import { RequestContext } from "../../../context/RequestContext";
 import CreatedContracts from "./CreatedContracts";
 import RelatedContracts from "./RelatedContracts";

@@ -6,68 +6,69 @@ import { useCallback, useState } from "react";
 import DynamicForms from "../../components/DynamicForms";
 import NewRequestShimmer from "../../shimmer/NewRequestShimmer";
 import toast, { Toaster } from "react-hot-toast";
+import LoadingSpinner from "../../Elements/loading spinner/LoadingSpinner";
 
 const NewRequest = () => {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
   const { ConfigData, loading } = usePortalConfig();
   const [DynamicForm, setDynamicForm] = useState([]);
+  const [LoadSpinner, setLoadSpinner] = useState(false);
 
   // function to handle the request-types
-  const handleRequestType = useCallback(
-    async (event) => {
-      const headers = {
-        "Content-Type": "application/json",
-        "eContracts-ApiKey":
-          "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
-      };
+  const handleRequestType = useCallback(async (event) => {
+    setLoadSpinner(true);
+    const headers = {
+      "Content-Type": "application/json",
+      "eContracts-ApiKey":
+        "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
+    };
 
-      try {
-        const response = await axios.get(
-          `${api}/api/accounts/${account_id}/Requests/requesttypes/metadatas?requesttypename=${event.target.value}`,
-          { headers }
-        );
+    try {
+      const response = await axios.get(
+        `${api}/api/accounts/${account_id}/Requests/requesttypes/metadatas?requesttypename=${event.target.value}`,
+        { headers }
+      );
 
-        const promise = toast.promise(
-          new Promise((resolve, reject) => {
-            if (response.status === 200) {
-              resolve(true);
-            } else {
-              reject(
-                new Error(
-                  "Could not create. There might be some issue with the API"
-                )
-              );
-            }
-          }),
-          {
-            loading: "Creating...",
-            success: <b>Successfully Created!</b>,
-            error: <b>Could not create. There might some issue with API</b>,
-          },
-          {
-            position: "top-center",
-            style: {
-              backgroundColor: "black",
-              color: "white",
-              fontSize: "0.8rem",
-            },
+      const promise = toast.promise(
+        new Promise((resolve, reject) => {
+          if (response.status === 200) {
+            resolve(true);
+          } else {
+            reject(
+              new Error(
+                "Could not create. There might be some issue with the API"
+              )
+            );
           }
-        );
-        await promise;
-        const Data = response.data;
-        const filteredData = Data.filter(
-          (item) =>
-            item.FieldDisplayName !== "Request Type" &&
-            item.FieldDisplayName !== "Business Area"
-        );
-        setDynamicForm(filteredData);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    [setDynamicForm]
-  );
+        }),
+        {
+          loading: "Creating...",
+          success: <b>Successfully Created!</b>,
+          error: <b>Could not create. There might some issue with API</b>,
+        },
+        {
+          position: "top-center",
+          style: {
+            backgroundColor: "black",
+            color: "white",
+            fontSize: "0.8rem",
+          },
+        }
+      );
+      await promise;
+      setLoadSpinner(false);
+      const Data = response.data;
+      const filteredData = Data.filter(
+        (item) =>
+          item.FieldDisplayName !== "Request Type" &&
+          item.FieldDisplayName !== "Business Area"
+      );
+      setDynamicForm(filteredData);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   if (loading) {
     return (
@@ -79,6 +80,7 @@ const NewRequest = () => {
 
   return (
     <>
+      {LoadSpinner && <LoadingSpinner />}
       <div className="newrequest-component">
         <div className="main">
           <div className="w-8/12 m-auto">

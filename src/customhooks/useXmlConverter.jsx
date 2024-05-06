@@ -5,7 +5,6 @@ function useXmlConverter(xmlString) {
 
   useEffect(() => {
     if (!xmlString) {
-      console.log("XML string is empty");
       setJsonResult("");
       return;
     }
@@ -18,7 +17,6 @@ function useXmlConverter(xmlString) {
       const xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
       if (!xmlDoc) {
-        console.error("Failed to parse XML document");
         setJsonResult("");
         return;
       }

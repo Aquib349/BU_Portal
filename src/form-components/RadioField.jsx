@@ -1,20 +1,18 @@
-import { useState } from "react";
 import PropTypes from "prop-types";
 
-const RadioField = ({ title, required }) => {
-  // State to track the selected radio button value
-  const [selectedOption, setSelectedOption] = useState("");
-
-  // Handler function to update the selected radio button value
-  const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
-
+const RadioField = ({
+  title,
+  required,
+  RadioOptionValue,
+  setRadioOptionValue,
+}) => {
   return (
     <>
       <label className="text-sm px-1">
         {title}
-        {required && <span className={`text-red-500 font-bold`}>*</span>}
+        {required === "true" && (
+          <span className={`text-red-500 font-bold`}>*</span>
+        )}
       </label>
       <div className="py-2 text-sm flex justify-between items-center">
         <div className="flex px-2 items-center gap-8">
@@ -22,8 +20,8 @@ const RadioField = ({ title, required }) => {
             <input
               type="radio"
               value="Yes"
-              checked={selectedOption === "Yes"}
-              onChange={handleOptionChange}
+              checked={RadioOptionValue === "Yes"}
+              onChange={(e) => setRadioOptionValue(e.target.value)}
             />
             Yes
           </label>
@@ -31,8 +29,8 @@ const RadioField = ({ title, required }) => {
             <input
               type="radio"
               value="No"
-              checked={selectedOption === "No"}
-              onChange={handleOptionChange}
+              checked={RadioOptionValue === "No"}
+              onChange={(e) => setRadioOptionValue(e.target.value)}
             />
             No
           </label>
@@ -41,7 +39,8 @@ const RadioField = ({ title, required }) => {
 
       <div
         className={`comment-box ${
-          selectedOption.toLowerCase() === "yes" ? "static" : "hidden"
+          //  RadioOptionValue.toLowerCase() === "yes" ? "static" : "hidden"
+          RadioOptionValue === "Yes" ? "static" : "hidden"
         }`}
       >
         <textarea
@@ -57,7 +56,9 @@ const RadioField = ({ title, required }) => {
 
 RadioField.propTypes = {
   title: PropTypes.string.isRequired,
-  required: PropTypes.bool.isRequired,
+  required: PropTypes.string.isRequired,
+  RadioOptionValue: PropTypes.string.isRequired,
+  setRadioOptionValue: PropTypes.func.isRequired,
 };
 
 export default RadioField;

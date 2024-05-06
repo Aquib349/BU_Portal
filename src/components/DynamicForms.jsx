@@ -10,83 +10,86 @@ import UserField from "../form-components/UserField";
 import Datepicker from "../form-components/DatePicker";
 import RadioField from "../form-components/RadioField";
 import FileUpload from "../form-components/FileUpload";
+import ChoiceField from "../form-components/ChoiceField";
+import MultiChoiceDropdown from "../form-components/MultiChoiceDropdown";
+import MultiChoiceBrowse from "../form-components/MultiChoiceBrowse";
+import ValueFinancialsField from "../form-components/ValueFinancialsField";
+import LookupMultiSelect from "../form-components/LookupMultiSelect";
+import NumberField from "../form-components/NumberField";
+import PhoneNumberField from "../form-components/PhoneNumberField";
+import EmailField from "../form-components/EmailField";
+import HyperLinkField from "../form-components/HyperLinkField";
 
 const componentMap = {
-  BusinessArea: {
+  "Office 365 Sharepoint Taxonomy": {
     component: Taxonomy,
     props: { options: [], multi: false },
   },
-  RequestType: {
+  Lookup: {
     component: LookupField,
     props: { options: [] },
   },
-  RequestTitle: {
+  "Single Line Text": {
     component: SingleLineTextField,
     props: { name: "", value: "" },
   },
-  Description: {
+  "Multi Line Text": {
     component: MultiLineTextField,
     props: { name: "", value: "" },
   },
-  RequestNumber: {
-    component: SingleLineTextField,
-    props: { name: "", value: "" },
-  },
-  Requestor: {
+  User: {
     component: UserField,
     props: { options: [], multi: true },
   },
-  DesiredSignatureDate: {
+  Date: {
     component: Datepicker,
   },
-  "Assigned To": {
-    component: UserField,
-    props: { options: [], multi: true },
-  },
-  Counterparty: {
-    component: LookupField,
-    props: { options: [] },
-  },
-  CounterpartyMailingAddress: {
-    component: MultiLineTextField,
-  },
-  CounterpartyEmailAddressandContactName: {
-    component: SingleLineTextField,
-  },
-  DataPrivacy: {
+  "Yes/No": {
     component: RadioField,
   },
-  GovermentRelated: {
-    component: RadioField,
-  },
-  HealthCareProfessional: {
-    component: RadioField,
-  },
-  Attachments: {
+  "File Upload": {
     component: FileUpload,
   },
-  AdditionalComments: {
-    component: MultiLineTextField,
+  Choice: {
+    component: ChoiceField,
   },
-  Project: {
-    component: LookupField,
-    props: { options: [] },
+  "Multi- Choice (Dropdown)": {
+    component: MultiChoiceDropdown,
   },
-  Approvers: {
-    component: UserField,
-    props: { options: [], multi: true },
+  "Multi- Choice (Browse)": {
+    component: MultiChoiceBrowse,
+  },
+  "Value/Financials": {
+    component: ValueFinancialsField,
+  },
+  "Lookup (Multi Select)": {
+    component: LookupMultiSelect,
+  },
+  Number: {
+    component: NumberField,
+  },
+  "Phone Number": {
+    component: PhoneNumberField,
+  },
+  Eamil: {
+    component: EmailField,
+  },
+  Hyperlink: {
+    component: HyperLinkField,
   },
 };
 
 function DynamicForms({ DynamicFormData }) {
+  // console.log(DynamicFormData);
   // Use state for component rendering
   const [componentsToRender, setComponentsToRender] = useState([]);
 
   // Trigger re-render when DynamicFormData changes
   useEffect(() => {
     const components = DynamicFormData?.map((val) => {
-      const { FieldName, FieldDisplayName, HelpText, Required } = val;
-      const componentInfo = componentMap[FieldName];
+      const { FieldName, FieldType, FieldDisplayName, HelpText, Required } =
+        val;
+      const componentInfo = componentMap[FieldType];
       if (componentInfo) {
         const { component: Component, props } = componentInfo;
         const componentProps = {

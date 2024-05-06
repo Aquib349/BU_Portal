@@ -1,20 +1,27 @@
-import { useState } from "react";
 import Select from "react-select";
 import PropTypes from "prop-types";
 
-const UserField = ({ title, options, multi, baseline, required }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
-
+const UserField = ({
+  title,
+  options,
+  multi,
+  baseline,
+  required,
+  UserselectedOption,
+  setUserSelectedOption,
+}) => {
   return (
     <>
       <div className="pb-3">
         <label className="text-sm">
           {title}
-          {required && <span className={`text-red-500 font-bold`}>*</span>}
+          {required === "true" && (
+            <span className={`text-red-500 font-bold`}>*</span>
+          )}
         </label>
         <Select
-          defaultValue={selectedOption}
-          onChange={setSelectedOption}
+          defaultValue={UserselectedOption}
+          onChange={setUserSelectedOption}
           options={options}
           isMulti={multi}
         />
@@ -29,7 +36,9 @@ UserField.propTypes = {
   options: PropTypes.array.isRequired,
   title: PropTypes.string.isRequired,
   baseline: PropTypes.string.isRequired,
-  required: PropTypes.bool.isRequired,
+  required: PropTypes.string.isRequired,
+  UserselectedOption: PropTypes.any.isRequired,
+  setUserSelectedOption: PropTypes.func.isRequired,
 };
 
 export default UserField;

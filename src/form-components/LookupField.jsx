@@ -1,20 +1,26 @@
-import { useState } from "react";
 import Select from "react-select";
 import PropTypes from "prop-types";
 
-const LookupField = ({ options, title, baseline, required }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
-
+const LookupField = ({
+  options,
+  title,
+  baseline,
+  required,
+  LookupValue,
+  setLookupValue,
+}) => {
   return (
     <>
       <div className="pb-3">
         <label className="text-sm">
           {title}
-          {required && <span className={`text-red-500 font-bold`}>*</span>}
+          {required === "true" && (
+            <span className={`text-red-500 font-bold`}>*</span>
+          )}
         </label>
         <Select
-          defaultValue={selectedOption}
-          onChange={setSelectedOption}
+          defaultValue={LookupValue}
+          onChange={setLookupValue}
           options={options}
         />
         <small className="text-slate-500">{baseline}</small>
@@ -27,7 +33,9 @@ LookupField.propTypes = {
   options: PropTypes.array.isRequired,
   title: PropTypes.string.isRequired,
   baseline: PropTypes.string.isRequired,
-  required: PropTypes.bool.isRequired,
+  required: PropTypes.string.isRequired,
+  LookupValue: PropTypes.string.isRequired,
+  setLookupValue: PropTypes.func.isRequired,
 };
 
 export default LookupField;

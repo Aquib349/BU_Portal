@@ -8,32 +8,72 @@ import RelatedDocuments from "./RelatedDocuments";
 import { CiCircleInfo } from "react-icons/ci";
 import { TbCirclesRelation } from "react-icons/tb";
 import useXmlConverter from "../../../customhooks/useXmlConverter";
+import { useEffect, useState } from "react";
+import usePortalConfig from "../../../customhooks/usePortalConfig";
+import axios from "axios";
+import ViewStatusUpdates from "./ViewStatusUpdate";
 
 function ViewRequestDetail() {
+  const api = import.meta.env.VITE_API_URL;
+  const account_id = import.meta.env.VITE_USER_KEY;
+  const [Data, setData] = useState([]);
+  const [IsStatusUpdates, setIsStatusUpdates] = useState(false);
+  const [StatusUpdates, setStatusUpdates] = useState([]);
   const { RowKey } = useParams();
+  const { ConfigData } = usePortalConfig();
   const { SingleRequestData } = useRequestDetail(RowKey);
-  const xml = SingleRequestData;
-  // console.log(xml)
-  const jsonResult = useXmlConverter(xml);
-  console.log(jsonResult?.Metadata);
+  const jsonResult = useXmlConverter(SingleRequestData);
+  const dateObject = new Date(Data?.Metadata?.RequiredByDate?._text);
 
-  // const json = xmljs.xml2json(xml, { compact: true, spaces: 4 });
-  // const jsonResult = JSON.parse(json);
-  const dateObject = new Date(jsonResult?.Metadata?.RequiredByDate?.text);
+  useEffect(() => {
+    if (jsonResult != "") {
+      setData(JSON.parse(jsonResult));
+    }
 
-  // console.log(jsonResult);
+    // check to see the status updates
+    function statusUpdates() {
+      const value = ConfigData.map((val) => {
+        return val.DisplayRequestStatus;
+      });
+      setIsStatusUpdates(value[0]);
+    }
+
+    // functions to get the status updates of the single requests !!
+    async function getStatusUpdates() {
+      const headers = {
+        "Content-Type": "application/json",
+        "eContracts-ApiKey":
+          "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
+      };
+
+      const response = await axios.get(
+        `${api}/api/accounts/${account_id}/Requests/${RowKey}/statusPosts`,
+        { headers }
+      );
+      setStatusUpdates(response.data);
+      console.log(response.data);
+    }
+    statusUpdates();
+    getStatusUpdates();
+  }, [jsonResult, ConfigData, RowKey]);
 
   return (
     <>
-      <div className="request-detail-component">
-        <div className="main w-8/12 bg-white m-auto my-2 shadow-sm">
+      <div
+        className={`request-detail-component grid grid-cols-5 gap-x-2 w-9/12 m-auto`}
+      >
+        <div
+          className={`main bg-white my-2 shadow-sm ${
+            IsStatusUpdates ? "col-span-3" : "col-span-4"
+          }`}
+        >
           <div className="p-4">
             <h1 className="text-2xl pb-4">
-              {jsonResult?.Metadata?.RequestTitle?._text}
+              {Data?.Metadata?.RequestTitle?._text}
             </h1>
             <div className="flex justify-between items-center">
               <div className="text-sm">
-                {jsonResult?.Metadata?.ContractArea?._text}
+                {Data?.Metadata?.ContractArea?._text}
               </div>
               <div className="flex gap-3 items-center text-lg">
                 <Tooltip
@@ -50,18 +90,18 @@ function ViewRequestDetail() {
                   header={<HiUsers />}
                 />
                 <span className="pt-1 text-sm">
-                  {jsonResult?.Metadata?.AssignedTo?._text}
+                  {Data?.Metadata?.AssignedTo?._text}
                 </span>
               </div>
               <div className="flex gap-3 items-center text-lg">
                 <Tooltip message="Priority" header={<FiFlag />} />
                 <span className="pt-1 text-sm">
-                  {jsonResult?.Metadata?.Priority?._text}
+                  {Data?.Metadata?.Priority?._text}
                 </span>
               </div>
             </div>
             <p className="text-sm pt-4 leading-4">
-              {jsonResult?.Metadata?.Description?._text}
+              {Data?.Metadata?.Description?._text}
             </p>
           </div>
           <hr />
@@ -85,12 +125,16 @@ function ViewRequestDetail() {
                 <TbCirclesRelation />
               </span>
               <p className="text-sm">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor,
-                totam!
+                {Data?.Metadata?.RelatedContracts?._text}
               </p>
             </div>
           </div>
         </div>
+        {IsStatusUpdates && (
+          <div className="bg-white my-2 shadow-sm p-4 col-span-2">
+            <ViewStatusUpdates StatusUpdates={StatusUpdates} />
+          </div>
+        )}
       </div>
     </>
   );

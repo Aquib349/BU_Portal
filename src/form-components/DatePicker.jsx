@@ -8,7 +8,7 @@ const Datepicker = ({ date, setDate, title, baseline, required }) => {
       <div className="flex flex-col pb-3">
         <label className="text-sm">
           {title}
-          {required && <span className={`text-red-500 font-bold`}>*</span>}
+          {required === "true" && <span className={`text-red-500 font-bold`}>*</span>}
         </label>
         <DatePicker
           className="p-2 text-sm text-white bg-transparent outline-blue-500
@@ -27,7 +27,7 @@ Datepicker.propTypes = {
   setDate: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   baseline: PropTypes.string.isRequired,
-  required: PropTypes.bool.isRequired,
+  required: PropTypes.string.isRequired,
 };
 
 export default Datepicker;

@@ -1,21 +1,26 @@
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
-import { useState } from "react";
 import PropTypes from "prop-types";
 
-const PhoneNumberField = ({ title, baseline, required }) => {
-  const [value, setValue] = useState();
-
+const PhoneNumberField = ({
+  title,
+  baseline,
+  required,
+  PhoneValue,
+  setPhoneValue,
+}) => {
   return (
     <>
       <div className="pb-3">
         <label className="text-sm">
           {title}
-          {required && <span className={`text-red-500 font-bold`}>*</span>}
+          {required === "true" && (
+            <span className={`text-red-500 font-bold`}>*</span>
+          )}
         </label>
         <PhoneInput
-          value={value}
-          onChange={setValue}
+          value={PhoneValue}
+          onChange={setPhoneValue}
           style={{
             padding: "0 10px",
             fontSize: "0.9rem",
@@ -33,7 +38,9 @@ const PhoneNumberField = ({ title, baseline, required }) => {
 PhoneNumberField.propTypes = {
   title: PropTypes.string.isRequired,
   baseline: PropTypes.string.isRequired,
-  required: PropTypes.bool.isRequired,
+  required: PropTypes.string.isRequired,
+  PhoneValue: PropTypes.number.isRequired,
+  setPhoneValue: PropTypes.func.isRequired,
 };
 
 export default PhoneNumberField;

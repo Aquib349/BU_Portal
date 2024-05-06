@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 function useRequestDetail(RowKey) {
-  const [SingleRequestData, setSigleRequetData] = useState([]);
+  const [SingleRequestData, setSigleRequetData] = useState("");
   const [loading, setLoading] = useState(true);
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;

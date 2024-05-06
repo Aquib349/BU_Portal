@@ -6,6 +6,10 @@ import FilterRequests from "./requests/FilterRequests";
 import Pagination from "../../Elements/Pagination";
 import { Link } from "react-router-dom";
 import Bookmarks from "./bookmark/Bookmarks";
+import MultiLineTextField from "../../form-components/MultiLineTextField";
+// import Tooltip from "../../Elements/Tooltip";
+// import { CiCircleInfo } from "react-icons/ci";
+import MultiChoiceDropdown from "../../form-components/MultiChoiceDropdown";
 
 function Dashboard() {
   const { RequestData } = useContext(RequestContext);
@@ -41,7 +45,38 @@ function Dashboard() {
 
   return (
     <>
-      {show && <Modal toggleModal={toggleModal} heading="Add Note" />}
+      {show && (
+        <Modal toggleModal={toggleModal} heading="Add Note">
+          <div className="add-note pt-4">
+            <MultiLineTextField
+              title="Notes"
+              baseline=""
+              name="add_note"
+              required="true"
+            />
+            <MultiChoiceDropdown
+              multi={true}
+              title="Send Notification to"
+              baseline=""
+              required="false"
+            />
+            <div className="btn text-white flex justify-end gap-2 pt-4">
+              <button
+                type="button"
+                className="bg-slate-600 px-8 py-2 text-sm rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="bg-blue-500 px-8 py-2 text-sm rounded-md"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
       <div className="dashboard-component px-14">
         <div className="p-2 grid grid-cols-4">
           <div className="col-span-3 pt-6">

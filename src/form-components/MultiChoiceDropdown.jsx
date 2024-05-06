@@ -1,20 +1,27 @@
-import { useState } from "react";
 import Select from "react-select";
 import PropTypes from "prop-types";
 
-const MultiChoiceDropdown = ({ multi, options, title, baseline, required }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
-
+const MultiChoiceDropdown = ({
+  multi,
+  options,
+  title,
+  baseline,
+  required,
+  MultiSelectValue,
+  setMultiSelectValue,
+}) => {
   return (
     <>
       <div className="pb-3">
         <label className="text-sm">
           {title}
-          {required && <span className={`text-red-500 font-bold`}>*</span>}
+          {required === "true" && (
+            <span className={`text-red-500 font-bold`}>*</span>
+          )}
         </label>
         <Select
-          defaultValue={selectedOption}
-          onChange={setSelectedOption}
+          defaultValue={MultiSelectValue}
+          onChange={setMultiSelectValue}
           options={options}
           isMulti={multi}
           className="css-control"
@@ -30,7 +37,9 @@ MultiChoiceDropdown.propTypes = {
   options: PropTypes.array.isRequired,
   title: PropTypes.string.isRequired,
   baseline: PropTypes.string.isRequired,
-  required: PropTypes.bool.isRequired,
+  required: PropTypes.string.isRequired,
+  MultiSelectValue: PropTypes.any.isRequired,
+  setMultiSelectValue: PropTypes.func.isRequired,
 };
 
 export default MultiChoiceDropdown;

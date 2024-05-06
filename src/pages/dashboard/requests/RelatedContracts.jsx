@@ -1,4 +1,4 @@
-import Status from "../Status";
+import Status from "./Status";
 import { MdOutlineDoubleArrow } from "react-icons/md";
 import { RiStickyNoteAddFill } from "react-icons/ri";
 import { FaEye } from "react-icons/fa";
