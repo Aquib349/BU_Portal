@@ -9,45 +9,32 @@ import { RxCross2 } from "react-icons/rx";
 function ProjectLookUp({ ProjectName }) {
   const [showModal, setShowModal] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [AllCheked, setAllChecked] = useState(
-    ProjectName.reduce((acc, obj) => {
-      acc[obj.RowKey] = false;
-      return acc;
-    }, {})
-  );
+  const [AllChecked, setAllChecked] = useState(false);
+  const [checkboxes, setCheckboxes] = useState(ProjectName);
+
+  // Function to handle header checkbox change
+  const handleHeaderChange = (event) => {
+    const isChecked = event.target.checked;
+    setHeaderChecked(isChecked);
+    setCheckboxes(
+      checkboxes.map((checkbox) => ({ ...checkbox, checked: isChecked }))
+    );
+  };
+
+  // Function to handle individual checkbox change
+  const handleCheckboxChange = (id) => {
+    const updatedCheckboxes = checkboxes.map((checkbox) =>
+      checkbox.id === id
+        ? { ...checkbox, checked: !checkbox.checked }
+        : checkbox
+    );
+    setCheckboxes(updatedCheckboxes);
+    setHeaderChecked(updatedCheckboxes.every((checkbox) => checkbox.checked));
+  };
 
   // function to handle the modal
   function toggleProjectModal() {
     setShowModal(!showModal);
-  }
-
-  // Function to handle top checkbox change
-  const handleTopCheckboxChange = () => {
-    const allChecked = Object.values(AllCheked).every((state) => state);
-    const updatedStates = Object.keys(AllCheked).reduce((acc, key) => {
-      acc[key] = !allChecked;
-      return acc;
-    }, {});
-    setAllChecked(updatedStates);
-  };
-
-  // function to handle the project change
-  function handleProjectChange(id) {
-    const updatedStates = {
-      ...AllCheked,
-      [id]: !AllCheked[id],
-    };
-    setAllChecked(updatedStates);
-
-    // Check if any checkbox below is unchecked
-    const isAnyUnchecked = Object.values(updatedStates).some((state) => !state);
-    // If any checkbox below is unchecked, uncheck the top checkbox
-    if (isAnyUnchecked) {
-      setAllChecked((prevState) => ({
-        ...prevState,
-        topCheckbox: false,
-      }));
-    }
   }
 
   return (
@@ -111,9 +98,9 @@ function ProjectLookUp({ ProjectName }) {
                       <AllProjects
                         ProjectName={data}
                         toggleModal={toggleModal}
-                        handleProjectChange={handleProjectChange}
-                        AllCheked={AllCheked}
-                        handleTopCheckboxChange={handleTopCheckboxChange}
+                        handleProjectChange={handleCheckboxChange}
+                        AllChecked={AllChecked}
+                        handleTopCheckboxChange={handleHeaderChange}
                       />
                     )}
                   />

@@ -4,7 +4,7 @@ import FilterArrow from "../../../components/FilterArrow";
 function AllProjects({
   ProjectName,
   handleProjectChange,
-  AllCheked,
+  AllChecked,
   handleTopCheckboxChange,
 }) {
   return (
@@ -14,7 +14,7 @@ function AllProjects({
           type="checkbox"
           name="select_project"
           className="w-3 h-3"
-          checked={Object.values(AllCheked).every((state) => state)}
+          checked={Object.values(AllChecked).every((state) => state)}
           onChange={handleTopCheckboxChange}
         />
         <span className="col-span-2">Project Name</span>
@@ -38,7 +38,7 @@ function AllProjects({
             type="checkbox"
             name="select_project"
             className="w-3 h-3"
-            checked={AllCheked[val.RowKey]}
+            checked={AllChecked[val.RowKey]}
             onChange={(e) =>
               handleProjectChange(e.target.checked ? val.RowKey : "")
             }
@@ -55,7 +55,7 @@ function AllProjects({
 AllProjects.propTypes = {
   ProjectName: PropTypes.array.isRequired,
   handleProjectChange: PropTypes.func.isRequired,
-  AllCheked: PropTypes.bool.isRequired,
+  AllChecked: PropTypes.bool.isRequired,
   handleTopCheckboxChange: PropTypes.func.isRequired,
 };
 
