@@ -4,6 +4,10 @@ import RequestProvider from "./context/RequestContext";
 import Dashboard from "./pages/dashboard/Dashboard";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import ViewRequestDetail from "./pages/dashboard/view request detail/ViewRequestDetail";
+import UserProvider from "./context/UserContext";
+import ContractSummary from "./pages/contract-summary/ContractSummary";
+import NewHomePage from "./pages/NewHomePage";
+// import LookupField from "./form-components/lookup-field/LookupField";
 
 function App() {
   return (
@@ -19,7 +23,11 @@ function App() {
 const Router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <UserProvider>
+        <App />
+      </UserProvider>
+    ),
     children: [
       {
         path: "/",
@@ -34,11 +42,20 @@ const Router = createBrowserRouter([
         element: <NewRequest />,
       },
       {
-        path : 'requestDetail/:RowKey',
-        element : <ViewRequestDetail/>
-      }
+        path: "requestDetail/:RowKey",
+        element: <ViewRequestDetail />,
+      },
+      {
+        path: "contractSummary/:Rowkey",
+        element: <ContractSummary />,
+      },
+      {
+        path: "new",
+        element: <NewHomePage />,
+        // element: <LookupField />,
+      },
     ],
   },
 ]);
 
-export default Router
+export default Router;

@@ -1,39 +1,27 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import ReactPaginate from "react-paginate";
 import PropTypes from "prop-types";
-import Requests from "../pages/dashboard/requests/Requests";
-import { RequestContext } from "../context/RequestContext";
 
-function Pagination({ itemsPerPage, FilteredData, toggleModal }) {
+function Pagination({ itemsPerPage, data, toggleModal, renderComponent }) {
   const [itemOffset, setItemOffset] = useState(0);
-  const { RequestData } = useContext(RequestContext);
 
   const endOffset = itemOffset + itemsPerPage;
 
-  const currentItems = (
-    FilteredData.length > 0 ? FilteredData : RequestData?.SubmittedRequests
-  )?.slice(itemOffset, endOffset);
+  const currentItems = data?.slice(itemOffset, endOffset);
 
-  const pageCount = Math.ceil(
-    (FilteredData.length > 0 ? FilteredData : RequestData?.SubmittedRequests)
-      ?.length / itemsPerPage
-  );
+  const pageCount = Math.ceil(data?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
-    const newOffset =
-      (event.selected * itemsPerPage) %
-      (FilteredData.length > 0 ? FilteredData : RequestData.SubmittedRequests)
-        .length;
+    const newOffset = (event.selected * itemsPerPage) % data?.length;
     setItemOffset(newOffset);
   };
   return (
     <>
-      <Requests
-        FilteredData={FilteredData}
-        toggleModal={toggleModal}
-        currentItems={currentItems}
-      />
+      {renderComponent({
+        data: currentItems,
+        toggleModal: toggleModal,
+      })}
       <ReactPaginate
         breakLabel="..."
         nextLabel="next >"
@@ -54,9 +42,11 @@ function Pagination({ itemsPerPage, FilteredData, toggleModal }) {
 }
 
 Pagination.propTypes = {
+  RequestData: PropTypes.array.isRequired,
   itemsPerPage: PropTypes.number.isRequired,
   toggleModal: PropTypes.func.isRequired,
-  FilteredData: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired,
+  renderComponent: PropTypes.func.isRequired,
 };
 
 export default Pagination;

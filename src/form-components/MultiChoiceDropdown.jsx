@@ -24,7 +24,7 @@ const MultiChoiceDropdown = ({
           onChange={setMultiSelectValue}
           options={options}
           isMulti={multi}
-          className="css-control"
+          className="css-control text-black bg-white"
         />
         <small className="text-slate-500">{baseline}</small>
       </div>

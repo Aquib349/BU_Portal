@@ -1,37 +1,54 @@
 import { useState } from "react";
-import { CiFilter } from "react-icons/ci";
 import Datepicker from "../../../form-components/DatePicker";
 import MultiChoiceDropdown from "../../../form-components/MultiChoiceDropdown";
+import UserField from "../../../form-components/UserField";
+import { TbAdjustmentsHorizontal } from "react-icons/tb";
 
 function FilterRequests() {
   const [show, setShow] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(null);
+
   return (
     <>
       <div className="relative inline-block text-left">
-        <div className="text-xl text-blue-600 font-bold">
-          <CiFilter
-            onClick={() => setShow(!show)}
-          />
+        <div
+          className="text-sm font-bold flex justify-center items-center gap-1 text-slate-500"
+          onClick={() => setShow(!show)}
+        >
+          <span><TbAdjustmentsHorizontal></TbAdjustmentsHorizontal></span>
+          <span>Filter</span>
         </div>
 
         <div
-          className={`absolute border right-0 z-10 mt-4 pb-8 w-80 rounded-md bg-gray-800 ${
+          className={`absolute border right-0 z-10 mt-4 pb-8 w-80 rounded bg-white ${
             show ? "static" : "hidden"
           }`}
         >
           <div className="py-1 px-2">
-            <form className="text-white text-sm">
+            <form className="text-sm">
               <div className="py-2">
-                <MultiChoiceDropdown title="Request Status" multi={true} options={[]}/>
+                <MultiChoiceDropdown
+                  title="Request Status"
+                  multi={true}
+                  options={[]}
+                />
               </div>
               <div className="py-2">
-                <MultiChoiceDropdown title="Assigned To" multi={true} options={[]}/>
+                <UserField
+                  title="Assigned To"
+                  multi={true}
+                  baseline=""
+                  required="false"
+                />
               </div>
               <div className="py-2">
-                <MultiChoiceDropdown title="Request Type" multi={true} options={[]}/>
+                <MultiChoiceDropdown
+                  title="Request Type"
+                  multi={true}
+                  options={[]}
+                />
               </div>
-              <div className="text-white">
+              <div>
                 <Datepicker
                   date={date}
                   setDate={setDate}

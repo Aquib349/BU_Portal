@@ -11,10 +11,11 @@ const Datepicker = ({ date, setDate, title, baseline, required }) => {
           {required === "true" && <span className={`text-red-500 font-bold`}>*</span>}
         </label>
         <DatePicker
-          className="p-2 text-sm text-white bg-transparent outline-blue-500
+          className="p-2 text-sm bg-white outline-blue-500
            border border-slate-400 rounded-md w-full"
           selected={date}
           onChange={(date) => setDate(date)}
+          placeholderText="pick date"
         />
         <small className="text-slate-500">{baseline}</small>
       </div>

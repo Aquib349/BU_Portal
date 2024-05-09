@@ -1,15 +1,17 @@
 import Select from "react-select";
 import PropTypes from "prop-types";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 const UserField = ({
   title,
-  options,
   multi,
   baseline,
   required,
   UserselectedOption,
   setUserSelectedOption,
 }) => {
+  const { AllUser } = useContext(UserContext);
   return (
     <>
       <div className="pb-3">
@@ -22,7 +24,7 @@ const UserField = ({
         <Select
           defaultValue={UserselectedOption}
           onChange={setUserSelectedOption}
-          options={options}
+          options={AllUser}
           isMulti={multi}
         />
         <small className="text-slate-500">{baseline}</small>

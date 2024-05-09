@@ -3,12 +3,14 @@ import { MdOutlineDoubleArrow } from "react-icons/md";
 import { RiStickyNoteAddFill } from "react-icons/ri";
 import { FaEye } from "react-icons/fa";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 function CreatedContracts({
   toggleModal,
   ContractTitle,
   status,
   ContractCreated,
+  RowKey,
 }) {
   return (
     <>
@@ -23,14 +25,16 @@ function CreatedContracts({
           </span>
         </td>
         <td className="w-3/12">{ContractTitle}</td>
-        <td className="w-4/12">
+        <td>
           <Status status={status} />
         </td>
         <td className="">{"-"}</td>
         <td className="">{"-"}</td>
         <td className=" text-sm cursor-pointer">
-          <span className="flex justify-center items-center">
-            <FaEye />
+          <span className="flex justify-center items-center text-blue-600">
+            <Link to={`contractSummary/${RowKey}`}>
+              <FaEye />
+            </Link>
           </span>
         </td>
         <td className="text-sm cursor-pointer">
@@ -48,6 +52,7 @@ CreatedContracts.propTypes = {
   ContractTitle: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
   toggleModal: PropTypes.func.isRequired,
+  RowKey: PropTypes.string.isRequired,
 };
 
 export default CreatedContracts;

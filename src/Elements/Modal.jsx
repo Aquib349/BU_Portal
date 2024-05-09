@@ -2,15 +2,19 @@ import { memo } from "react";
 import PropTypes from "prop-types";
 import { RxCross2 } from "react-icons/rx";
 
-const Modal = memo(function Modal({ toggleModal, heading, children }) {
+const Modal = memo(function Modal({ toggleModal, heading, children, set_Width }) {
   return (
     <>
       <div className="modal_component">
         <div
-          className={`modal inset-0 z-50 items-center justify-center fixed h-[100vh] bg-black/40`}
+          className={`modal inset-0 z-50 items-center justify-center fixed h-[100vh] bg-black/60`}
         >
           <div className="flex justify-center mt-10">
-            <div className="modal-content relative rounded-sm bg-white pb-4 drop-shadow-xl max-w-xl w-11/12 animation-zoomIn">
+            <div
+              className={`modal-content relative rounded-sm bg-white pb-4 drop-shadow-xl ${
+                set_Width ? `max-w-5xl` : "max-w-xl"
+              } w-11/12 animation-zoomIn`}
+            >
               <div className="modal-header px-2 py-3 border-b border-slate-400">
                 <h2 className="text-xl text-start px-2 text-gray-800">
                   {heading}
@@ -36,6 +40,7 @@ Modal.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   heading: PropTypes.any.isRequired,
   children: PropTypes.object.isRequired,
+  set_Width: PropTypes.bool.isRequired,
 };
 
 export default Modal;

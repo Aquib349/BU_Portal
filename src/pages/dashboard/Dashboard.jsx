@@ -10,6 +10,7 @@ import MultiLineTextField from "../../form-components/MultiLineTextField";
 // import Tooltip from "../../Elements/Tooltip";
 // import { CiCircleInfo } from "react-icons/ci";
 import MultiChoiceDropdown from "../../form-components/MultiChoiceDropdown";
+import Requests from "./requests/Requests";
 
 function Dashboard() {
   const { RequestData } = useContext(RequestContext);
@@ -152,9 +153,17 @@ function Dashboard() {
               </div>
               {/* requests */}
               <Pagination
-                FilteredData={FilteredData}
+                RequestData={RequestData}
+                data={
+                  FilteredData?.length > 0
+                    ? FilteredData
+                    : RequestData?.SubmittedRequests
+                }
                 toggleModal={toggleModal}
                 itemsPerPage={10}
+                renderComponent={({ data, toggleModal }) => (
+                  <Requests currentItems={data} toggleModal={toggleModal} />
+                )}
               />
             </div>
 

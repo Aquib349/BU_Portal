@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 // Import your components here
 import Taxonomy from "../form-components/Taxonomy";
-import LookupField from "../form-components/LookupField";
+import LookupField from "../form-components/lookup-field/LookupField";
 import SingleLineTextField from "../form-components/SingleLineTextField";
 import MultiLineTextField from "../form-components/MultiLineTextField";
 import UserField from "../form-components/UserField";
@@ -96,6 +96,7 @@ function DynamicForms({ DynamicFormData }) {
           title: FieldDisplayName,
           baseline: HelpText ? HelpText : "",
           required: Required,
+          fieldname: FieldName,
           ...props,
         };
         return (

@@ -19,7 +19,7 @@ function Requests({ toggleModal, currentItems }) {
             <thead className="sticky top-0">
               <tr className="bg-blue-500 text-white text-sm">
                 <th className="p-1">Sl No.</th>
-                <th className="p-1">Title</th>
+                <th className="p-1 w-3/12">Title</th>
                 <th className="p-1">Status</th>
                 <th className="p-1">Assigned To</th>
                 <th className="p-1">Due Date</th>
@@ -37,13 +37,12 @@ function Requests({ toggleModal, currentItems }) {
                     <tr className="text-center text-[0.8rem] border-t border-slate-400">
                       {/* Columns for original row */}
                       <td className="">{index + 1}</td>
-                      <td className="w-3/12">
+                      <td className="w-3/12 text-start">
                         {val.RequestTitle.length > 40
                           ? val.RequestTitle?.slice(0, 25) + "..."
                           : val.RequestTitle}
                       </td>
-                      <td className="w-4/12">
-                        {/*  */}
+                      <td>
                         <Status status={val.Status} />
                       </td>
                       <td className="">{val.AssignedTo}</td>
@@ -66,6 +65,7 @@ function Requests({ toggleModal, currentItems }) {
                     {RequestData?.ContractsCreated?.map((rel) => (
                       <CreatedContracts
                         key={rel.RowKey}
+                        RowKey={rel.RowKey}
                         toggleModal={toggleModal}
                         ContractTitle={rel.ContractTitle}
                         status={rel.Status}
@@ -75,6 +75,7 @@ function Requests({ toggleModal, currentItems }) {
                     {RequestData?.ContractsAttached?.map((rel) => (
                       <RelatedContracts
                         key={rel.RowKey}
+                        RowKey={rel.RowKey}
                         toggleModal={toggleModal}
                         ContractTitle={rel.ContractTitle}
                         RelatedContract={rel.RelatedContracts}

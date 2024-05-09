@@ -17,8 +17,8 @@ function Accordion({ heading, children, checked }) {
           <IoIosArrowDown />
         </div>
         <div
-          className={`max-h-0 peer-checked:max-h-[200px]
-          transition-all ease-in-out duration-500 bg-slate-100 overflow-hidden`}
+          className={`max-h-0 peer-checked:max-h-[300px]
+          transition-all ease-in-out duration-500 bg-slate-100 overflow-auto`}
         >
           {children}
         </div>
@@ -29,7 +29,7 @@ function Accordion({ heading, children, checked }) {
 
 Accordion.propTypes = {
   heading: PropTypes.string.isRequired,
-  children: PropTypes.object.isRequired,
+  children: PropTypes.any.isRequired,
   checked: PropTypes.bool.isRequired,
 };
 

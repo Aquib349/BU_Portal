@@ -62,7 +62,7 @@ body {
 /* Pagination container */
 .pagination-container {
   display: flex;
-  justify-content: center;
+  justify-content: end;
   margin-top: 10px;
 }
 
