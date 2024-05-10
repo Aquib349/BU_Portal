@@ -10,32 +10,49 @@ function ProjectLookUp({ ProjectName }) {
   const [showModal, setShowModal] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [AllChecked, setAllChecked] = useState(false);
-  const [checkboxes, setCheckboxes] = useState(ProjectName);
-
-  // Function to handle header checkbox change
-  const handleHeaderChange = (event) => {
-    const isChecked = event.target.checked;
-    setHeaderChecked(isChecked);
-    setCheckboxes(
-      checkboxes.map((checkbox) => ({ ...checkbox, checked: isChecked }))
-    );
-  };
-
-  // Function to handle individual checkbox change
-  const handleCheckboxChange = (id) => {
-    const updatedCheckboxes = checkboxes.map((checkbox) =>
-      checkbox.id === id
-        ? { ...checkbox, checked: !checkbox.checked }
-        : checkbox
-    );
-    setCheckboxes(updatedCheckboxes);
-    setHeaderChecked(updatedCheckboxes.every((checkbox) => checkbox.checked));
-  };
+  const [checkedItems, setCheckedItems] = useState({});
+  const [SelectedProjects, setSelectedProjects] = useState([]);
 
   // function to handle the modal
   function toggleProjectModal() {
     setShowModal(!showModal);
   }
+
+  const toggleSelectAll = () => {
+    const newSelectAll = !AllChecked;
+    setAllChecked(newSelectAll);
+    const newCheckedItems = {};
+    ProjectName.forEach((item) => {
+      newCheckedItems[item.RowKey] = newSelectAll;
+    });
+    setCheckedItems(newCheckedItems);
+
+    // If all checked, include all items in SelectedProjects, otherwise set to an empty array
+    const updatedSelectedProjects = newSelectAll
+      ? ProjectName.map((item) => ({ id: item.RowKey, name: item.ProjectName }))
+      : [];
+    updateSelectedProjects(updatedSelectedProjects);
+  };
+
+  // function to toggle checkbox
+  const toggleCheckBox = (itemId, itemName) => {
+    const newCheckedItems = {
+      ...checkedItems,
+      [itemId]: !checkedItems[itemId],
+    };
+    setCheckedItems(newCheckedItems);
+    const allChecked = Object.values(newCheckedItems).every((value) => value);
+    setAllChecked(allChecked);
+
+    const updatedSelectedProjects = checkedItems[itemId] // If the item is unchecked
+      ? SelectedProjects.filter((project) => project.ProjectName !== itemName) // Remove the unchecked item
+      : [...SelectedProjects, { id: itemId, name: itemName }]; // Add the checked item
+    updateSelectedProjects(updatedSelectedProjects);
+  };
+
+  const updateSelectedProjects = (projects) => {
+    setSelectedProjects(projects);
+  };
 
   return (
     <>
@@ -98,9 +115,10 @@ function ProjectLookUp({ ProjectName }) {
                       <AllProjects
                         ProjectName={data}
                         toggleModal={toggleModal}
-                        handleProjectChange={handleCheckboxChange}
                         AllChecked={AllChecked}
-                        handleTopCheckboxChange={handleHeaderChange}
+                        toggleSelectAll={toggleSelectAll}
+                        checkedItems={checkedItems}
+                        toggleCheckBox={toggleCheckBox}
                       />
                     )}
                   />
@@ -109,14 +127,19 @@ function ProjectLookUp({ ProjectName }) {
                 {/*  */}
                 <div className="grid grid-cols-4">
                   <div className="selected-project col-span-3 text-xs">
-                    <div className="inline-flex justify-between items-center px-2 py-1">
-                      <span className="border border-gray-400 rounded px-2 py-1 flex items-center">
-                        <span className="flex-grow">Test</span>
-                        <span className="ml-2 text-blue-500">
-                          <RxCross2 />
+                    {SelectedProjects.map((val) => (
+                      <div
+                        key={val.id}
+                        className="inline-flex justify-between items-center px-2 py-1"
+                      >
+                        <span className="border border-gray-400 rounded px-2 py-1 flex items-center">
+                          <span className="flex-grow">{val.name}</span>
+                          <span className="ml-2 text-blue-500">
+                            <RxCross2 />
+                          </span>
                         </span>
-                      </span>
-                    </div>
+                      </div>
+                    ))}
                   </div>
                   <div className="btn flex justify-end gap-2 text-sm pt-4">
                     <button

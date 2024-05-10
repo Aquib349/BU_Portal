@@ -3,9 +3,10 @@ import FilterArrow from "../../../components/FilterArrow";
 
 function AllProjects({
   ProjectName,
-  handleProjectChange,
   AllChecked,
-  handleTopCheckboxChange,
+  toggleSelectAll,
+  checkedItems,
+  toggleCheckBox,
 }) {
   return (
     <>
@@ -14,8 +15,8 @@ function AllProjects({
           type="checkbox"
           name="select_project"
           className="w-3 h-3"
-          checked={Object.values(AllChecked).every((state) => state)}
-          onChange={handleTopCheckboxChange}
+          checked={AllChecked}
+          onChange={toggleSelectAll}
         />
         <span className="col-span-2">Project Name</span>
         <div className="col-span-2 flex items-center relative">
@@ -38,10 +39,8 @@ function AllProjects({
             type="checkbox"
             name="select_project"
             className="w-3 h-3"
-            checked={AllChecked[val.RowKey]}
-            onChange={(e) =>
-              handleProjectChange(e.target.checked ? val.RowKey : "")
-            }
+            checked={checkedItems[val.RowKey] || false}
+            onChange={() => toggleCheckBox(val.RowKey, val.ProjectName)}
           />
           <span className="col-span-2">{val.ProjectName}</span>
           <span className="col-span-2 pl-1">{val.ProjectManager}</span>
@@ -54,9 +53,10 @@ function AllProjects({
 
 AllProjects.propTypes = {
   ProjectName: PropTypes.array.isRequired,
-  handleProjectChange: PropTypes.func.isRequired,
+  toggleSelectAll: PropTypes.func.isRequired,
   AllChecked: PropTypes.bool.isRequired,
-  handleTopCheckboxChange: PropTypes.func.isRequired,
+  toggleCheckBox: PropTypes.func.isRequired,
+  checkedItems: PropTypes.object.isRequired,
 };
 
 export default AllProjects;
