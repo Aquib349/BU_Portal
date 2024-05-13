@@ -4,7 +4,7 @@ import ProjectTaskLookUp from "../project-task/ProjectTaskLookUp";
 import PropTypes from "prop-types";
 import AllProjects from "./AllProjects";
 import Pagination from "../../../Elements/Pagination";
-import { RxCross2 } from "react-icons/rx";
+import SelectedProject from "./SelectedProjects";
 
 function ProjectLookUp({ ProjectName }) {
   const [showModal, setShowModal] = useState(false);
@@ -21,6 +21,7 @@ function ProjectLookUp({ ProjectName }) {
   const toggleSelectAll = () => {
     const newSelectAll = !AllChecked;
     setAllChecked(newSelectAll);
+
     const newCheckedItems = {};
     ProjectName.forEach((item) => {
       newCheckedItems[item.RowKey] = newSelectAll;
@@ -41,11 +42,15 @@ function ProjectLookUp({ ProjectName }) {
       [itemId]: !checkedItems[itemId],
     };
     setCheckedItems(newCheckedItems);
-    const allChecked = Object.values(newCheckedItems).every((value) => value);
+
+    const allChecked =
+      ProjectName.length === Object.keys(newCheckedItems).length
+        ? Object.values(newCheckedItems).every((value) => value)
+        : false;
     setAllChecked(allChecked);
 
     const updatedSelectedProjects = checkedItems[itemId] // If the item is unchecked
-      ? SelectedProjects.filter((project) => project.ProjectName !== itemName) // Remove the unchecked item
+      ? SelectedProjects.filter((project) => project.name !== itemName) // Remove the unchecked item
       : [...SelectedProjects, { id: itemId, name: itemName }]; // Add the checked item
     updateSelectedProjects(updatedSelectedProjects);
   };
@@ -124,38 +129,15 @@ function ProjectLookUp({ ProjectName }) {
                   />
                 </div>
 
-                {/*  */}
-                <div className="grid grid-cols-4">
-                  <div className="selected-project col-span-3 text-xs">
-                    {SelectedProjects.map((val) => (
-                      <div
-                        key={val.id}
-                        className="inline-flex justify-between items-center px-2 py-1"
-                      >
-                        <span className="border border-gray-400 rounded px-2 py-1 flex items-center">
-                          <span className="flex-grow">{val.name}</span>
-                          <span className="ml-2 text-blue-500">
-                            <RxCross2 />
-                          </span>
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="btn flex justify-end gap-2 text-sm pt-4">
-                    <button
-                      type="button"
-                      className="py-2 px-4 bg-blue-500 text-white rounded"
-                    >
-                      Ok
-                    </button>
-                    <button
-                      type="button"
-                      className="py-2 px-6 bg-slate-500 text-white rounded"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
+                {/* selected projects */}
+                <SelectedProject
+                  SelectedProjects={SelectedProjects}
+                  setSelectedProjects={setSelectedProjects}
+                  checkedItems={checkedItems}
+                  setCheckedItems={setCheckedItems}
+                  ProjectName={ProjectName}
+                  setAllChecked={setAllChecked}
+                />
               </div>
             </Modal>
           </div>
