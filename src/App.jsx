@@ -1,4 +1,4 @@
-import Header from "./components/Header";
+import Header from "./components/header/Header";
 import NewRequest from "./pages/new request/NewRequest";
 import RequestProvider from "./context/RequestContext";
 import Dashboard from "./pages/dashboard/Dashboard";

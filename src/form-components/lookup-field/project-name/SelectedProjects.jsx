@@ -9,6 +9,10 @@ function SelectedProject({
   setCheckedItems,
   ProjectName,
   setAllChecked,
+  setSelectedProjectValue,
+  setShowModal,
+  showModal,
+  setProjectTask
 }) {
   // function to handle selected projects
   async function handleSelectedProjects() {
@@ -16,6 +20,8 @@ function SelectedProject({
     const account_id = import.meta.env.VITE_USER_KEY;
 
     const concatedString = SelectedProjects.map((val) => val.name).join(";");
+    setSelectedProjectValue(concatedString);
+
     const headers = {
       "Content-Type": "application/json",
       "eContracts-ApiKey":
@@ -26,7 +32,7 @@ function SelectedProject({
         `${api}/api/accounts/${account_id}/projecttasks?projectnames=${concatedString}`,
         { headers }
       );
-      console.log(response.data);
+      setProjectTask(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -77,13 +83,17 @@ function SelectedProject({
           <button
             type="button"
             className="py-2 px-4 bg-blue-500 text-white rounded"
-            onClick={handleSelectedProjects}
+            onClick={() => {
+              handleSelectedProjects();
+              setShowModal(!showModal)
+            }}
           >
             Ok
           </button>
           <button
             type="button"
             className="py-2 px-6 bg-slate-500 text-white rounded"
+            onClick={() => setShowModal(!showModal)}
           >
             Cancel
           </button>
@@ -100,6 +110,10 @@ SelectedProject.propTypes = {
   setCheckedItems: PropTypes.func.isRequired,
   ProjectName: PropTypes.array.isRequired,
   setAllChecked: PropTypes.func.isRequired,
+  setSelectedProjectValue: PropTypes.func.isRequired,
+  showModal:PropTypes.bool.isRequired,
+  setShowModal: PropTypes.func.isRequired,
+  setProjectTask:PropTypes.func.isRequired
 };
 
 export default SelectedProject;

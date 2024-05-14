@@ -1,14 +1,11 @@
 import { useContext, useState } from "react";
 import { RequestContext } from "../../context/RequestContext";
 import Modal from "../../Elements/Modal";
-import PortalInformation from "./PortalInformation";
 import FilterRequests from "./requests/FilterRequests";
 import Pagination from "../../Elements/Pagination";
 import { Link } from "react-router-dom";
 import Bookmarks from "./bookmark/Bookmarks";
 import MultiLineTextField from "../../form-components/MultiLineTextField";
-// import Tooltip from "../../Elements/Tooltip";
-// import { CiCircleInfo } from "react-icons/ci";
 import MultiChoiceDropdown from "../../form-components/MultiChoiceDropdown";
 import Requests from "./requests/Requests";
 
@@ -29,7 +26,7 @@ function Dashboard() {
   };
 
   function SearchRequests(e) {
-    const inputValue = e.target.value.toLowerCase(); // Convert input to lowercase
+    const inputValue = e.target.value.toLowerCase();
     setSearchInput(inputValue);
 
     if (inputValue.length === 0) {
@@ -78,15 +75,15 @@ function Dashboard() {
           </div>
         </Modal>
       )}
-      <div className="dashboard-component px-14">
-        <div className="p-2 grid grid-cols-4">
-          <div className="col-span-3 pt-6">
-            <div className="flex px-1">
-              <div>
-                <h1 className="text-3xl heading">
+      <div className="dashboard-component px-6 no-scrollbar">
+        <div className="p-2">
+          <div className="pt-2">
+            <div className="px-1 grid grid-cols-4">
+              <div className="col-span-3 pt-10">
+                <h1 className="text-4xl heading">
                   Welcome to the eContracts Portal !
                 </h1>
-                <p className="py-4 text-[0.8rem] pr-2">
+                <p className="py-4 text-sm pr-[6rem]">
                   This portal allows you to request preparation or review of
                   contracts or related documents. To begin a new request, please
                   click on the blue “Submit a New Request” button in the top
@@ -98,7 +95,7 @@ function Dashboard() {
                 <img
                   src="https://app-otbt-econ-test.azurewebsites.net/Content/BUPortal/Images/welcome_bg.svg"
                   alt="image"
-                  className="w-[350px]"
+                  className="w-[250px]"
                 />
               </div>
             </div>
@@ -169,11 +166,6 @@ function Dashboard() {
 
             {/* All Bookmarks */}
             <Bookmarks />
-          </div>
-
-          {/* Portal Information Sidebar */}
-          <div className="p-2">
-            <PortalInformation />
           </div>
         </div>
       </div>

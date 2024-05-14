@@ -5,13 +5,18 @@ import PropTypes from "prop-types";
 import AllProjects from "./AllProjects";
 import Pagination from "../../../Elements/Pagination";
 import SelectedProject from "./SelectedProjects";
+import ProjectsPerPage from "./ProjectsPerPage";
+import SearchProjects from "./SearchProjects";
 
-function ProjectLookUp({ ProjectName }) {
+function ProjectLookUp({ ProjectName, baseline }) {
   const [showModal, setShowModal] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [AllChecked, setAllChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
   const [SelectedProjects, setSelectedProjects] = useState([]);
+  const [SelectedProjectValue, setSelectedProjectValue] = useState("");
+  const [ProjectTask, setProjectTask] = useState([]);
+  const [filteredProject, setFilteredProject] = useState([]);
 
   // function to handle the modal
   function toggleProjectModal() {
@@ -64,7 +69,7 @@ function ProjectLookUp({ ProjectName }) {
       <div className="flex">
         <input
           type="text"
-          value=""
+          value={SelectedProjectValue}
           className="border border-slate-400 text-sm p-2 rounded-l-md w-full outline-blue-200 text-black bg-gray-200"
           readOnly
         />
@@ -83,38 +88,21 @@ function ProjectLookUp({ ProjectName }) {
             >
               {/* pick the projec type */}
               <div className="main-project">
-                {/* show-entries and search bar */}
                 <div className="show-entries-search flex justify-between items-center py-3">
-                  <div className="flex items-center gap-x-1 text-sm">
-                    <span>Show</span>
-                    <select
-                      name="entries"
-                      id="entries"
-                      className="px-2 border rounded"
-                      onChange={(e) => setItemsPerPage(e.target.value)}
-                    >
-                      <option value="10">10</option>
-                      <option value="25">25</option>
-                      <option value="50">50</option>
-                      <option value="100">100</option>
-                    </select>
-                    <span>entries</span>
-                  </div>
-                  <div className="">
-                    <input
-                      type="search"
-                      name="project"
-                      placeholder="search"
-                      className="p-2 border rounded w-full text-sm outline-none"
-                    />
-                  </div>
+                  {/* items per page to show */}
+                  <ProjectsPerPage setItemsPerPage={setItemsPerPage} />
+                  {/* search input project */}
+                  <SearchProjects
+                    setFilteredProject={setFilteredProject}
+                    ProjectName={ProjectName}
+                  />
                 </div>
 
                 {/* all projects */}
                 <div className="border-b border-slate-300 pb-2">
                   <Pagination
                     itemsPerPage={itemsPerPage}
-                    data={ProjectName}
+                    data={filteredProject.length <= 0 ? ProjectName : filteredProject}
                     toggleModal={toggleProjectModal}
                     renderComponent={({ data, toggleModal }) => (
                       <AllProjects
@@ -137,19 +125,25 @@ function ProjectLookUp({ ProjectName }) {
                   setCheckedItems={setCheckedItems}
                   ProjectName={ProjectName}
                   setAllChecked={setAllChecked}
+                  setSelectedProjectValue={setSelectedProjectValue}
+                  showModal={showModal}
+                  setShowModal={setShowModal}
+                  setProjectTask={setProjectTask}
                 />
               </div>
             </Modal>
           </div>
         </button>
       </div>
-      <ProjectTaskLookUp />
+      <small className="text-slate-500">{baseline}</small>
+      <ProjectTaskLookUp ProjectTask={ProjectTask} baseline={baseline} />
     </>
   );
 }
 
 ProjectLookUp.propTypes = {
   ProjectName: PropTypes.array.isRequired,
+  baseline: PropTypes.string.isRequired,
 };
 
 export default ProjectLookUp;

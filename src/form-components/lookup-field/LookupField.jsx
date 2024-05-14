@@ -72,8 +72,7 @@ const LookupField = ({
             <span className={`text-red-500 font-bold`}>*</span>
           )}
         </label>
-        <ProjectLookUp ProjectName={ProjectName} />
-        <small className="text-slate-500">{baseline}</small>
+        <ProjectLookUp ProjectName={ProjectName} baseline={baseline} />
       </div>
     );
   }

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Modal from "../../../Elements/Modal";
+import PropTypes from "prop-types";
+import SelectedProjectTask from "./SelectedProjectTask";
 
-function ProjectTaskLookUp() {
+function ProjectTaskLookUp({ ProjectTask, baseline }) {
   const [showModal, setShowModal] = useState(false);
 
   // function to handle the modal
@@ -35,13 +37,38 @@ function ProjectTaskLookUp() {
                 set_Width={true}
               >
                 {/* pick the project task */}
+                <div className="project-task pt-4">
+                  {ProjectTask.map((val) => (
+                    <div key={val.RowKey} className="main text-sm">
+                      <div className="project-task-name bg-slate-200 p-2 flex items-center gap-2">
+                        <input type="checkbox" name="task_name" />
+                        <span>
+                          {val.TaskDescription.replace("(Default Task)", "")}
+                        </span>
+                      </div>
+                      <div className="project-task-detail p-2 flex items-center gap-2 pl-8">
+                        <input type="checkbox" name="task_desc" />
+                        <span>
+                          {val.TaskID} : {val.TaskDescription}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                  <SelectedProjectTask />
+                </div>
               </Modal>
             </div>
           </button>
         </div>
+        <small className="text-slate-500">{baseline}</small>
       </div>
     </>
   );
 }
+
+ProjectTaskLookUp.propTypes = {
+  ProjectTask: PropTypes.array.isRequired,
+  baseline: PropTypes.string.isRequired,
+};
 
 export default ProjectTaskLookUp;

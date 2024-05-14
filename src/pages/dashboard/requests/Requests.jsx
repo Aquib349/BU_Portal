@@ -14,13 +14,13 @@ function Requests({ toggleModal, currentItems }) {
   return (
     <>
       <div className="request-contents">
-        <div className="overflow-y-auto h-[400px] w-full no-scrollbar">
+        <div className="overflow-y-auto h-auto w-full no-scrollbar">
           <table className="w-full border-collapse">
             <thead className="sticky top-0">
               <tr className="bg-blue-500 text-white text-sm">
-                <th className="p-1">Sl No.</th>
-                <th className="p-1 w-3/12">Title</th>
-                <th className="p-1">Status</th>
+                <th className="p-1 text-start">Sl No.</th>
+                <th className="p-1 w-3/12 text-start">Title</th>
+                <th className="p-1 text-start pl-10">Status</th>
                 <th className="p-1">Assigned To</th>
                 <th className="p-1">Due Date</th>
                 <th className="p-1">Details</th>
@@ -34,9 +34,9 @@ function Requests({ toggleModal, currentItems }) {
                 return (
                   <React.Fragment key={val.RowKey}>
                     {/* Original row */}
-                    <tr className="text-center text-[0.8rem] border-t border-slate-400">
+                    <tr className="text-center text-sm border-t border-slate-400">
                       {/* Columns for original row */}
-                      <td className="">{index + 1}</td>
+                      <td className="text-start px-3">{index + 1}</td>
                       <td className="w-3/12 text-start">
                         {val.RequestTitle.length > 40
                           ? val.RequestTitle?.slice(0, 25) + "..."
@@ -45,16 +45,16 @@ function Requests({ toggleModal, currentItems }) {
                       <td>
                         <Status status={val.Status} />
                       </td>
-                      <td className="">{val.AssignedTo}</td>
+                      <td className="p-2">{val.AssignedTo}</td>
                       <td className="">{dateObject.toLocaleDateString()}</td>
-                      <td className="text-lg cursor-pointer">
+                      <td className="text-xl cursor-pointer">
                         <span className="flex justify-center items-center text-slate-600">
                           <Link to={`requestDetail/${val.RowKey}`}>
                             <FaEye />
                           </Link>
                         </span>
                       </td>
-                      <td className="py-2 text-lg cursor-pointer">
+                      <td className="py-2 text-xl cursor-pointer">
                         <span className="flex justify-center items-center text-slate-600">
                           <RiStickyNoteAddFill onClick={toggleModal} />
                         </span>

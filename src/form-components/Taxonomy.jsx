@@ -1,7 +1,7 @@
 const Taxonomy = () => {
   return (
     <div>
-      <div>taxonomy</div>
+      <div>taxonomy field</div>
     </div>
   );
 };

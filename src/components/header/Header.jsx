@@ -1,14 +1,15 @@
-import Dropdown from "../Elements/Dropdown";
+import Dropdown from "../../Elements/Dropdown";
 import { FaBell } from "react-icons/fa6";
 import { FaCircleUser } from "react-icons/fa6";
 import Notification from "./Notifications";
 import { useState } from "react";
+import SearchBar from "../../Elements/searchbox/Search";
 
 function Header() {
   const [showModal, setShowModal] = useState(false);
   return (
     <>
-      <div className="Header-component border-b border-slate-300 h-16 flex items-center bg-white sticky top-0 z-20">
+      <div className="Header-component shadow-md shadow-slate-300 h-16 flex items-center bg-white sticky top-0 z-20">
         <div className="main w-[95%] m-auto">
           <div className="grid grid-cols-4 items-center">
             <div className="dropdown-menu flex items-center gap-4">
@@ -40,15 +41,12 @@ function Header() {
               </Dropdown>
             </div>
             <div className="global-search col-span-2 flex justify-center items-center">
-              <input
-                type="search"
-                name="search"
-                id="global-search"
-                placeholder="Search with Contract, Document or Counterparty name"
-                className="p-2 rounded-md text-sm border border-slate-300 w-9/12 outline-2 outline-blue-500/50"
-              />
+              {/* other nav items */}
             </div>
-            <div className="notification-user flex gap-8 justify-center items-center">
+            <div className="notification-user flex gap-6 justify-end items-center">
+              <div className="flex items-center gap-1 cursor-pointer">
+                <SearchBar />
+              </div>
               <div className="relative">
                 <span className="text-[1.1rem]">
                   <FaBell
@@ -63,14 +61,10 @@ function Header() {
                   233
                 </div>
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 cursor-pointer">
                 <span className="text-[1.1rem]">
                   <FaCircleUser />
                 </span>
-                <div className="text-sm">
-                  <span>Hello, windows User</span>
-                  {/* dropdown if required */}
-                </div>
               </div>
             </div>
           </div>
