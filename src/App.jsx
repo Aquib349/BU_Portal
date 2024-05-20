@@ -7,12 +7,14 @@ import ViewRequestDetail from "./pages/dashboard/view request detail/ViewRequest
 import UserProvider from "./context/UserContext";
 import ContractSummary from "./pages/contract-summary/ContractSummary";
 import NewHomePage from "./pages/NewHomePage";
+import ScrollToTop from "./components/ScrollToTop";
 // import LookupField from "./form-components/lookup-field/LookupField";
 
 function App() {
   return (
     <>
       <div>
+        <ScrollToTop />
         <Header />
         <Outlet />
       </div>

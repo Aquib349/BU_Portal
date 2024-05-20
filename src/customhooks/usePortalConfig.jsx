@@ -6,6 +6,7 @@ function usePortalConfig() {
   const account_id = import.meta.env.VITE_USER_KEY;
 
   const [ConfigData, setConfigData] = useState([]);
+  const [showStatus, setShowStatus] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // function to split the business areas
@@ -70,6 +71,7 @@ function usePortalConfig() {
         Timestamp: response.data.Timestamp,
         ETag: response.data.ETag,
       });
+      setShowStatus(response.data.DisplayRequestStatus);
       setConfigData(NewData);
       setLoading(false);
     } catch (error) {
@@ -82,7 +84,7 @@ function usePortalConfig() {
     getBusinessPortalConfig();
   }, []);
 
-  return { ConfigData, loading };
+  return { ConfigData, loading, showStatus };
 }
 
 export default usePortalConfig;

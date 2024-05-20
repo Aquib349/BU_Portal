@@ -28,7 +28,7 @@ function Pagination({ itemsPerPage, data, toggleModal, renderComponent }) {
         onPageChange={handlePageClick}
         pageRangeDisplayed={5}
         pageCount={pageCount}
-        previousLabel="< Prev"
+        previousLabel="< prev"
         renderOnZeroPageCount={null}
         containerClassName="pagination-container"
         pageClassName="pagination-item"

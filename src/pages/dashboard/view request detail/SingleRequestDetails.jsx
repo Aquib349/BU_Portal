@@ -187,7 +187,7 @@ function SingleRequestDetails({ Data }) {
 }
 
 SingleRequestDetails.propTypes = {
-  Data: PropTypes.array.isRequired,
+  Data: PropTypes.object.isRequired,
 };
 
 export default SingleRequestDetails;

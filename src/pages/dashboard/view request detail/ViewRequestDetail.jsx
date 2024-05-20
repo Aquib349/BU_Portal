@@ -10,29 +10,21 @@ import usePortalConfig from "../../../customhooks/usePortalConfig";
 import axios from "axios";
 import ViewStatusUpdates from "./ViewStatusUpdate";
 import SingleRequestDetails from "./SingleRequestDetails";
+import RequestDetailShimmer from "../../../shimmer/RequestDetailShimmer";
 
 function ViewRequestDetail() {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
-  const [Data, setData] = useState([]);
-  const [IsStatusUpdates, setIsStatusUpdates] = useState(false);
+  const [Data, setData] = useState({});
   const [StatusUpdates, setStatusUpdates] = useState([]);
   const { RowKey } = useParams();
-  const { ConfigData } = usePortalConfig();
+  const { showStatus } = usePortalConfig();
   const { SingleRequestData } = useRequestDetail(RowKey);
   const jsonResult = useXmlConverter(SingleRequestData);
 
   useEffect(() => {
     if (jsonResult != "") {
       setData(JSON.parse(jsonResult));
-    }
-
-    // check to see the status updates
-    function statusUpdates() {
-      const value = ConfigData.map((val) => {
-        return val.DisplayRequestStatus;
-      });
-      setIsStatusUpdates(value[0]);
     }
 
     // functions to get the status updates of the single requests !!
@@ -47,11 +39,19 @@ function ViewRequestDetail() {
         `${api}/api/accounts/${account_id}/Requests/${RowKey}/statusPosts`,
         { headers }
       );
+      console.log(response.data);
       setStatusUpdates(response.data);
     }
-    statusUpdates();
     getStatusUpdates();
   }, [jsonResult]);
+
+  if (!showStatus) {
+    return (
+      <>
+        <RequestDetailShimmer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -60,7 +60,7 @@ function ViewRequestDetail() {
       >
         <div
           className={`main my-2 ${
-            IsStatusUpdates ? "col-span-3" : "col-span-4"
+            showStatus ? "col-span-3" : "col-span-4"
           }`}
         >
           <SingleRequestDetails Data={Data} />
@@ -99,7 +99,7 @@ function ViewRequestDetail() {
             </div>
           </div>
         </div>
-        {IsStatusUpdates && (
+        {showStatus && (
           <div className="bg-white my-2 shadow-sm p-4 col-span-2">
             <ViewStatusUpdates
               StatusUpdates={StatusUpdates}

@@ -1,11 +1,23 @@
 import { useState } from "react";
 import ReactApexChart from "react-apexcharts";
+import PropTypes from "prop-types";
 
-function StatusAnalysis() {
+function StatusAnalysis({ data }) {
+  // all types of status
+  const status = [
+    { id: 1, name: "Completed", color: "bg-[#2563eb]" },
+    { id: 2, name: "New", color: "bg-[#22c55e]" },
+    { id: 3, name: "On Hold", color: "bg-[#eb2323]" },
+    { id: 4, name: "Awaiting", color: "bg-[#FEB019]" },
+    { id: 5, name: "Approved", color: "bg-[#2563eb]" },
+    { id: 6, name: "Cancelled", color: "bg-[#546E7A]" },
+  ];
+
   const [state, setState] = useState({
     series: [
       {
-        data: [21, 22, 10, 28, 16, 21],
+        name: "",
+        data: data,
       },
     ],
     options: {
@@ -19,14 +31,14 @@ function StatusAnalysis() {
       colors: [
         "#2563eb",
         "#22c55e",
+        "#eb2323",
         "#FEB019",
-        "#FF4560",
-        "#775DD0",
+        "#2563eb",
         "#546E7A",
       ],
       plotOptions: {
         bar: {
-          columnWidth: "40%",
+          columnWidth: "30%",
           distributed: true,
           borderRadius: 5,
         },
@@ -41,6 +53,12 @@ function StatusAnalysis() {
         labels: {
           show: false,
         },
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
         grid: {
           show: false,
         },
@@ -49,9 +67,28 @@ function StatusAnalysis() {
         labels: {
           show: false,
         },
-        grid: {
-          show: false, // Remove background lines on x-axis
+        axisBorder: {
+          show: false,
         },
+        axisTicks: {
+          show: false,
+        },
+        grid: {
+          show: false,
+        },
+      },
+      grid: {
+        show: false,
+      },
+      tooltip: {
+        y: {
+          formatter: function (value, { dataPointIndex}) {
+            return `${status[dataPointIndex].name}: ${value}`;
+          },
+        },
+        x: {
+          show: false,
+      },
       },
     },
   });
@@ -59,20 +96,33 @@ function StatusAnalysis() {
   return (
     <>
       <div className="chart-component">
-        <div className="main w-3/12">
+        <div className="main">
           <div className="chart">
+            <h1 className="text-lg font-semibold px-4">Status</h1>
             <ReactApexChart
               options={state.options}
               series={state.series}
               type="bar"
-              height={350}
+              height={200}
             />
+            {status.map((val) => (
+              <div
+                key={val.id}
+                className="status-name-and-color flex gap-4 items-center text-sm py-1 px-6"
+              >
+                <span className={`w-3 h-3 ${val.color} rounded-full`}></span>
+                <span className="">{val.name}</span>
+              </div>
+            ))}
           </div>
-          <div className="chart-label p-2 bg-slate-400"></div>
         </div>
       </div>
     </>
   );
 }
+
+StatusAnalysis.propTypes = {
+  data: PropTypes.array.isRequired,
+};
 
 export default StatusAnalysis;

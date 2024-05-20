@@ -5,7 +5,7 @@ import useRelatedDocuments from "../../../customhooks/useRelatedDocuments";
 
 function RelatedDocuments({ status, RowKey }) {
   const { DocumentData } = useRelatedDocuments(RowKey);
-  console.log(DocumentData);
+  // console.log(DocumentData);
   return (
     <>
       <div className="related-documents">
