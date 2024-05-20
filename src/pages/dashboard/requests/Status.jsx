@@ -8,7 +8,7 @@ function Status({ status }) {
         <span className="text-lg text-orange-500">
           <GoDotFill />
         </span>
-        <span className="px-2 text-black">{status}</span>
+        <span className="px-2">{status}</span>
       </div>
     );
   }
@@ -18,7 +18,7 @@ function Status({ status }) {
         <span className="text-lg text-green-500">
           <GoDotFill />
         </span>
-        <span className="px-2 text-black">{status}</span>
+        <span className="px-2">{status}</span>
       </div>
     );
   }
@@ -28,7 +28,7 @@ function Status({ status }) {
         <span className="text-lg text-blue-500">
           <GoDotFill />
         </span>
-        <span className="px-2 text-black">{status}</span>
+        <span className="px-2">{status}</span>
       </div>
     );
   }
@@ -38,7 +38,7 @@ function Status({ status }) {
         <span className="text-lg text-slate-500">
           <GoDotFill />
         </span>
-        <span className="px-2 text-black">{status}</span>
+        <span className="px-2">{status}</span>
       </div>
     );
   }
@@ -48,7 +48,7 @@ function Status({ status }) {
         <span className="text-lg text-blue-500">
           <GoDotFill />
         </span>
-        <span className="px-2 text-black">{status}</span>
+        <span className="px-2">{status}</span>
       </div>
     );
   }
@@ -58,7 +58,7 @@ function Status({ status }) {
         <span className="text-lg text-red-500">
           <GoDotFill />
         </span>
-        <span className="px-2 text-black">{status}</span>
+        <span className="px-2">{status}</span>
       </div>
     );
   }

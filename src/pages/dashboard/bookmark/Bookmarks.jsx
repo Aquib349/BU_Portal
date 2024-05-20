@@ -22,7 +22,7 @@ const Bookmarks = ({ BookmarkData }) => {
                   className="flex justify-between items-center p-2"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-xl text-orange-600 cursor-pointer">
+                    <span className="text-xl text-slate-600 cursor-pointer">
                       <GoBookmarkFill />
                     </span>
                     <div>

@@ -3,6 +3,7 @@ import Requests from "./requests/Requests";
 import Pagination from "../../Elements/Pagination";
 import StatusAnalysis from "./requests/StatusAnalysis";
 import FilterRequests from "./requests/FilterRequests";
+import { TbCirclesRelation } from "react-icons/tb";
 import { Link } from "react-router-dom";
 
 function AllRequest({
@@ -57,15 +58,23 @@ function AllRequest({
             <div className="border border-slate-400 rounded px-2 pt-5">
               <StatusAnalysis data={AllRequestStatus} />
             </div>
-            <div className="col-span-4 border border-slate-400 rounded p-2">
-              <div className="flex gap-8 p-2">
+            <div className="col-span-4 border border-slate-400 rounded py-2">
+              <div className="flex gap-8 px-2 pb-1">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-red-600 border-2 border-red-400 rounded-sm"></div>
-                  <small className="text-red-600">Related Contracts</small>
+                  <div className="text-blue-600 text-2xl">
+                    <TbCirclesRelation />
+                  </div>
+                  <small className="text-md font-semibold">Related Contracts</small>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-blue-600 border-2 border-blue-400 rounded-sm"></div>
-                  <small className="text-blue-600">Created Contracts</small>
+                  <div>
+                    <img
+                      src="/assets/contract-icon.png"
+                      alt="agreement"
+                      className="w-4"
+                    />
+                  </div>
+                  <small className="text-md font-semibold">Created Contracts</small>
                 </div>
               </div>
               {/* requests */}

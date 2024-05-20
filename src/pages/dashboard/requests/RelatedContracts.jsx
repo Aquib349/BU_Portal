@@ -1,5 +1,5 @@
 import Status from "./Status";
-import { MdOutlineDoubleArrow } from "react-icons/md";
+import { TbCirclesRelation } from "react-icons/tb";
 import { RiStickyNoteAddFill } from "react-icons/ri";
 import { FaEye } from "react-icons/fa";
 import PropTypes from "prop-types";
@@ -19,11 +19,11 @@ function RelatedContracts({
           RelatedContracts?.toLowerCase() === ContractTitle?.toLowerCase()
             ? "static"
             : "hidden"
-        } bg-gray-200 text-[0.8rem] text-red-600`}
+        } bg-gray-100 text-[0.8rem] text-slate-400`}
       >
         <td className="">
-          <span className="flex text-[0.8rem] justify-center items-center">
-            <MdOutlineDoubleArrow />
+          <span className="flex text-lg text-blue-600 font-bold px-2 items-center">
+            <TbCirclesRelation />
           </span>
         </td>
         <td className="w-3/12 pl-4">{ContractTitle}</td>
@@ -33,7 +33,7 @@ function RelatedContracts({
         <td className="text-center">{"-"}</td>
         <td className="text-center">{"-"}</td>
         <td className=" text-sm cursor-pointer">
-          <span className="flex justify-center items-center text-red-500">
+          <span className="flex justify-center items-center">
             <Link to={`contractSummary/${RowKey}`}>
               <FaEye />
             </Link>

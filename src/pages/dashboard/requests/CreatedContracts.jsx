@@ -17,11 +17,17 @@ function CreatedContracts({
       <tr
         className={`${
           ContractCreated === true ? "" : "hidden"
-        } bg-gray-200 text-[0.8rem] text-blue-600`}
+        } bg-gray-200 text-[0.8rem] text-slate-400`}
       >
         <td className="">
-          <span className="flex text-[0.8rem] justify-center items-center">
-            <MdOutlineDoubleArrow />
+          <span className="flex text-[0.8rem] px-2 items-center">
+            <div>
+              <img
+                src="/assets/contract-icon.png"
+                alt="agreement"
+                className="w-3"
+              />
+            </div>
           </span>
         </td>
         <td className="w-3/12 pl-4">{ContractTitle}</td>

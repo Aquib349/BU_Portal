@@ -18,13 +18,13 @@ function Requests({ toggleModal, currentItems }) {
           <table className="w-full border-collapse">
             <thead className="sticky top-0">
               <tr className="bg-blue-500 text-white text-sm">
-                <th className="p-1 text-start">Sl No.</th>
-                <th className="p-1 w-3/12 text-start">Title</th>
-                <th className="p-1 text-start pl-10">Status</th>
-                <th className="p-1">Assigned To</th>
-                <th className="p-1">Due Date</th>
-                <th className="p-1">Details</th>
-                <th className="p-1">Add Note</th>
+                <th className="p-2 text-start">Sl No.</th>
+                <th className="p-2 w-3/12 text-start">Title</th>
+                <th className="p-2 text-start pl-10">Status</th>
+                <th className="p-2">Assigned To</th>
+                <th className="p-2">Due Date</th>
+                <th className="p-2">Details</th>
+                <th className="p-2">Add Note</th>
               </tr>
             </thead>
 
@@ -47,7 +47,7 @@ function Requests({ toggleModal, currentItems }) {
                       </td>
                       <td className="p-2">{val.AssignedTo}</td>
                       <td className="">{dateObject.toLocaleDateString()}</td>
-                      <td className="text-xl cursor-pointer">
+                      <td className="relative text-xl cursor-pointer">
                         <span className="flex justify-center items-center text-slate-600">
                           <Link to={`requestDetail/${val.RowKey}`}>
                             <FaEye />
