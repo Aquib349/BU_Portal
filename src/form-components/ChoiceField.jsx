@@ -1,14 +1,27 @@
 import Select from "react-select";
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 
 const ChoiceField = ({
   options,
   title,
   baseline,
   required,
-  ChoiceOption,
-  setChoiceOption,
+  fieldname,
+  validate,
 }) => {
+  const [ChoiceOption, setChoiceOption] = useState(null);
+  useEffect(() => {
+    if (validate) {
+      validate(fieldname, ChoiceOption, required);
+    }
+  }, []);
+
+  const handleChange = (selectedOption) => {
+    setChoiceOption(selectedOption);
+    validate(fieldname, selectedOption, required);
+  };
+
   return (
     <>
       <div className="pb-3">
@@ -19,9 +32,11 @@ const ChoiceField = ({
           )}
         </label>
         <Select
+          className={`p-2 text-sm rounded-md border w-full border-slate-400 outline-blue-400`}
           defaultValue={ChoiceOption}
-          onChange={setChoiceOption}
+          onChange={handleChange}
           options={options}
+          value={ChoiceOption}
         />
         <small className="text-slate-500">{baseline}</small>
       </div>
@@ -30,12 +45,12 @@ const ChoiceField = ({
 };
 
 ChoiceField.propTypes = {
-  options: PropTypes.array.isRequired,
-  title: PropTypes.string.isRequired,
-  baseline: PropTypes.string.isRequired,
-  required: PropTypes.string.isRequired,
-  ChoiceOption: PropTypes.string.isRequired,
-  setChoiceOption: PropTypes.func.isRequired,
+  options: PropTypes.array,
+  title: PropTypes.string,
+  baseline: PropTypes.string,
+  required: PropTypes.string,
+  validate: PropTypes.func,
+  fieldname: PropTypes.string,
 };
 
 export default ChoiceField;

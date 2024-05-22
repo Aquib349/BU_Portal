@@ -1,13 +1,20 @@
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 
 const EmailField = ({
   title,
   name,
-  Emailvalue,
-  setEmailValue,
   baseline,
   required,
+  fieldname,
+  validate,
 }) => {
+  const [Emailvalue, setEmailValue] = useState("");
+  useEffect(() => {
+    if (validate) {
+      validate(fieldname, Emailvalue, required);
+    }
+  }, []);
   return (
     <>
       <div className="flex flex-col pb-3">
@@ -21,8 +28,11 @@ const EmailField = ({
           type="email"
           name={name}
           value={Emailvalue}
-          className="p-2 text-sm rounded-md border border-slate-400 outline-blue-500 w-full"
-          onChange={(e) => setEmailValue(e.target.value)}
+          className={`p-2 text-sm rounded-md border w-full border-slate-400 outline-blue-400`}
+          onChange={(e) => {
+            setEmailValue(e.target.value);
+            validate(fieldname, e.target.value, required);
+          }}
         />
         <small className="text-slate-500">{baseline}</small>
       </div>
@@ -31,12 +41,12 @@ const EmailField = ({
 };
 
 EmailField.propTypes = {
-  title: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  Emailvalue: PropTypes.string.isRequired,
-  baseline: PropTypes.string.isRequired,
-  required: PropTypes.string.isRequired,
-  setEmailValue: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  name: PropTypes.string,
+  baseline: PropTypes.string,
+  required: PropTypes.string,
+  fieldname: PropTypes.string.isRequired,
+  validate: PropTypes.func,
 };
 
 export default EmailField;

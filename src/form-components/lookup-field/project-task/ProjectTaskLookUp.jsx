@@ -15,16 +15,16 @@ function ProjectTaskLookUp({ ProjectTask, baseline }) {
     <>
       <div className="py-4">
         <label className="text-sm">Project Task</label>
-        <div className="flex">
+        <div className="flex items-center">
           <input
             type="text"
             value=""
             className="border border-slate-400 text-sm p-2 rounded-l-md w-full outline-blue-200 text-black bg-gray-200"
             readOnly
           />
-          <button type="button">
+          <div>
             <span
-              className="text-blue-600 text-sm py-2 px-6 rounded-r-md border border-blue-500 bg-blue-50"
+              className="text-blue-600 text-sm py-2 px-6 rounded-r-md border border-blue-500 bg-blue-50 cursor-pointer"
               onClick={() => setShowModal(!showModal)}
             >
               Browse
@@ -58,7 +58,7 @@ function ProjectTaskLookUp({ ProjectTask, baseline }) {
                 </div>
               </Modal>
             </div>
-          </button>
+          </div>
         </div>
         <small className="text-slate-500">{baseline}</small>
       </div>
@@ -67,8 +67,8 @@ function ProjectTaskLookUp({ ProjectTask, baseline }) {
 }
 
 ProjectTaskLookUp.propTypes = {
-  ProjectTask: PropTypes.array.isRequired,
-  baseline: PropTypes.string.isRequired,
+  ProjectTask: PropTypes.array,
+  baseline: PropTypes.string,
 };
 
 export default ProjectTaskLookUp;

@@ -1,13 +1,20 @@
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 
 const ValueFinancialsField = ({
   title,
   name,
   baseline,
   required,
-  ValueFinancials,
-  setValueFinancials,
+  fieldname,
+  validate,
 }) => {
+  const [ValueFinancials, setValueFinancials] = useState(0);
+  useEffect(() => {
+    if (validate) {
+      validate(fieldname, ValueFinancials, required);
+    }
+  }, []);
   return (
     <>
       <div className="flex flex-col pb-3">
@@ -22,7 +29,10 @@ const ValueFinancialsField = ({
           name={name}
           value={ValueFinancials}
           className="p-2 text-sm rounded-md border border-slate-400 outline-blue-500 w-full"
-          onChange={(e) => setValueFinancials(e.target.value)}
+          onChange={(e) => {
+            setValueFinancials(e.target.value);
+            validate(fieldname, e.target.value, required);
+          }}
         />
         <small className="text-slate-500">{baseline}</small>
       </div>
@@ -31,13 +41,13 @@ const ValueFinancialsField = ({
 };
 
 ValueFinancialsField.propTypes = {
-  title: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.number.isRequired,
-  baseline: PropTypes.string.isRequired,
-  required: PropTypes.string.isRequired,
-  ValueFinancials: PropTypes.number.isRequired,
-  setValueFinancials: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  name: PropTypes.string,
+  value: PropTypes.number,
+  baseline: PropTypes.string,
+  required: PropTypes.string,
+  fieldname: PropTypes.string.isRequired,
+  validate: PropTypes.func,
 };
 
 export default ValueFinancialsField;

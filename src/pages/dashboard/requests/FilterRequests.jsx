@@ -63,7 +63,7 @@ function FilterRequests() {
                 <Datepicker
                   date={date}
                   setDate={setDate}
-                  title="Request Status"
+                  title="Request Date"
                 />
               </div>
             </form>

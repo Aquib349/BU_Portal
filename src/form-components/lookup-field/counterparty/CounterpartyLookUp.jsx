@@ -30,6 +30,7 @@ function CounterpartyLookUp() {
           <div className={`${showModal ? "static" : "hidden"} text-black`}>
             <Modal toggleModal={toggleModal} heading="Business Area Picker">
               {/* pick the project task */}
+              <h1>hii</h1>
             </Modal>
           </div>
         </button>

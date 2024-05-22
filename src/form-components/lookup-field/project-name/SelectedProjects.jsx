@@ -104,16 +104,16 @@ function SelectedProject({
 }
 
 SelectedProject.propTypes = {
-  SelectedProjects: PropTypes.array.isRequired,
-  setSelectedProjects: PropTypes.func.isRequired,
-  checkedItems: PropTypes.object.isRequired,
-  setCheckedItems: PropTypes.func.isRequired,
-  ProjectName: PropTypes.array.isRequired,
-  setAllChecked: PropTypes.func.isRequired,
-  setSelectedProjectValue: PropTypes.func.isRequired,
-  showModal:PropTypes.bool.isRequired,
-  setShowModal: PropTypes.func.isRequired,
-  setProjectTask:PropTypes.func.isRequired
+  SelectedProjects: PropTypes.array,
+  setSelectedProjects: PropTypes.func,
+  checkedItems: PropTypes.object,
+  setCheckedItems: PropTypes.func,
+  ProjectName: PropTypes.array,
+  setAllChecked: PropTypes.func,
+  setSelectedProjectValue: PropTypes.func,
+  showModal:PropTypes.bool,
+  setShowModal: PropTypes.func,
+  setProjectTask:PropTypes.func
 };
 
 export default SelectedProject;

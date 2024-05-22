@@ -8,7 +8,7 @@ import SelectedProject from "./SelectedProjects";
 import ProjectsPerPage from "./ProjectsPerPage";
 import SearchProjects from "./SearchProjects";
 
-function ProjectLookUp({ ProjectName, baseline }) {
+function ProjectLookUp({ ProjectName, baseline, required, validationError }) {
   const [showModal, setShowModal] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [AllChecked, setAllChecked] = useState(false);
@@ -66,16 +66,18 @@ function ProjectLookUp({ ProjectName, baseline }) {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex items-center">
         <input
           type="text"
           value={SelectedProjectValue}
-          className="border border-slate-400 text-sm p-2 rounded-l-md w-full outline-blue-200 text-black bg-gray-200"
+          className={`p-2 text-sm rounded-l-md bg-slate-200 border w-full ${
+            validationError ? "border-red-500" : "border-slate-400"
+          } outline-none`}
           readOnly
         />
-        <button type="button">
+        <div>
           <span
-            className="text-blue-600 text-sm py-2 px-6 rounded-r-md border border-blue-500 bg-blue-50"
+            className="text-blue-600 text-sm py-2 px-6 rounded-r-md border border-blue-500 bg-blue-50 cursor-pointer"
             onClick={() => setShowModal(!showModal)}
           >
             Browse
@@ -102,7 +104,11 @@ function ProjectLookUp({ ProjectName, baseline }) {
                 <div className="border-b border-slate-300 pb-2">
                   <Pagination
                     itemsPerPage={itemsPerPage}
-                    data={filteredProject.length <= 0 ? ProjectName : filteredProject}
+                    data={
+                      filteredProject.length <= 0
+                        ? ProjectName
+                        : filteredProject
+                    }
                     toggleModal={toggleProjectModal}
                     renderComponent={({ data, toggleModal }) => (
                       <AllProjects
@@ -133,7 +139,7 @@ function ProjectLookUp({ ProjectName, baseline }) {
               </div>
             </Modal>
           </div>
-        </button>
+        </div>
       </div>
       <small className="text-slate-500">{baseline}</small>
       <ProjectTaskLookUp ProjectTask={ProjectTask} baseline={baseline} />
@@ -142,8 +148,10 @@ function ProjectLookUp({ ProjectName, baseline }) {
 }
 
 ProjectLookUp.propTypes = {
-  ProjectName: PropTypes.array.isRequired,
-  baseline: PropTypes.string.isRequired,
+  ProjectName: PropTypes.array,
+  baseline: PropTypes.string,
+  require: PropTypes.string,
+  validationError: PropTypes.string,
 };
 
 export default ProjectLookUp;

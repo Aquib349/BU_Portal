@@ -1,5 +1,6 @@
 import Select from "react-select";
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 
 const MultiChoiceDropdown = ({
   multi,
@@ -7,9 +8,22 @@ const MultiChoiceDropdown = ({
   title,
   baseline,
   required,
-  MultiSelectValue,
-  setMultiSelectValue,
+  fieldname,
+  validate,
 }) => {
+  const [MultiSelectValue, setMultiSelectValue] = useState(null);
+
+  useEffect(() => {
+    if (validate) {
+      validate(fieldname, MultiSelectValue, required);
+    }
+  }, []);
+
+  const handleChange = (selectedOption) => {
+    setMultiSelectValue(selectedOption);
+    validate(fieldname, selectedOption, required);
+  };
+
   return (
     <>
       <div className="pb-3">
@@ -21,9 +35,10 @@ const MultiChoiceDropdown = ({
         </label>
         <Select
           defaultValue={MultiSelectValue}
-          onChange={setMultiSelectValue}
+          onChange={handleChange}
           options={options}
           isMulti={multi}
+          value={MultiSelectValue}
           className="css-control text-black bg-white"
         />
         <small className="text-slate-500">{baseline}</small>
@@ -33,13 +48,15 @@ const MultiChoiceDropdown = ({
 };
 
 MultiChoiceDropdown.propTypes = {
-  multi: PropTypes.bool.isRequired,
-  options: PropTypes.array.isRequired,
-  title: PropTypes.string.isRequired,
-  baseline: PropTypes.string.isRequired,
-  required: PropTypes.string.isRequired,
-  MultiSelectValue: PropTypes.any.isRequired,
-  setMultiSelectValue: PropTypes.func.isRequired,
+  multi: PropTypes.bool,
+  options: PropTypes.array,
+  title: PropTypes.string,
+  baseline: PropTypes.string,
+  required: PropTypes.string,
+  MultiSelectValue: PropTypes.any,
+  setMultiSelectValue: PropTypes.func,
+  fieldname: PropTypes.string.isRequired,
+  validate: PropTypes.func,
 };
 
 export default MultiChoiceDropdown;

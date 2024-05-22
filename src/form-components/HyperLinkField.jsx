@@ -1,13 +1,20 @@
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 
 const HyperLinkField = ({
   title,
   name,
   baseline,
   required,
-  EnteredUrl,
-  setEnteredUrl,
+  fieldname,
+  validate,
 }) => {
+  const [EnteredUrl, setEnteredUrl] = useState("");
+  useEffect(() => {
+    if (validate) {
+      validate(fieldname, EnteredUrl, required);
+    }
+  }, []);
   return (
     <>
       <div className="flex flex-col pb-3">
@@ -21,8 +28,11 @@ const HyperLinkField = ({
           type="text"
           name={name}
           value={EnteredUrl}
-          className="p-2 text-sm rounded-md border border-slate-400 outline-blue-500 w-full"
-          onChange={(e) => setEnteredUrl(e.target.value)}
+          className={`p-2 text-sm rounded-md border w-full border-slate-400 outline-blue-400`}
+          onChange={(e) => {
+            setEnteredUrl(e.target.value);
+            validate(fieldname, e.target.value, required);
+          }}
         />
         <small className="text-slate-500">{baseline}</small>
       </div>
@@ -31,13 +41,13 @@ const HyperLinkField = ({
 };
 
 HyperLinkField.propTypes = {
-  title: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  baseline: PropTypes.string.isRequired,
-  required: PropTypes.string.isRequired,
-  EnteredUrl: PropTypes.string.isRequired,
-  setEnteredUrl: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  name: PropTypes.string,
+  value: PropTypes.string,
+  baseline: PropTypes.string,
+  required: PropTypes.string,
+  fieldname: PropTypes.string.isRequired,
+  validate: PropTypes.func,
 };
 
 export default HyperLinkField;

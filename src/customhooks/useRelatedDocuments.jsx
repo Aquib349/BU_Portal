@@ -2,14 +2,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
-function useRelatedDocuments({ RowKey }) {
+function useRelatedDocuments(RowKey) {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
 
   const [DocumentData, setDocumentData] = useState([]);
+  const [loader, setLoader] = useState(true);
 
-  // function to fetch all the related documents of single request
-  async function getRelatedDocument() {
+  // Function to fetch all the related documents of a single request
+  async function getRelatedDocument(RowKey) {
     const headers = {
       "Content-Type": "application/json",
       "eContracts-ApiKey":
@@ -20,17 +21,22 @@ function useRelatedDocuments({ RowKey }) {
         `${api}/api/accounts/${account_id}/Requests/documents?requestid=${RowKey}`,
         { headers }
       );
-      setDocumentData(response.data);
+      setLoader(false);
+      return response.data;
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      return [];
     }
   }
 
   useEffect(() => {
-    getRelatedDocument();
-  }, []);
+    if (RowKey) {
+      // Fetch or handle document data based on RowKey
+      getRelatedDocument(RowKey).then((data) => setDocumentData(data));
+    }
+  }, [RowKey]);
 
-  return { DocumentData };
+  return { DocumentData, loader };
 }
 
 useRelatedDocuments.propTypes = {

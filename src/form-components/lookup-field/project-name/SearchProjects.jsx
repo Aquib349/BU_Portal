@@ -37,8 +37,8 @@ function SearchProjects({ setFilteredProject, ProjectName }) {
 }
 
 SearchProjects.propTypes = {
-  setFilteredProject: PropTypes.func.isRequired,
-  ProjectName: PropTypes.array.isRequired,
+  setFilteredProject: PropTypes.func,
+  ProjectName: PropTypes.array,
 };
 
 export default SearchProjects;

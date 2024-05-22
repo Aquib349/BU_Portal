@@ -23,7 +23,7 @@ function ProjectsPerPage({ setItemsPerPage }) {
 }
 
 ProjectsPerPage.propTypes = {
-  setItemsPerPage: PropTypes.func.isRequired,
+  setItemsPerPage: PropTypes.func,
 };
 
 export default ProjectsPerPage;

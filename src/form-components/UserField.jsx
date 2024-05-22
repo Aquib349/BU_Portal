@@ -1,6 +1,6 @@
 import Select from "react-select";
 import PropTypes from "prop-types";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
 
 const UserField = ({
@@ -8,10 +8,22 @@ const UserField = ({
   multi,
   baseline,
   required,
-  UserselectedOption,
-  setUserSelectedOption,
+  fieldname,
+  validate,
 }) => {
+  const [UserselectedOption, setUserSelectedOption] = useState(null);
   const { AllUser } = useContext(UserContext);
+
+  useEffect(() => {
+    if (validate) {
+      validate(fieldname, UserselectedOption, required);
+    }
+  }, []);
+
+  const handleChange = (selectedOption) => {
+    setUserSelectedOption(selectedOption);
+    validate(fieldname, selectedOption, required);
+  };
   return (
     <>
       <div className="pb-3">
@@ -23,7 +35,7 @@ const UserField = ({
         </label>
         <Select
           defaultValue={UserselectedOption}
-          onChange={setUserSelectedOption}
+          onChange={handleChange}
           options={AllUser}
           isMulti={multi}
         />
@@ -34,13 +46,13 @@ const UserField = ({
 };
 
 UserField.propTypes = {
-  multi: PropTypes.bool.isRequired,
-  options: PropTypes.array.isRequired,
-  title: PropTypes.string.isRequired,
-  baseline: PropTypes.string.isRequired,
-  required: PropTypes.string.isRequired,
-  UserselectedOption: PropTypes.any.isRequired,
-  setUserSelectedOption: PropTypes.func.isRequired,
+  multi: PropTypes.bool,
+  options: PropTypes.array,
+  title: PropTypes.string,
+  baseline: PropTypes.string,
+  required: PropTypes.string,
+  fieldname: PropTypes.string.isRequired,
+  validate: PropTypes.func,
 };
 
 export default UserField;

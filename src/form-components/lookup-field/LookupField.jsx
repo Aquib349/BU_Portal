@@ -13,6 +13,7 @@ const LookupField = ({
   required,
   LookupValue,
   setLookupValue,
+  validate,
 }) => {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
@@ -61,6 +62,9 @@ const LookupField = ({
   useEffect(() => {
     getProjectName();
     getProjectTask();
+    if (validate) {
+      validate(fieldname, ProjectName, required);
+    }
   }, []);
 
   if (fieldname === "Project") {
@@ -112,13 +116,14 @@ const LookupField = ({
 };
 
 LookupField.propTypes = {
-  fieldname: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
-  title: PropTypes.string.isRequired,
-  baseline: PropTypes.string.isRequired,
-  required: PropTypes.string.isRequired,
-  LookupValue: PropTypes.string.isRequired,
-  setLookupValue: PropTypes.func.isRequired,
+  fieldname: PropTypes.string,
+  options: PropTypes.array,
+  title: PropTypes.string,
+  baseline: PropTypes.string,
+  required: PropTypes.string,
+  LookupValue: PropTypes.string,
+  setLookupValue: PropTypes.func,
+  validate: PropTypes.func,
 };
 
 export default LookupField;

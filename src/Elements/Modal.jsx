@@ -2,7 +2,12 @@ import { memo } from "react";
 import PropTypes from "prop-types";
 import { RxCross2 } from "react-icons/rx";
 
-const Modal = memo(function Modal({ toggleModal, heading, children, set_Width }) {
+const Modal = memo(function Modal({
+  toggleModal,
+  heading,
+  children,
+  set_Width,
+}) {
   return (
     <>
       <div className="modal_component">
@@ -40,7 +45,7 @@ Modal.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   heading: PropTypes.any.isRequired,
   children: PropTypes.object.isRequired,
-  set_Width: PropTypes.bool.isRequired,
+  set_Width: PropTypes.bool,
 };
 
 export default Modal;

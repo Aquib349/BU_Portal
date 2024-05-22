@@ -39,7 +39,6 @@ function ViewRequestDetail() {
         `${api}/api/accounts/${account_id}/Requests/${RowKey}/statusPosts`,
         { headers }
       );
-      console.log(response.data);
       setStatusUpdates(response.data);
     }
     getStatusUpdates();
@@ -59,9 +58,7 @@ function ViewRequestDetail() {
         className={`request-detail-component grid grid-cols-5 gap-x-2 w-9/12 m-auto`}
       >
         <div
-          className={`main my-2 ${
-            showStatus ? "col-span-3" : "col-span-4"
-          }`}
+          className={`main my-2 ${showStatus ? "col-span-3" : "col-span-4"}`}
         >
           <SingleRequestDetails Data={Data} />
           <hr />
@@ -77,7 +74,7 @@ function ViewRequestDetail() {
           {/* All the related contracts */}
           <div className="p-2 border rounded my-1 bg-white shadow-sm">
             <div className="flex items-center text-lg">
-              <h1>Related Contracts</h1>
+              <h1 className="font-semibold">Related Contracts</h1>
               <div className="mb-1">
                 <Tooltip
                   header={<CiCircleInfo />}

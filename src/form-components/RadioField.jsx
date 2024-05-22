@@ -1,11 +1,13 @@
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 
-const RadioField = ({
-  title,
-  required,
-  RadioOptionValue,
-  setRadioOptionValue,
-}) => {
+const RadioField = ({ title, required, fieldname, validate }) => {
+  const [RadioOptionValue, setRadioOptionValue] = useState(null);
+  useEffect(() => {
+    if (validate) {
+      validate(fieldname, RadioOptionValue, required);
+    }
+  }, []);
   return (
     <>
       <label className="text-sm px-1">
@@ -21,7 +23,10 @@ const RadioField = ({
               type="radio"
               value="Yes"
               checked={RadioOptionValue === "Yes"}
-              onChange={(e) => setRadioOptionValue(e.target.value)}
+              onChange={(e) => {
+                setRadioOptionValue(e.target.value);
+                validate(fieldname, e.target.value, required);
+              }}
             />
             Yes
           </label>
@@ -30,7 +35,10 @@ const RadioField = ({
               type="radio"
               value="No"
               checked={RadioOptionValue === "No"}
-              onChange={(e) => setRadioOptionValue(e.target.value)}
+              onChange={(e) => {
+                setRadioOptionValue(e.target.value);
+                validate(fieldname, e.target.value, required);
+              }}
             />
             No
           </label>
@@ -55,10 +63,10 @@ const RadioField = ({
 };
 
 RadioField.propTypes = {
-  title: PropTypes.string.isRequired,
-  required: PropTypes.string.isRequired,
-  RadioOptionValue: PropTypes.string.isRequired,
-  setRadioOptionValue: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  required: PropTypes.string,
+  fieldname: PropTypes.string.isRequired,
+  validate: PropTypes.func,
 };
 
 export default RadioField;

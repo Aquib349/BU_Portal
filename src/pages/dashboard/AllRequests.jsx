@@ -64,7 +64,9 @@ function AllRequest({
                   <div className="text-blue-600 text-2xl">
                     <TbCirclesRelation />
                   </div>
-                  <small className="text-md font-semibold">Related Contracts</small>
+                  <small className="text-md font-semibold">
+                    Related Contracts
+                  </small>
                 </div>
                 <div className="flex items-center gap-2">
                   <div>
@@ -74,12 +76,13 @@ function AllRequest({
                       className="w-4"
                     />
                   </div>
-                  <small className="text-md font-semibold">Created Contracts</small>
+                  <small className="text-md font-semibold">
+                    Created Contracts
+                  </small>
                 </div>
               </div>
               {/* requests */}
               <Pagination
-                RequestData={RequestData}
                 data={
                   FilteredData?.length > 0
                     ? FilteredData
@@ -100,12 +103,12 @@ function AllRequest({
 }
 
 AllRequest.propTypes = {
-  SearchInput: PropTypes.string.isRequired,
-  SearchRequests: PropTypes.func.isRequired,
-  AllRequestStatus: PropTypes.array.isRequired,
-  RequestData: PropTypes.array.isRequired,
-  FilteredData: PropTypes.array.isRequired,
-  toggleModal: PropTypes.bool.isRequired,
+  SearchInput: PropTypes.string,
+  SearchRequests: PropTypes.func,
+  AllRequestStatus: PropTypes.array,
+  RequestData: PropTypes.object,
+  FilteredData: PropTypes.array,
+  toggleModal: PropTypes.func,
 };
 
 export default AllRequest;

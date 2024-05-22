@@ -11,11 +11,15 @@ const SearchBar = () => {
 
   return (
     <>
-      <div class="search-box">
-        <button class="btn-search">
+      <div className="search-box">
+        <button className="btn-search">
           <IoSearchSharp />
         </button>
-        <input type="text" class="input-search" placeholder="Search with Contract, Document or Counterparty name"/>
+        <input
+          type="text"
+          className="input-search"
+          placeholder="Search with Contract, Document or Counterparty name"
+        />
       </div>
     </>
   );

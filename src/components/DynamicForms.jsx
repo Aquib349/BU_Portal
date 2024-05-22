@@ -31,11 +31,9 @@ const componentMap = {
   },
   "Single Line Text": {
     component: SingleLineTextField,
-    props: { name: "", value: "" },
   },
   "Multi Line Text": {
     component: MultiLineTextField,
-    props: { name: "", value: "" },
   },
   User: {
     component: UserField,
@@ -79,8 +77,7 @@ const componentMap = {
   },
 };
 
-function DynamicForms({ DynamicFormData }) {
-  // console.log(DynamicFormData);
+function DynamicForms({ DynamicFormData, validationErrors, validateField }) {
   // Use state for component rendering
   const [componentsToRender, setComponentsToRender] = useState([]);
 
@@ -94,9 +91,11 @@ function DynamicForms({ DynamicFormData }) {
         const { component: Component, props } = componentInfo;
         const componentProps = {
           title: FieldDisplayName,
+          name: FieldName,
           baseline: HelpText ? HelpText : "",
           required: Required,
           fieldname: FieldName,
+          validate: validateField,
           ...props,
         };
         return (
@@ -109,13 +108,15 @@ function DynamicForms({ DynamicFormData }) {
       }
     });
     setComponentsToRender(components);
-  }, [DynamicFormData]);
+  }, [DynamicFormData, validationErrors]);
 
   return <>{componentsToRender}</>;
 }
 
 DynamicForms.propTypes = {
-  DynamicFormData: PropTypes.array.isRequired,
+  DynamicFormData: PropTypes.array,
+  validationErrors: PropTypes.object,
+  validateField: PropTypes.func.isRequired,
 };
 
 export default DynamicForms;

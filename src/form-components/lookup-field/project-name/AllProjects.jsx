@@ -52,11 +52,11 @@ function AllProjects({
 }
 
 AllProjects.propTypes = {
-  ProjectName: PropTypes.array.isRequired,
-  toggleSelectAll: PropTypes.func.isRequired,
-  AllChecked: PropTypes.bool.isRequired,
-  toggleCheckBox: PropTypes.func.isRequired,
-  checkedItems: PropTypes.object.isRequired,
+  ProjectName: PropTypes.array,
+  toggleSelectAll: PropTypes.func,
+  AllChecked: PropTypes.bool,
+  toggleCheckBox: PropTypes.func,
+  checkedItems: PropTypes.object,
 };
 
 export default AllProjects;

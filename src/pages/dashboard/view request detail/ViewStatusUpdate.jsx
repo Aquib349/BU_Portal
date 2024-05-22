@@ -107,8 +107,8 @@ function ViewStatusUpdates({ StatusUpdates, status }) {
 }
 
 ViewStatusUpdates.propTypes = {
-  StatusUpdates: PropTypes.array.isRequired,
-  status: PropTypes.any.isRequired,
+  StatusUpdates: PropTypes.array,
+  status: PropTypes.any,
 };
 
 export default ViewStatusUpdates;
