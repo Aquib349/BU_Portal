@@ -19,15 +19,15 @@ import NumberField from "../form-components/NumberField";
 import PhoneNumberField from "../form-components/PhoneNumberField";
 import EmailField from "../form-components/EmailField";
 import HyperLinkField from "../form-components/HyperLinkField";
+import { option } from "../constants/AllRequestStatus";
 
 const componentMap = {
   "Office 365 Sharepoint Taxonomy": {
     component: Taxonomy,
-    props: { options: [], multi: false },
   },
   Lookup: {
     component: LookupField,
-    props: { options: [] },
+    props: { options: option },
   },
   "Single Line Text": {
     component: SingleLineTextField,
@@ -37,7 +37,7 @@ const componentMap = {
   },
   User: {
     component: UserField,
-    props: { options: [], multi: true },
+    props: { multi: true },
   },
   Date: {
     component: Datepicker,
@@ -99,8 +99,11 @@ function DynamicForms({ DynamicFormData, validationErrors, validateField }) {
           ...props,
         };
         return (
-          <div key={FieldName}>
+          <div key={FieldName} className="relative">
             <Component {...componentProps} />
+            <span className="absolute top-0 right-4 text-red-500 text-sm">
+              {validationErrors[FieldName]}
+            </span>
           </div>
         );
       } else {

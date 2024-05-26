@@ -12,7 +12,8 @@ function SelectedProject({
   setSelectedProjectValue,
   setShowModal,
   showModal,
-  setProjectTask
+  setProjectTask,
+  setSelectedProjectName,
 }) {
   // function to handle selected projects
   async function handleSelectedProjects() {
@@ -20,6 +21,7 @@ function SelectedProject({
     const account_id = import.meta.env.VITE_USER_KEY;
 
     const concatedString = SelectedProjects.map((val) => val.name).join(";");
+    setSelectedProjectName(concatedString);
     setSelectedProjectValue(concatedString);
 
     const headers = {
@@ -85,7 +87,7 @@ function SelectedProject({
             className="py-2 px-4 bg-blue-500 text-white rounded"
             onClick={() => {
               handleSelectedProjects();
-              setShowModal(!showModal)
+              setShowModal(!showModal);
             }}
           >
             Ok
@@ -111,9 +113,10 @@ SelectedProject.propTypes = {
   ProjectName: PropTypes.array,
   setAllChecked: PropTypes.func,
   setSelectedProjectValue: PropTypes.func,
-  showModal:PropTypes.bool,
+  showModal: PropTypes.bool,
   setShowModal: PropTypes.func,
-  setProjectTask:PropTypes.func
+  setProjectTask: PropTypes.func,
+  setSelectedProjectName: PropTypes.func,
 };
 
 export default SelectedProject;

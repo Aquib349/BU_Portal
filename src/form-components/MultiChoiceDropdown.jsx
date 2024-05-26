@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 
 const MultiChoiceDropdown = ({
   multi,
-  options,
   title,
+  options,
   baseline,
   required,
   fieldname,
@@ -14,6 +14,7 @@ const MultiChoiceDropdown = ({
   const [MultiSelectValue, setMultiSelectValue] = useState(null);
 
   useEffect(() => {
+    console.log(fieldname);
     if (validate) {
       validate(fieldname, MultiSelectValue, required);
     }
@@ -21,7 +22,7 @@ const MultiChoiceDropdown = ({
 
   const handleChange = (selectedOption) => {
     setMultiSelectValue(selectedOption);
-    validate(fieldname, selectedOption, required);
+    validate(fieldname, selectedOption.label, required);
   };
 
   return (

@@ -1,5 +1,6 @@
 import { IoIosArrowDown } from "react-icons/io";
 import BusinessAreaDynamicRequestForm from "./BusinessAreaRequestForm";
+import PropTypes from "prop-types";
 
 function NewRequestForm({
   ConfigData,
@@ -8,6 +9,8 @@ function NewRequestForm({
   DynamicForm,
   validationErrors,
   validateField,
+  setBusinessArea,
+  BusinessArea
 }) {
   return (
     <>
@@ -48,6 +51,8 @@ function NewRequestForm({
                   DynamicForm={DynamicForm}
                   validationErrors={validationErrors}
                   validateField={validateField}
+                  setBusinessArea={setBusinessArea}
+                  BusinessArea={BusinessArea}
                 />
               </div>
             </div>
@@ -57,5 +62,16 @@ function NewRequestForm({
     </>
   );
 }
+
+NewRequestForm.propTypes = {
+  ConfigData: PropTypes.array,
+  handleFormSubmit: PropTypes.func,
+  handleRequestType: PropTypes.func,
+  DynamicForm: PropTypes.array,
+  validationErrors: PropTypes.object,
+  validateField: PropTypes.func,
+  setBusinessArea: PropTypes.func,
+  BusinessArea: PropTypes.string,
+};
 
 export default NewRequestForm;

@@ -3,9 +3,13 @@ import Modal from "../../Elements/Modal";
 import BusinessAreaPicker from "./BusinessAreaPicker";
 import PropTypes from "prop-types";
 
-function MultiBusinessAreaRoute({ isMultiArea, RequestBusinessAreas }) {
+function MultiBusinessAreaRoute({
+  isMultiArea,
+  RequestBusinessAreas,
+  setBusinessArea,
+  BusinessArea,
+}) {
   const [showModal, setShowModal] = useState(false);
-  const [BusinessArea, setBusinessArea] = useState("");
 
   function toggleModal() {
     setShowModal(!showModal);
@@ -53,6 +57,7 @@ function MultiBusinessAreaRoute({ isMultiArea, RequestBusinessAreas }) {
 MultiBusinessAreaRoute.propTypes = {
   isMultiArea: PropTypes.bool.isRequired,
   RequestBusinessAreas: PropTypes.array.isRequired,
+  setBusinessArea: PropTypes.func,
 };
 
 export default MultiBusinessAreaRoute;

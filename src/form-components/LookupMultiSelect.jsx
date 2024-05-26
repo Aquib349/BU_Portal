@@ -20,7 +20,7 @@ const LookupMultiSelect = ({
 
   const handleChange = (selectedOption) => {
     setLookupMultiValue(selectedOption);
-    validate(fieldname, selectedOption, required);
+    validate(fieldname, selectedOption.label, required);
   };
   return (
     <>

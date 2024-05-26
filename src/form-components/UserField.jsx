@@ -21,8 +21,23 @@ const UserField = ({
   }, []);
 
   const handleChange = (selectedOption) => {
-    setUserSelectedOption(selectedOption);
-    validate(fieldname, selectedOption, required);
+    // setUserSelectedOption(selectedOption);
+    let concatenatedLabels = "";
+    if (multi) {
+      concatenatedLabels = selectedOption
+        ? selectedOption.map((option) => option.label).join("; ")
+        : "";
+      setUserSelectedOption(
+        selectedOption
+          ? selectedOption.map((option) => option.label).join(";")
+          : ""
+      );
+    } else {
+      concatenatedLabels = selectedOption ? selectedOption.label : "";
+      setUserSelectedOption(selectedOption ? selectedOption.label : "");
+    }
+
+    validate(fieldname, concatenatedLabels, required);
   };
   return (
     <>

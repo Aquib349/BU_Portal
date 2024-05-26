@@ -19,7 +19,7 @@ const ChoiceField = ({
 
   const handleChange = (selectedOption) => {
     setChoiceOption(selectedOption);
-    validate(fieldname, selectedOption, required);
+    validate(fieldname, selectedOption.label, required);
   };
 
   return (

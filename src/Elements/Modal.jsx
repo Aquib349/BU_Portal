@@ -12,7 +12,7 @@ const Modal = memo(function Modal({
     <>
       <div className="modal_component">
         <div
-          className={`modal inset-0 z-50 items-center justify-center fixed h-[100vh] bg-black/60`}
+          className={`modal inset-0 z-50 items-center justify-center fixed h-[100vh] overflow-scroll bg-black/60`}
         >
           <div className="flex justify-center mt-10">
             <div
@@ -43,7 +43,7 @@ const Modal = memo(function Modal({
 
 Modal.propTypes = {
   toggleModal: PropTypes.func.isRequired,
-  heading: PropTypes.any.isRequired,
+  heading: PropTypes.any,
   children: PropTypes.object.isRequired,
   set_Width: PropTypes.bool,
 };

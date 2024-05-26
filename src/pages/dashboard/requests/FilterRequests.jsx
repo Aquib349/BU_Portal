@@ -4,6 +4,7 @@ import MultiChoiceDropdown from "../../../form-components/MultiChoiceDropdown";
 import UserField from "../../../form-components/UserField";
 import { TbAdjustmentsHorizontal } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
+import { option } from "../../../constants/AllRequestStatus";
 
 function FilterRequests() {
   const [show, setShow] = useState(false);
@@ -41,7 +42,7 @@ function FilterRequests() {
                 <MultiChoiceDropdown
                   title="Request Status"
                   multi={true}
-                  options={[]}
+                  options={option}
                 />
               </div>
               <div className="py-2">

@@ -6,11 +6,19 @@ import LoadingSpinner from "../../Elements/loading spinner/LoadingSpinner";
 import NewRequestForm from "./NewRequestForm";
 import axios from "axios";
 
+const headers = {
+  "Content-Type": "application/json",
+  "eContracts-ApiKey":
+    "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
+};
+
 const NewRequest = () => {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
 
   const { ConfigData, loading } = usePortalConfig();
+  const [BusinessArea, setBusinessArea] = useState("");
+  const [RequestType, setRequestType] = useState("");
   const [DynamicForm, setDynamicForm] = useState([]);
   const [LoadSpinner, setLoadSpinner] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
@@ -18,13 +26,8 @@ const NewRequest = () => {
 
   // function to handle the request-types
   const handleRequestType = useCallback(async (event) => {
+    setRequestType(event.target.value);
     setLoadSpinner(true);
-    const headers = {
-      "Content-Type": "application/json",
-      "eContracts-ApiKey":
-        "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
-    };
-
     try {
       const response = await axios.get(
         `${api}/api/accounts/${account_id}/Requests/requesttypes/metadatas?requesttypename=${event.target.value}`,
@@ -71,13 +74,36 @@ const NewRequest = () => {
     }
   }, []);
 
+  // function to set the all the field values !!
+  function SetAllFieldValues(fieldname, value) {
+    setFieldValues((prevValues) => {
+      const updatedValues = { ...prevValues };
+
+      if (Array.isArray(value)) {
+        // If value is an array, iterate over each object in the array
+        value.forEach((field) => {
+          // Assuming each field object contains only one key-value pair
+          for (const key in field) {
+            if (field.hasOwnProperty(key)) {
+              updatedValues[`&${key}`] = encodeURIComponent(field[key]);
+            }
+          }
+        });
+      } else {
+        // If value is not an array, directly update using fieldname
+        updatedValues[`&${fieldname}`] = encodeURIComponent(value);
+      }
+
+      // Ensure RequestType and BusinessArea fields are set
+      updatedValues["RequestType"] = encodeURIComponent(RequestType);
+      updatedValues["BusinessArea"] = encodeURIComponent(BusinessArea);
+
+      return updatedValues;
+    });
+  }
+
   // function to validate the form component
   const validateField = (fieldname, value, required) => {
-    setFieldValues((prevValues) => ({
-      ...prevValues,
-      [fieldname]: value,
-    }));
-
     setValidationErrors((prevErrors) => {
       const errors = { ...prevErrors };
       if (required === "true" && !value) {
@@ -89,9 +115,19 @@ const NewRequest = () => {
     });
   };
 
+  // Function to convert fieldValues to query string
+  const convertToQueryString = (fieldValues) => {
+    return Object.keys(fieldValues)
+      .map(
+        (key) => `${key}=${fieldValues[key] !== null ? fieldValues[key] : ""}`
+      )
+      .join("");
+  };
+
   // function to validate the form component on submit
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
 
     // Validate all fields before submission
     DynamicForm.forEach(({ FieldName, Required }) => {
@@ -100,21 +136,42 @@ const NewRequest = () => {
 
     const hasErrors = Object.keys(validationErrors).length > 0;
     if (!hasErrors) {
-
       // Form is valid, proceed with submission
-      console.log(fieldValues);
-      toast.success("Form submitted successfully", {
-        duration: 1000,
-        position: "top-center",
-        style: {
-          backgroundColor: "black",
-          color: "white",
-          fontSize: "0.8rem",
-        },
-      });
-      console.log("Form submitted successfully");
-    } else {
+      let QueryString = convertToQueryString(fieldValues);
+      QueryString += "&CreatedFromPortal=YES";
+      // Append the querystring and accountID fields to the FormData object
+      formData.append("SearializeControls", QueryString);
+      formData.append("AccountID", account_id);
+      // Log FormData contents
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+      setFieldValues({});
 
+      // console.log(QueryString);
+      // mehtod post to crete the new request
+      // try {
+      //   const response = await axios.post(
+      //     `${api}/api/accounts/${account_id}/Requests`,
+      //     formData,
+      //     { headers }
+      //   );
+      //   if (response.status === 200 || response.status === 201) {
+      //     toast.success("Form submitted successfully", {
+      //       duration: 1000,
+      //       position: "top-center",
+      //       style: {
+      //         backgroundColor: "black",
+      //         color: "white",
+      //         fontSize: "0.8rem",
+      //       },
+      //     });
+      //     setFieldValues({});
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      // }
+    } else {
       // Form is invalid, show errors
       toast.error("Please fill all the required fields", {
         duration: 1500,
@@ -125,8 +182,6 @@ const NewRequest = () => {
           fontSize: "0.8rem",
         },
       });
-      console.log(validationErrors);
-      console.log("Form contains errors");
     }
   };
 
@@ -143,7 +198,6 @@ const NewRequest = () => {
       {LoadSpinner && <LoadingSpinner />}
       <div className="newrequest-component">
         <div className="main">
-          
           {/* new request form */}
           <NewRequestForm
             ConfigData={ConfigData}
@@ -151,7 +205,9 @@ const NewRequest = () => {
             handleRequestType={handleRequestType}
             DynamicForm={DynamicForm}
             validationErrors={validationErrors}
-            validateField={validateField}
+            validateField={SetAllFieldValues}
+            setBusinessArea={setBusinessArea}
+            BusinessArea={BusinessArea}
           />
         </div>
       </div>

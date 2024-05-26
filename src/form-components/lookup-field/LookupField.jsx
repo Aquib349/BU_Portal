@@ -5,30 +5,38 @@ import axios from "axios";
 import ProjectLookUp from "./project-name/ProjectLookUp";
 import CounterpartyLookUp from "./counterparty/CounterpartyLookUp";
 
+const headers = {
+  "Content-Type": "application/json",
+  "eContracts-ApiKey":
+    "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
+};
+
 const LookupField = ({
   fieldname,
   options,
   title,
   baseline,
   required,
-  LookupValue,
-  setLookupValue,
   validate,
 }) => {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
+  const [LookupValue, setLookupValue] = useState(null);
 
+  const [CounterParty, setCounterparty] = useState([]);
   const [ProjectName, setProjectName] = useState([]);
-  const [ProjectTask, setProjectTask] = useState([]);
+  const [SelectedProjectName, setSelectedProjectName] = useState("");
+  const [SelectedProjectTask, setSelectedProjectTask] = useState("");
+  const [SelectedCounterPartyName, setSelectedCounterPartyName] = useState("");
+
+  // if the field type is normal lookup
+  const handleChange = (selectedOption) => {
+    setLookupValue(selectedOption);
+    validate(fieldname, selectedOption.label, required);
+  };
 
   // function to get the project name !!
   async function getProjectName() {
-    const headers = {
-      "Content-Type": "application/json",
-      "eContracts-ApiKey":
-        "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
-    };
-
     try {
       const response = await axios.get(
         `${api}/api/accounts/${account_id}/project`,
@@ -40,20 +48,14 @@ const LookupField = ({
     }
   }
 
-  // function to get the project task based on the project name !!
-  async function getProjectTask() {
-    const headers = {
-      "Content-Type": "application/json",
-      "eContracts-ApiKey":
-        "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
-    };
-
+  // function to get all the counterparty
+  async function getCounterParty() {
     try {
       const response = await axios.get(
-        `${api}/api/accounts/${account_id}/portal/config`,
+        `${api}/api/accounts/${account_id}/counterparty`,
         { headers }
       );
-      setProjectTask(response.data);
+      setCounterparty(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -61,11 +63,25 @@ const LookupField = ({
 
   useEffect(() => {
     getProjectName();
-    getProjectTask();
-    if (validate) {
-      validate(fieldname, ProjectName, required);
+    getCounterParty();
+
+    let fieldData;
+
+    if (fieldname === "Project") {
+      fieldData = [
+        { Project: SelectedProjectName },
+        { ProjectTask: SelectedProjectTask },
+      ];
+    } else if (fieldname === "Counterparty") {
+      fieldData = SelectedCounterPartyName;
+    } else {
+      fieldData = LookupValue;
     }
-  }, []);
+
+    if (validate) {
+      validate(fieldname, fieldData, required);
+    }
+  }, [SelectedProjectName, SelectedProjectTask, SelectedCounterPartyName]);
 
   if (fieldname === "Project") {
     return (
@@ -76,7 +92,12 @@ const LookupField = ({
             <span className={`text-red-500 font-bold`}>*</span>
           )}
         </label>
-        <ProjectLookUp ProjectName={ProjectName} baseline={baseline} />
+        <ProjectLookUp
+          ProjectName={ProjectName}
+          baseline={baseline}
+          setSelectedProjectName={setSelectedProjectName}
+          setSelectedProjectTask={setSelectedProjectTask}
+        />
       </div>
     );
   }
@@ -90,7 +111,10 @@ const LookupField = ({
             <span className={`text-red-500 font-bold`}>*</span>
           )}
         </label>
-        <CounterpartyLookUp ProjectTask={ProjectTask} />
+        <CounterpartyLookUp
+          CounterParty={CounterParty}
+          setSelectedCounterPartyName={setSelectedCounterPartyName}
+        />
         <small className="text-slate-500">{baseline}</small>
       </div>
     );
@@ -106,8 +130,10 @@ const LookupField = ({
         </label>
         <Select
           defaultValue={LookupValue}
-          onChange={setLookupValue}
+          onChange={handleChange}
           options={options}
+          menuPortalTarget={document.body}
+          menuPosition="fixed"
         />
         <small className="text-slate-500">{baseline}</small>
       </div>

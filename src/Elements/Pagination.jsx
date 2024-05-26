@@ -42,10 +42,10 @@ function Pagination({ itemsPerPage, data, toggleModal, renderComponent }) {
 }
 
 Pagination.propTypes = {
-  itemsPerPage: PropTypes.number.isRequired,
-  toggleModal: PropTypes.func.isRequired,
-  data: PropTypes.array.isRequired,
-  renderComponent: PropTypes.func.isRequired,
+  itemsPerPage: PropTypes.number,
+  toggleModal: PropTypes.func,
+  data: PropTypes.array,
+  renderComponent: PropTypes.func,
 };
 
 export default Pagination;

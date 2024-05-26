@@ -8,7 +8,12 @@ import SelectedProject from "./SelectedProjects";
 import ProjectsPerPage from "./ProjectsPerPage";
 import SearchProjects from "./SearchProjects";
 
-function ProjectLookUp({ ProjectName, baseline, required, validationError }) {
+function ProjectLookUp({
+  ProjectName,
+  baseline,
+  setSelectedProjectName,
+  setSelectedProjectTask,
+}) {
   const [showModal, setShowModal] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [AllChecked, setAllChecked] = useState(false);
@@ -28,14 +33,18 @@ function ProjectLookUp({ ProjectName, baseline, required, validationError }) {
     setAllChecked(newSelectAll);
 
     const newCheckedItems = {};
-    ProjectName.forEach((item) => {
-      newCheckedItems[item.RowKey] = newSelectAll;
-    });
+    (filteredProject.length > 0 ? filteredProject : ProjectName).forEach(
+      (item) => {
+        newCheckedItems[item.RowKey] = newSelectAll;
+      }
+    );
     setCheckedItems(newCheckedItems);
 
     // If all checked, include all items in SelectedProjects, otherwise set to an empty array
     const updatedSelectedProjects = newSelectAll
-      ? ProjectName.map((item) => ({ id: item.RowKey, name: item.ProjectName }))
+      ? (filteredProject.length > 0 ? filteredProject : ProjectName).map(
+          (item) => ({ id: item.RowKey, name: item.ProjectName })
+        )
       : [];
     updateSelectedProjects(updatedSelectedProjects);
   };
@@ -70,9 +79,7 @@ function ProjectLookUp({ ProjectName, baseline, required, validationError }) {
         <input
           type="text"
           value={SelectedProjectValue}
-          className={`p-2 text-sm rounded-l-md bg-slate-200 border w-full ${
-            validationError ? "border-red-500" : "border-slate-400"
-          } outline-none`}
+          className={`p-2 text-sm rounded-l-md bg-slate-200 border w-full border-slate-400 outline-blue-400`}
           readOnly
         />
         <div>
@@ -127,6 +134,7 @@ function ProjectLookUp({ ProjectName, baseline, required, validationError }) {
                 <SelectedProject
                   SelectedProjects={SelectedProjects}
                   setSelectedProjects={setSelectedProjects}
+                  setSelectedProjectName={setSelectedProjectName}
                   checkedItems={checkedItems}
                   setCheckedItems={setCheckedItems}
                   ProjectName={ProjectName}
@@ -142,7 +150,11 @@ function ProjectLookUp({ ProjectName, baseline, required, validationError }) {
         </div>
       </div>
       <small className="text-slate-500">{baseline}</small>
-      <ProjectTaskLookUp ProjectTask={ProjectTask} baseline={baseline} />
+      <ProjectTaskLookUp
+        ProjectTask={ProjectTask}
+        baseline={baseline}
+        setSelectedProjectTask={setSelectedProjectTask}
+      />
     </>
   );
 }
@@ -150,8 +162,9 @@ function ProjectLookUp({ ProjectName, baseline, required, validationError }) {
 ProjectLookUp.propTypes = {
   ProjectName: PropTypes.array,
   baseline: PropTypes.string,
-  require: PropTypes.string,
   validationError: PropTypes.string,
+  setSelectedProjectName: PropTypes.func,
+  setSelectedProjectTask: PropTypes.func,
 };
 
 export default ProjectLookUp;

@@ -11,6 +11,8 @@ function BusinessAreaDynamicRequestForm({
   DynamicForm,
   validationErrors,
   validateField,
+  setBusinessArea,
+  BusinessArea,
 }) {
   return (
     <>
@@ -20,6 +22,8 @@ function BusinessAreaDynamicRequestForm({
           <MultiBusinessAreaRoute
             isMultiArea={IsMultiBusinessAreaRoute}
             RequestBusinessAreas={RequestBusinessAreas}
+            setBusinessArea={setBusinessArea}
+            BusinessArea={BusinessArea}
           />
           <div className="flex flex-col py-2">
             <label>
@@ -79,6 +83,8 @@ BusinessAreaDynamicRequestForm.propTypes = {
   DynamicForm: PropTypes.any,
   validationErrors: PropTypes.object,
   validateField: PropTypes.func,
+  setBusinessArea: PropTypes.func,
+  BusinessArea: PropTypes.string,
 };
 
 export default BusinessAreaDynamicRequestForm;

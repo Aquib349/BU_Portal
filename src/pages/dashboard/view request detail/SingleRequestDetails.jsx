@@ -17,7 +17,7 @@ function SingleRequestDetails({ Data }) {
             <div className="text-sm">{Data?.Metadata?.ContractArea?._text}</div>
             <div className="flex gap-4 items-center text-lg">
               <Tooltip
-                message="Request will be due on this data"
+                message="Request will be due on this date"
                 header={<LuCalendarDays />}
               />
               <span className="pt-1 text-sm">

@@ -1,5 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import Modal from "../Elements/Modal";
+import MultiFileUploader from "../components/MultiFileUploader";
 
 const FileUpload = ({
   title,
@@ -10,29 +12,43 @@ const FileUpload = ({
   validate,
 }) => {
   const [UploadFile, setUploadFile] = useState(null);
+  const [show, setShow] = useState(false);
+
+  // function to handle modal
+  function toggleModal() {
+    setShow(!show);
+  }
+
   useEffect(() => {
     if (validate) {
       validate(fieldname, UploadFile, required);
     }
   }, []);
+
   return (
     <>
-      <div className="flex flex-col pb-3">
+      {show && (
+        <Modal
+          toggleModal={toggleModal}
+          heading="Upload Your Multiple File"
+          set_Width={true}
+        >
+          <MultiFileUploader />
+        </Modal>
+      )}
+      <div className="flex flex-col pb-3 pt-1">
         <label className="text-sm">
           {title}
           {required === "true" && (
-            <span className={`text-red-500 font-bold`}>*</span>
+            <span className="text-red-500 font-bold">*</span>
           )}
         </label>
-        <input
-          type="file"
-          name={name}
-          className={`p-2 text-sm rounded-md border w-full border-slate-400 outline-blue-400`}
-          onChange={(e) => {
-            setUploadFile(e.target.files[0]);
-            validate(fieldname, e.target.files[0], required);
-          }}
-        />
+        <div
+          className="border border-slate-400 flex items-center text-xs p-2 w-2/12 my-1 rounded cursor-pointer font-medium"
+          onClick={() => setShow(!show)}
+        >
+          +Upload file
+        </div>
         <small className="text-slate-500">{baseline}</small>
       </div>
     </>
@@ -40,8 +56,8 @@ const FileUpload = ({
 };
 
 FileUpload.propTypes = {
-  title: PropTypes.string,
-  name: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   baseline: PropTypes.string,
   required: PropTypes.string,
   fieldname: PropTypes.string.isRequired,
