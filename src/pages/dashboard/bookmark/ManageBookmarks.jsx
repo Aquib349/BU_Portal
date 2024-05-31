@@ -149,14 +149,14 @@ function ManageBookmarks({
           </button>
         </div>
         <div
-          className={`absolute right-4 z-10 mt-2 w-60 origin-top-right rounded-md bg-slate-800 text-white
+          className={`absolute right-4 z-10 mt-2 w-60 origin-top-right rounded-md bg-white border border-slate-400
        ${show ? "static" : "hidden"}`}
         >
           <div className="py-1">
             {list.map((val) => (
               <div
                 key={val.id}
-                className="flex items-center gap-1 hover:bg-slate-600 px-4 cursor-pointer"
+                className="flex items-center gap-1 hover:bg-slate-100 px-4 cursor-pointer"
                 onClick={val.click}
               >
                 <span>{val.icon}</span>

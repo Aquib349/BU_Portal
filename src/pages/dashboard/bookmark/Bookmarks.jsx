@@ -5,6 +5,7 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { useContext, useState } from "react";
 import { UserSubscription } from "../../../context/UserSubscriptionContext";
+import Tooltip from "../../../Elements/Tooltip";
 
 const headers = {
   "eContracts-ApiKey":
@@ -111,10 +112,15 @@ const Bookmarks = ({ BookmarkData, getAllBookmarks, setShowSpinner }) => {
                   key={val.RowKey}
                   className="flex justify-between items-center p-2"
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-4">
                     <span className="text-xl text-slate-600 cursor-pointer">
-                      <GoBookmarkFill
-                        onClick={() => DeleteBookmark(val.ObjectID)}
+                      <Tooltip
+                        message="Remove Bookmark"
+                        header={
+                          <GoBookmarkFill
+                            onClick={() => DeleteBookmark(val.ObjectID)}
+                          />
+                        }
                       />
                     </span>
                     <div>
