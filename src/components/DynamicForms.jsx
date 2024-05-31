@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 
 // Import your components here
@@ -19,67 +19,67 @@ import NumberField from "../form-components/NumberField";
 import PhoneNumberField from "../form-components/PhoneNumberField";
 import EmailField from "../form-components/EmailField";
 import HyperLinkField from "../form-components/HyperLinkField";
-import { option } from "../constants/AllRequestStatus";
-
-const componentMap = {
-  "Office 365 Sharepoint Taxonomy": {
-    component: Taxonomy,
-  },
-  Lookup: {
-    component: LookupField,
-    props: { options: option },
-  },
-  "Single Line Text": {
-    component: SingleLineTextField,
-  },
-  "Multi Line Text": {
-    component: MultiLineTextField,
-  },
-  User: {
-    component: UserField,
-    props: { multi: true },
-  },
-  Date: {
-    component: Datepicker,
-  },
-  "Yes/No": {
-    component: RadioField,
-  },
-  "File Upload": {
-    component: FileUpload,
-  },
-  Choice: {
-    component: ChoiceField,
-  },
-  "Multi- Choice (Dropdown)": {
-    component: MultiChoiceDropdown,
-  },
-  "Multi- Choice (Browse)": {
-    component: MultiChoiceBrowse,
-  },
-  "Value/Financials": {
-    component: ValueFinancialsField,
-  },
-  "Lookup (Multi Select)": {
-    component: LookupMultiSelect,
-  },
-  Number: {
-    component: NumberField,
-  },
-  "Phone Number": {
-    component: PhoneNumberField,
-  },
-  Eamil: {
-    component: EmailField,
-  },
-  Hyperlink: {
-    component: HyperLinkField,
-  },
-};
+import { StatusContext } from "../context/StatusContext";
 
 function DynamicForms({ DynamicFormData, validationErrors, validateField }) {
   // Use state for component rendering
   const [componentsToRender, setComponentsToRender] = useState([]);
+  const { AllStatus } = useContext(StatusContext);
+  const componentMap = {
+    "Office 365 Sharepoint Taxonomy": {
+      component: Taxonomy,
+    },
+    Lookup: {
+      component: LookupField,
+      props: { options: AllStatus },
+    },
+    "Single Line Text": {
+      component: SingleLineTextField,
+    },
+    "Multi Line Text": {
+      component: MultiLineTextField,
+    },
+    User: {
+      component: UserField,
+      props: { multi: true },
+    },
+    Date: {
+      component: Datepicker,
+    },
+    "Yes/No": {
+      component: RadioField,
+    },
+    "File Upload": {
+      component: FileUpload,
+    },
+    Choice: {
+      component: ChoiceField,
+    },
+    "Multi- Choice (Dropdown)": {
+      component: MultiChoiceDropdown,
+    },
+    "Multi- Choice (Browse)": {
+      component: MultiChoiceBrowse,
+    },
+    "Value/Financials": {
+      component: ValueFinancialsField,
+    },
+    "Lookup (Multi Select)": {
+      component: LookupMultiSelect,
+    },
+    Number: {
+      component: NumberField,
+    },
+    "Phone Number": {
+      component: PhoneNumberField,
+    },
+    Eamil: {
+      component: EmailField,
+    },
+    Hyperlink: {
+      component: HyperLinkField,
+    },
+  };
 
   // Trigger re-render when DynamicFormData changes
   useEffect(() => {

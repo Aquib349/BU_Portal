@@ -10,20 +10,20 @@ function AllRequest({
   SearchInput,
   SearchRequests,
   AllRequestStatus,
-  RequestData,
   FilteredData,
   toggleModal,
+  setFilteredData,
 }) {
   return (
     <>
       <div className="AllRequest-component">
-        <div className="requests bg-white mt-8 rounded-sm shadow-sm shadow-black/20 pb-2">
-          <div className="py-2 px-3 border-b border-slate-300">
-            <h1 className="text-xl">My Requests</h1>
-            <p className="text-slate-500 text-[0.8rem]">
-              Your submitted contract request
-            </p>
-          </div>
+        <div className="px-1 pb-2">
+          <h1 className="text-xl font-semibold">My Requests</h1>
+          <p className="text-slate-500 text-sm">
+            Your submitted contract request
+          </p>
+        </div>
+        <div className="requests bg-white pt-2 rounded-sm shadow-md shadow-black/20 pb-2 border border-slate-200">
           <div className="search-filter grid grid-cols-6 gap-2 items-center p-2">
             <div className="col-span-4">
               <input
@@ -41,7 +41,7 @@ function AllRequest({
                  bg-gray-50 p-2"
             >
               {/* filter */}
-              <FilterRequests />
+              <FilterRequests setFilteredData={setFilteredData} />
             </div>
             <div className="">
               <Link to={"newRequest"}>
@@ -83,11 +83,7 @@ function AllRequest({
               </div>
               {/* requests */}
               <Pagination
-                data={
-                  FilteredData?.length > 0
-                    ? FilteredData
-                    : RequestData?.SubmittedRequests
-                }
+                data={FilteredData}
                 toggleModal={toggleModal}
                 itemsPerPage={8}
                 renderComponent={({ data, toggleModal }) => (
@@ -109,6 +105,7 @@ AllRequest.propTypes = {
   RequestData: PropTypes.object,
   FilteredData: PropTypes.array,
   toggleModal: PropTypes.func,
+  setFilteredData: PropTypes.func,
 };
 
 export default AllRequest;

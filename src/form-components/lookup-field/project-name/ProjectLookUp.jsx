@@ -75,6 +75,62 @@ function ProjectLookUp({
 
   return (
     <>
+      {showModal && (
+        <Modal
+          toggleModal={toggleProjectModal}
+          heading="Project Picker"
+          set_Width={true}
+        >
+          {/* pick the projec type */}
+          <div className="main-project">
+            <div className="show-entries-search flex justify-between items-center py-3">
+              {/* items per page to show */}
+              <ProjectsPerPage setItemsPerPage={setItemsPerPage} />
+              {/* search input project */}
+              <SearchProjects
+                setFilteredProject={setFilteredProject}
+                ProjectName={ProjectName}
+              />
+            </div>
+
+            {/* all projects */}
+            <div className="border-b border-slate-300 pb-2">
+              <Pagination
+                itemsPerPage={itemsPerPage}
+                data={
+                  filteredProject.length <= 0 ? ProjectName : filteredProject
+                }
+                toggleModal={toggleProjectModal}
+                renderComponent={({ data, toggleModal }) => (
+                  <AllProjects
+                    ProjectName={data}
+                    toggleModal={toggleModal}
+                    AllChecked={AllChecked}
+                    toggleSelectAll={toggleSelectAll}
+                    checkedItems={checkedItems}
+                    toggleCheckBox={toggleCheckBox}
+                  />
+                )}
+              />
+            </div>
+
+            {/* selected projects */}
+            <SelectedProject
+              SelectedProjects={SelectedProjects}
+              setSelectedProjects={setSelectedProjects}
+              setSelectedProjectName={setSelectedProjectName}
+              checkedItems={checkedItems}
+              setCheckedItems={setCheckedItems}
+              ProjectName={ProjectName}
+              setAllChecked={setAllChecked}
+              setSelectedProjectValue={setSelectedProjectValue}
+              showModal={showModal}
+              setShowModal={setShowModal}
+              setProjectTask={setProjectTask}
+            />
+          </div>
+        </Modal>
+      )}
       <div className="flex items-center">
         <input
           type="text"
@@ -89,64 +145,6 @@ function ProjectLookUp({
           >
             Browse
           </span>
-          <div className={`${showModal ? "static" : "hidden"} text-black`}>
-            <Modal
-              toggleModal={toggleProjectModal}
-              heading="Project Picker"
-              set_Width={true}
-            >
-              {/* pick the projec type */}
-              <div className="main-project">
-                <div className="show-entries-search flex justify-between items-center py-3">
-                  {/* items per page to show */}
-                  <ProjectsPerPage setItemsPerPage={setItemsPerPage} />
-                  {/* search input project */}
-                  <SearchProjects
-                    setFilteredProject={setFilteredProject}
-                    ProjectName={ProjectName}
-                  />
-                </div>
-
-                {/* all projects */}
-                <div className="border-b border-slate-300 pb-2">
-                  <Pagination
-                    itemsPerPage={itemsPerPage}
-                    data={
-                      filteredProject.length <= 0
-                        ? ProjectName
-                        : filteredProject
-                    }
-                    toggleModal={toggleProjectModal}
-                    renderComponent={({ data, toggleModal }) => (
-                      <AllProjects
-                        ProjectName={data}
-                        toggleModal={toggleModal}
-                        AllChecked={AllChecked}
-                        toggleSelectAll={toggleSelectAll}
-                        checkedItems={checkedItems}
-                        toggleCheckBox={toggleCheckBox}
-                      />
-                    )}
-                  />
-                </div>
-
-                {/* selected projects */}
-                <SelectedProject
-                  SelectedProjects={SelectedProjects}
-                  setSelectedProjects={setSelectedProjects}
-                  setSelectedProjectName={setSelectedProjectName}
-                  checkedItems={checkedItems}
-                  setCheckedItems={setCheckedItems}
-                  ProjectName={ProjectName}
-                  setAllChecked={setAllChecked}
-                  setSelectedProjectValue={setSelectedProjectValue}
-                  showModal={showModal}
-                  setShowModal={setShowModal}
-                  setProjectTask={setProjectTask}
-                />
-              </div>
-            </Modal>
-          </div>
         </div>
       </div>
       <small className="text-slate-500">{baseline}</small>

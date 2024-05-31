@@ -16,6 +16,17 @@ function MultiBusinessAreaRoute({
   }
   return (
     <>
+      {/* modal */}
+      {showModal && (
+        <Modal toggleModal={toggleModal} heading="Business Area Picker">
+          <BusinessAreaPicker
+            setBusinessArea={setBusinessArea}
+            showModal={showModal}
+            setShowModal={setShowModal}
+            RequestBusinessAreas={RequestBusinessAreas}
+          />
+        </Modal>
+      )}
       <div className={`browse-input ${isMultiArea ? "static" : "hidden"}`}>
         <label>Business Area</label>
         <div className="flex">
@@ -32,17 +43,6 @@ function MultiBusinessAreaRoute({
             >
               Browse
             </span>
-            {/* modal */}
-            <div className={`${showModal ? "static" : "hidden"} text-black`}>
-              <Modal toggleModal={toggleModal} heading="Business Area Picker">
-                <BusinessAreaPicker
-                  setBusinessArea={setBusinessArea}
-                  showModal={showModal}
-                  setShowModal={setShowModal}
-                  RequestBusinessAreas={RequestBusinessAreas}
-                />
-              </Modal>
-            </div>
           </button>
         </div>
         <small className="px-1 text-slate-500">

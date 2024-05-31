@@ -1,72 +1,125 @@
-import PropType from "prop-types";
+import PropTypes from "prop-types";
 import { RxCross2 } from "react-icons/rx";
+import { useContext, useEffect, useState } from "react";
+import { differenceInMonths, parseISO } from "date-fns";
+import { UserSubscription } from "../../context/UserSubscriptionContext";
+import { FaEyeSlash } from "react-icons/fa";
 
-function Notification({ showModal, setShowModal }) {
+function Notification({ showModal, setShowModal, NotificationData }) {
+  const handleDrawerClose = () => setShowModal(false);
+  const [Active, setActive] = useState("unread");
+  const { userSub } = useContext(UserSubscription);
+  const now = new Date();
+
+  useEffect(() => {
+    // Prevent scrolling when the modal is open
+    if (showModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [showModal, userSub]);
+
   return (
     <>
-      <div className="Notification-component">
-        <div className="main">
-          {showModal ? (
-            <div className="fixed inset-0 z-50 overflow-hidden">
-              <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute inset-0 bg-black opacity-50"></div>
-                <div className="fixed w-full h-full top-0 right-0 flex justify-end">
-                  <div
-                    className="w-[400px] bg-white border border-gray-300 rounded-sm
-                     transition-all ease-in-out duration-700"
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="modal-headline"
-                  >
-                    <div className="relative flex flex-col">
-                      <div className="flex items-start justify-between p-2 border-b border-solid border-gray-300 bg-slate-100 rounded-t">
-                        <h3 className="text-xl font-medium">Alerts</h3>
-                        <button
-                          className="p-1 ml-auto bg-transparent border-0 text-black opacity-7 float-right focus:outline-none"
-                          onClick={() => setShowModal(false)}
-                        >
-                          <span className="text-black opacity-7 text-2xl">
-                            <RxCross2/>
-                          </span>
-                        </button>
-                      </div>
-                      <div className="">
-                        <div className="gap-4 text-sm pb-6 p-2 flex items-center">
-                          <span className="shadow shadow-slate-400 px-3 py-1 rounded-sm cursor-pointer font-medium text-blue-600">Unread</span>
-                          <span className="">Contracts | Follow</span>
-                        </div>
-                        <div className="">
-                            <div className=" leading-5 border-b border-slate-200 p-3 mb-2
-                             cursor-pointer">
-                                <p>{('IT Service Agreement Request / 16th FEB 24 - 1 Request deleted by Hariharan N').slice(0,40)}...</p>
-                                <small className="text-slate-500 text-[0.8rem]">2 months ago</small>
-                            </div>
+      {showModal && (
+        <div
+          className="fixed inset-0 z-30 bg-black/70 bg-opacity-50  transition-opacity"
+          onClick={handleDrawerClose}
+        ></div>
+      )}
 
-                            <div className=" leading-5 border-b border-slate-200 p-2 mb-2
-                             cursor-pointer">
-                                <p>{('IT Service Agreement Request / 16th FEB 24 - 1 Request deleted by Hariharan N').slice(0,40)}...</p>
-                                <small className="text-slate-500 text-[0.8rem]">2 months ago</small>
-                            </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : null}
-
-          {/* <div
-            className={`fixed h-full bg-white p-2 transition-all ease-linear duration-300 
-          ${showModal ? "w-4/12" : "w-0 overflow-hidden"}`}
+      {/* Sidebar */}
+      <div
+        id="drawer-right-example"
+        className={`fixed top-0 right-0 z-40 w-[25rem] transition-transform
+         duration-300 ease-in-out ${
+           showModal ? "translate-x-0" : "translate-x-full"
+         }`}
+        tabIndex="-1"
+        aria-labelledby="drawer-right-label"
+      >
+        <div className="p-2 bg-slate-100 fixed w-full top-0">
+          <h5
+            id="drawer-right-label"
+            className="inline-flex items-center mb-2 pt-2 text-base font-semibold"
           >
-            <p>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Esse
-              consequatur qui quidem doloremque eaque facilis, optio quisquam
-              est aliquam nemo adipisci. Consequatur ipsam eum sapiente sit
-              exercitationem explicabo natus veniam.
-            </p>
-          </div> */}
+            Alerts
+          </h5>
+          <button
+            type="button"
+            onClick={handleDrawerClose}
+            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute
+           top-2.5 right-2.5 inline-flex items-center justify-center"
+          >
+            <RxCross2 className="w-5 h-5" />
+          </button>
+        </div>
+        <div className="fixed w-full top-14">
+          <div className="text-sm grid grid-cols-2 items-center text-center">
+            <span
+              className={`rounded-sm cursor-pointer font-medium py-1 border ${
+                Active === "unread"
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "border-slate-500 bg-white"
+              }`}
+              onClick={() => setActive("unread")}
+            >
+              Unread
+            </span>
+            <span
+              className={`py-1 cursor-pointer font-medium border ${
+                Active === "contracts"
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "border-slate-500 bg-white"
+              }`}
+              onClick={() => setActive("contracts")}
+            >
+              Contracts | Follow
+            </span>
+          </div>
+          <div className="no-scrollbar h-screen overflow-y-auto bg-white">
+            {NotificationData.map((val) => {
+              const monthsAgo = differenceInMonths(
+                now,
+                parseISO(val.NotificationDate)
+              );
+              const displayText =
+                monthsAgo === 0 ? "a month ago" : `${monthsAgo} months ago`;
+              return (
+                <div
+                  key={val.RowKey}
+                  className={`leading-5 border-b border-slate-200 py-2 px-3 mb-2 mt-2 cursor-pointer text-sm ${
+                    Active === "unread" ? "static" : "hidden"
+                  }`}
+                >
+                  <p>
+                    {val.NotificationTitle.slice(0, 40)}
+                    ...
+                  </p>
+                  <small className="text-slate-500 text-[0.8rem]">
+                    {displayText}
+                  </small>
+                </div>
+              );
+            })}
+            {userSub.map((val) => (
+              <div
+                key={val.RowKey}
+                className={`flex justify-between border-b border-slate-200 py-2 px-3 mb-2 mt-2 cursor-pointer text-sm ${
+                  Active === "contracts" ? "static" : "hidden"
+                }`}
+              >
+                <p>
+                  {val.Title.slice(0, 40)}
+                  ...
+                </p>
+                <span>
+                  <FaEyeSlash />
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>
@@ -74,8 +127,9 @@ function Notification({ showModal, setShowModal }) {
 }
 
 Notification.propTypes = {
-  showModal: PropType.bool.isRequired,
-  setShowModal: PropType.func.isRequired,
+  showModal: PropTypes.bool,
+  setShowModal: PropTypes.func,
+  NotificationData: PropTypes.array,
 };
 
-export default Notification
+export default Notification;

@@ -44,8 +44,8 @@ Datepicker.propTypes = {
   title: PropTypes.string,
   baseline: PropTypes.string,
   required: PropTypes.string,
-  fieldname: PropTypes.string.isRequired,
-  validate: PropTypes.func.isRequired,
+  fieldname: PropTypes.string,
+  validate: PropTypes.func,
 };
 
 export default Datepicker;

@@ -2,11 +2,38 @@ import Dropdown from "../../Elements/Dropdown";
 import { FaBell } from "react-icons/fa6";
 import { FaCircleUser } from "react-icons/fa6";
 import Notification from "./Notifications";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchBar from "../../Elements/searchbox/Search";
+import axios from "axios";
 
 function Header() {
   const [showModal, setShowModal] = useState(false);
+  const [NotificationData, setNotificationData] = useState([]);
+
+  const api = import.meta.env.VITE_API_URL;
+  const account_id = import.meta.env.VITE_USER_KEY;
+
+  // function to get all the contract which is subscribed by user !!
+  async function getUserNotification() {
+    const headers = {
+      "Content-Type": "application/json",
+      "eContracts-ApiKey":
+        "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
+    };
+    try {
+      const response = await axios.get(
+        `${api}/api/accounts/${account_id}/portal/myAlerts?userName=Santosh Dutta`,
+        { headers }
+      );
+      setNotificationData(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getUserNotification();
+  }, []);
   return (
     <>
       <div className="Header-component shadow-md shadow-slate-300 h-16 flex items-center bg-white sticky top-0 z-20">
@@ -58,7 +85,7 @@ function Header() {
                   className="absolute flex justify-center items-center font-medium bg-red-600 text-white text-[0.7rem]
                  w-auto left-2 h-4 p-1 rounded-full top-[-0.6rem]"
                 >
-                  233
+                  {NotificationData.length}
                 </div>
               </div>
               <div className="flex items-center gap-1 cursor-pointer">
@@ -70,7 +97,11 @@ function Header() {
           </div>
         </div>
       </div>
-      <Notification showModal={showModal} setShowModal={setShowModal} />
+      <Notification
+        showModal={showModal}
+        setShowModal={setShowModal}
+        NotificationData={NotificationData}
+      />
     </>
   );
 }

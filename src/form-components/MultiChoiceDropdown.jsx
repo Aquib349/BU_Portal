@@ -14,15 +14,29 @@ const MultiChoiceDropdown = ({
   const [MultiSelectValue, setMultiSelectValue] = useState(null);
 
   useEffect(() => {
-    console.log(fieldname);
     if (validate) {
       validate(fieldname, MultiSelectValue, required);
     }
   }, []);
 
   const handleChange = (selectedOption) => {
-    setMultiSelectValue(selectedOption);
-    validate(fieldname, selectedOption.label, required);
+    // setUserSelectedOption(selectedOption);
+    let concatenatedLabels = "";
+    if (multi) {
+      concatenatedLabels = selectedOption
+        ? selectedOption.map((option) => option.label).join(";")
+        : "";
+      setMultiSelectValue(
+        selectedOption
+          ? selectedOption.map((option) => option.label).join(";")
+          : ""
+      );
+    } else {
+      concatenatedLabels = selectedOption ? selectedOption.label : "";
+      setMultiSelectValue(selectedOption ? selectedOption.label : "");
+    }
+
+    validate(fieldname, concatenatedLabels, required);
   };
 
   return (
@@ -39,7 +53,6 @@ const MultiChoiceDropdown = ({
           onChange={handleChange}
           options={options}
           isMulti={multi}
-          value={MultiSelectValue}
           className="css-control text-black bg-white"
         />
         <small className="text-slate-500">{baseline}</small>
@@ -56,7 +69,7 @@ MultiChoiceDropdown.propTypes = {
   required: PropTypes.string,
   MultiSelectValue: PropTypes.any,
   setMultiSelectValue: PropTypes.func,
-  fieldname: PropTypes.string.isRequired,
+  fieldname: PropTypes.string,
   validate: PropTypes.func,
 };
 

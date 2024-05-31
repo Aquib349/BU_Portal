@@ -5,17 +5,20 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import ViewRequestDetail from "./pages/dashboard/view request detail/ViewRequestDetail";
 import UserProvider from "./context/UserContext";
-import ContractSummary from "./pages/contract-summary/ContractSummary";
 import NewHomePage from "./pages/NewHomePage";
 import ScrollToTop from "./components/ScrollToTop";
-// import LookupField from "./form-components/lookup-field/LookupField";
+import RequestTypesProvider from "./context/RequestTypesContext";
+import StatusProvider from "./context/StatusContext";
+import UserSubscriptionProvider from "./context/UserSubscriptionContext";
 
 function App() {
   return (
     <>
       <div>
         <ScrollToTop />
-        <Header />
+        <UserSubscriptionProvider>
+          <Header />
+        </UserSubscriptionProvider>
         <Outlet />
       </div>
     </>
@@ -35,26 +38,31 @@ const Router = createBrowserRouter([
         path: "/",
         element: (
           <RequestProvider>
-            <Dashboard />
+            <UserSubscriptionProvider>
+              <RequestTypesProvider>
+                <StatusProvider>
+                  <Dashboard />
+                </StatusProvider>
+              </RequestTypesProvider>
+            </UserSubscriptionProvider>
           </RequestProvider>
         ),
       },
       {
         path: "newRequest",
-        element: <NewRequest />,
+        element: (
+          <StatusProvider>
+            <NewRequest />,
+          </StatusProvider>
+        ),
       },
       {
         path: "requestDetail/:RowKey",
         element: <ViewRequestDetail />,
       },
       {
-        path: "contractSummary/:Rowkey",
-        element: <ContractSummary />,
-      },
-      {
         path: "new",
         element: <NewHomePage />,
-        // element: <LookupField />,
       },
     ],
   },

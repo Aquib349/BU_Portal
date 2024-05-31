@@ -57,6 +57,48 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
 
   return (
     <>
+      {showModal && (
+        <Modal
+          toggleModal={toggleProjectTaskModal}
+          heading="Project Task Picker"
+          set_Width={true}
+        >
+          {/* Pick the project task */}
+          <div className="project-task pt-4">
+            {ProjectTask.map((val) => (
+              <div key={val.RowKey} className="main text-sm">
+                <div className="project-task-name bg-slate-200 p-2 flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    name="task_name"
+                    checked={checkedTasks[val.RowKey]?.nameChecked || false}
+                    onChange={() => selectProjectTask(val.RowKey, "name")}
+                  />
+                  <span>
+                    {val.TaskDescription.replace("(Default Task)", "")}
+                  </span>
+                </div>
+                <div className="project-task-detail p-2 flex items-center gap-2 pl-8">
+                  <input
+                    type="checkbox"
+                    name="task_desc"
+                    checked={checkedTasks[val.RowKey]?.descChecked || false}
+                    onChange={() => selectProjectTask(val.RowKey, "desc")}
+                  />
+                  <span>
+                    {val.TaskID} : {val.TaskDescription}
+                  </span>
+                </div>
+              </div>
+            ))}
+            <SelectedProjectTask
+              handleTaskSubmit={handleTaskSubmit}
+              showModal={showModal}
+              setShowModal={setShowModal}
+            />
+          </div>
+        </Modal>
+      )}
       <div className="py-4">
         <label className="text-sm">Project Task</label>
         <div className="flex items-center">
@@ -73,53 +115,6 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
             >
               Browse
             </span>
-            {/* Modal */}
-            <div className={`${showModal ? "static" : "hidden"} text-black`}>
-              <Modal
-                toggleModal={toggleProjectTaskModal}
-                heading="Project Task Picker"
-                set_Width={true}
-              >
-                {/* Pick the project task */}
-                <div className="project-task pt-4">
-                  {ProjectTask.map((val) => (
-                    <div key={val.RowKey} className="main text-sm">
-                      <div className="project-task-name bg-slate-200 p-2 flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          name="task_name"
-                          checked={
-                            checkedTasks[val.RowKey]?.nameChecked || false
-                          }
-                          onChange={() => selectProjectTask(val.RowKey, "name")}
-                        />
-                        <span>
-                          {val.TaskDescription.replace("(Default Task)", "")}
-                        </span>
-                      </div>
-                      <div className="project-task-detail p-2 flex items-center gap-2 pl-8">
-                        <input
-                          type="checkbox"
-                          name="task_desc"
-                          checked={
-                            checkedTasks[val.RowKey]?.descChecked || false
-                          }
-                          onChange={() => selectProjectTask(val.RowKey, "desc")}
-                        />
-                        <span>
-                          {val.TaskID} : {val.TaskDescription}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                  <SelectedProjectTask
-                    handleTaskSubmit={handleTaskSubmit}
-                    showModal={showModal}
-                    setShowModal={setShowModal}
-                  />
-                </div>
-              </Modal>
-            </div>
           </div>
         </div>
         <small className="text-slate-500">{baseline}</small>

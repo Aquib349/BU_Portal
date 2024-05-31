@@ -1,6 +1,5 @@
 import { RxCross2 } from "react-icons/rx";
 import PropTypes from "prop-types";
-import axios from "axios";
 
 function SelectedCounterparty({
   SelectedCounterParty,

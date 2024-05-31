@@ -146,7 +146,6 @@ const NewRequest = () => {
       for (let [key, value] of formData.entries()) {
         console.log(key, value);
       }
-      setFieldValues({});
 
       // console.log(QueryString);
       // mehtod post to crete the new request

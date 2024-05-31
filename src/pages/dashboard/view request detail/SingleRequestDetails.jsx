@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import Tooltip from "../../../Elements/Tooltip";
 
 function SingleRequestDetails({ Data }) {
-  const dateObject = new Date(Data?.Metadata?.RequiredByDate?._text);
+  const dateObject = new Date();
   return (
     <>
       <div className="bg-white shadow-sm">

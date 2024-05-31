@@ -71,6 +71,74 @@ function CounterpartyLookUp({ CounterParty, setSelectedCounterPartyName }) {
 
   return (
     <>
+      {showModal && (
+        <Modal
+          toggleModal={toggleCounterPartyModal}
+          heading={
+            <>
+              <div className="">
+                <h1>Select Counterparties</h1>
+                <p className="text-sm">
+                  Select Counterparties related to this request. If not
+                  available here, provide Counterparty info in the request
+                  description field.
+                </p>
+              </div>
+            </>
+          }
+          set_Width={true}
+        >
+          {/* pick the projec type */}
+          <div className="main-project">
+            <div className="show-entries-search flex justify-between items-center py-3">
+              {/* items per page to show */}
+              <CounterPartyPerPage setItemsPerPage={setItemsPerPage} />
+              {/* search input project */}
+              <SearchCounterParty
+                setFilteredCounterParty={setFilteredCounterParty}
+                CounterPartyName={CounterParty}
+              />
+            </div>
+
+            {/* all projects */}
+            <div className="border-b border-slate-300 pb-2">
+              <Pagination
+                itemsPerPage={itemsPerPage}
+                data={
+                  filteredCounterParty.length > 0
+                    ? filteredCounterParty
+                    : CounterParty
+                }
+                toggleModal={toggleCounterPartyModal}
+                renderComponent={({ data, toggleModal }) => (
+                  <AllCounterParty
+                    CounterPartyName={data}
+                    toggleModal={toggleModal}
+                    AllChecked={AllChecked}
+                    toggleSelectAll={toggleSelectAll}
+                    checkedItems={checkedItems}
+                    toggleCheckBox={toggleCheckBox}
+                  />
+                )}
+              />
+            </div>
+
+            {/* selected projects */}
+            <SelectedCounterparty
+              SelectedCounterParty={SelectedCounterParty}
+              setSelectedCounterParty={setSelectedCounterParty}
+              checkedItems={checkedItems}
+              setCheckedItems={setCheckedItems}
+              CounterPartyName={CounterParty}
+              setAllChecked={setAllChecked}
+              setSelectedCounterPartyValue={setSelectedCounterPartyValue}
+              showModal={showModal}
+              setShowModal={setShowModal}
+              setSelectedCounterPartyName={setSelectedCounterPartyName}
+            />
+          </div>
+        </Modal>
+      )}
       <div className="flex items-center">
         <input
           type="text"
@@ -85,75 +153,6 @@ function CounterpartyLookUp({ CounterParty, setSelectedCounterPartyName }) {
           >
             Browse
           </span>
-
-          <div className={`${showModal ? "static" : "hidden"} text-black`}>
-            <Modal
-              toggleModal={toggleCounterPartyModal}
-              heading={
-                <>
-                  <div className="">
-                    <h1>Select Counterparties</h1>
-                    <p className="text-sm">
-                      Select Counterparties related to this request. If not
-                      available here, provide Counterparty info in the request
-                      description field.
-                    </p>
-                  </div>
-                </>
-              }
-              set_Width={true}
-            >
-              {/* pick the projec type */}
-              <div className="main-project">
-                <div className="show-entries-search flex justify-between items-center py-3">
-                  {/* items per page to show */}
-                  <CounterPartyPerPage setItemsPerPage={setItemsPerPage} />
-                  {/* search input project */}
-                  <SearchCounterParty
-                    setFilteredCounterParty={setFilteredCounterParty}
-                    CounterPartyName={CounterParty}
-                  />
-                </div>
-
-                {/* all projects */}
-                <div className="border-b border-slate-300 pb-2">
-                  <Pagination
-                    itemsPerPage={itemsPerPage}
-                    data={
-                      filteredCounterParty.length > 0
-                        ? filteredCounterParty
-                        : CounterParty
-                    }
-                    toggleModal={toggleCounterPartyModal}
-                    renderComponent={({ data, toggleModal }) => (
-                      <AllCounterParty
-                        CounterPartyName={data}
-                        toggleModal={toggleModal}
-                        AllChecked={AllChecked}
-                        toggleSelectAll={toggleSelectAll}
-                        checkedItems={checkedItems}
-                        toggleCheckBox={toggleCheckBox}
-                      />
-                    )}
-                  />
-                </div>
-
-                {/* selected projects */}
-                <SelectedCounterparty
-                  SelectedCounterParty={SelectedCounterParty}
-                  setSelectedCounterParty={setSelectedCounterParty}
-                  checkedItems={checkedItems}
-                  setCheckedItems={setCheckedItems}
-                  CounterPartyName={CounterParty}
-                  setAllChecked={setAllChecked}
-                  setSelectedCounterPartyValue={setSelectedCounterPartyValue}
-                  showModal={showModal}
-                  setShowModal={setShowModal}
-                  setSelectedCounterPartyName={setSelectedCounterPartyName}
-                />
-              </div>
-            </Modal>
-          </div>
         </div>
       </div>
     </>

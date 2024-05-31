@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
 
+// const newFiles = { ...files };
+//     const objectURL = URL.createObjectURL(file);
+//     newFiles[objectURL] = file;
+//     setFiles(newFiles);
+
 const MultiFileUploader = () => {
   const [files, setFiles] = useState({});
   const [isDraggedOver, setIsDraggedOver] = useState(false);
 
   const addFile = (file) => {
-    const newFiles = { ...files };
-    const objectURL = URL.createObjectURL(file);
-    newFiles[objectURL] = file;
-    setFiles(newFiles);
+    setFiles((prevFiles) => ({ ...prevFiles }, file));
   };
 
   const handleDrop = (event) => {
@@ -86,6 +88,7 @@ const MultiFileUploader = () => {
               />
               <button
                 id="button"
+                type="button"
                 className="mt-2 rounded-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none"
                 onClick={() => document.getElementById("hidden-input").click()}
               >
@@ -115,6 +118,7 @@ const MultiFileUploader = () => {
           <footer className="flex justify-end px-8 pb-8 pt-4">
             <button
               id="submit"
+              type="button"
               className="rounded-sm px-3 py-1 bg-blue-700 hover:bg-blue-500 text-white focus:shadow-outline focus:outline-none"
               onClick={handleSubmit}
             >
@@ -122,6 +126,7 @@ const MultiFileUploader = () => {
             </button>
             <button
               id="cancel"
+              type="button"
               className="ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:shadow-outline focus:outline-none"
               onClick={handleCancel}
             >

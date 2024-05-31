@@ -21,7 +21,6 @@ const UserField = ({
   }, []);
 
   const handleChange = (selectedOption) => {
-    // setUserSelectedOption(selectedOption);
     let concatenatedLabels = "";
     if (multi) {
       concatenatedLabels = selectedOption
@@ -66,7 +65,7 @@ UserField.propTypes = {
   title: PropTypes.string,
   baseline: PropTypes.string,
   required: PropTypes.string,
-  fieldname: PropTypes.string.isRequired,
+  fieldname: PropTypes.string,
   validate: PropTypes.func,
 };
 

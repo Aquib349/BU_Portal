@@ -1,13 +1,33 @@
-import { memo } from "react";
 import PropTypes from "prop-types";
+import { useEffect } from "react";
 import { RxCross2 } from "react-icons/rx";
 
-const Modal = memo(function Modal({
-  toggleModal,
-  heading,
-  children,
-  set_Width,
-}) {
+const Modal = ({ toggleModal, heading, children, set_Width }) => {
+  useEffect(() => {
+    // Add class to body to prevent scrolling when the modal is open
+    const originalOverflow = document.body.style.overflow;
+    const originalPosition = document.body.style.position;
+    const originalTop = document.body.style.top;
+    const originalWidth = document.body.style.width;
+    const originalLeft = document.body.style.left;
+    const originalScrollY = window.scrollY;
+
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${originalScrollY}px`;
+    document.body.style.width = "100%";
+    document.body.style.left = "0";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.body.style.position = originalPosition;
+      document.body.style.top = originalTop;
+      document.body.style.width = originalWidth;
+      document.body.style.left = originalLeft;
+      window.scrollTo(0, originalScrollY);
+    };
+  }, []);
+
   return (
     <>
       <div className="modal_component">
@@ -17,7 +37,7 @@ const Modal = memo(function Modal({
           <div className="flex justify-center mt-10">
             <div
               className={`modal-content relative rounded-sm bg-white pb-4 drop-shadow-xl ${
-                set_Width ? `max-w-5xl` : "max-w-xl"
+                set_Width ? `max-w-6xl` : "max-w-xl"
               } w-11/12 animation-zoomIn`}
             >
               <div className="modal-header px-2 py-3 border-b border-slate-400">
@@ -39,7 +59,7 @@ const Modal = memo(function Modal({
       </div>
     </>
   );
-});
+};
 
 Modal.propTypes = {
   toggleModal: PropTypes.func.isRequired,

@@ -34,7 +34,6 @@ body::-webkit-scrollbar {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
-
 /* css for the modal */
 .animation-zoomIn {
   animation-name: zoomIn;
@@ -68,12 +67,13 @@ body::-webkit-scrollbar {
   display: flex;
   justify-content: end;
   margin-top: 10px;
+  margin-right: 10px;
 }
 
 /* Pagination item */
 .pagination-item {
   display: inline-block;
-  margin: 0 5px;
+  margin: 0 2px;
   padding: 2px 10px;
   border-radius: 4px;
   cursor: pointer;

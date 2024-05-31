@@ -8,11 +8,13 @@ import AllRequest from "./AllRequests";
 import WelcomeScreen from "./WelcomeScreen";
 import axios from "axios";
 import Pagination from "../../Elements/Pagination";
+import LoadingSpinner from "../../Elements/loading spinner/LoadingSpinner";
 
 function Dashboard() {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
 
+  const [ShowSpinner, setShowSpinner] = useState(false);
   const [BookmarkData, setBookmarkData] = useState([]);
   const { RequestData, AllRequestStatus } = useContext(RequestContext);
   const [SearchInput, setSearchInput] = useState("");
@@ -67,10 +69,12 @@ function Dashboard() {
 
   useEffect(() => {
     getAllBookmarks();
+    setFilteredData(RequestData?.SubmittedRequests);
   }, []);
 
   return (
     <>
+      {ShowSpinner && <LoadingSpinner />}
       {show && (
         <Modal toggleModal={toggleModal} heading="Add Note">
           <div className="add-note pt-4">
@@ -114,21 +118,33 @@ function Dashboard() {
               SearchInput={SearchInput}
               SearchRequests={SearchRequests}
               AllRequestStatus={AllRequestStatus}
-              RequestData={RequestData}
               FilteredData={FilteredData}
               toggleModal={toggleModal}
+              setFilteredData={setFilteredData}
             />
 
             {/* All Bookmarks */}
-            <div className="bg-white mt-8 rounded-sm shadow-sm shadow-black/20 pb-2">
-              <Pagination
-                itemsPerPage={10}
-                data={BookmarkData}
-                toggleModal={toggleModal}
-                renderComponent={({ data }) => (
-                  <Bookmarks BookmarkData={data} />
-                )}
-              />
+            <div className="">
+              <div className="px-1 pb-2">
+                <h1 className="text-xl font-semibold pt-6">My Bookmarks</h1>
+                <p className="text-slate-500 text-sm">
+                  Your bookmarked contracts
+                </p>
+              </div>
+              <div className="bg-white rounded shadow-md shadow-black/20 pb-2 border border-slate-200">
+                <Pagination
+                  itemsPerPage={10}
+                  data={BookmarkData}
+                  toggleModal={toggleModal}
+                  renderComponent={({ data }) => (
+                    <Bookmarks
+                      BookmarkData={data}
+                      getAllBookmarks={getAllBookmarks}
+                      setShowSpinner={setShowSpinner}
+                    />
+                  )}
+                />
+              </div>
             </div>
           </div>
         </div>
