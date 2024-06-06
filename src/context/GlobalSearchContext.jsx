@@ -12,7 +12,6 @@ const GlobalSearchProvider = ({ children }) => {
   const [sort, setSort] = useState("Recently Updated");
   const [searchText, setSearchText] = useState("");
   const [GlobalSearchData, setGlobalSearchData] = useState([]);
-  const [GlobalFilteredData, setGlobalFilteredData] = useState([]);
   const [DataLoading, setDataLoading] = useState(false);
 
   // function to handle the global search
@@ -35,7 +34,6 @@ const GlobalSearchProvider = ({ children }) => {
           { headers }
         );
         setGlobalSearchData(response.data);
-        setGlobalFilteredData(response.data);
       } else if (DropDownValue === "DocumentName") {
         const response = await axios.get(
           `${api}/api/accounts/${account_id}/portal/documentSearch?` +
@@ -47,7 +45,6 @@ const GlobalSearchProvider = ({ children }) => {
           { headers }
         );
         setGlobalSearchData(response.data);
-        setGlobalFilteredData(response.data);
       } else if (DropDownValue === "CounterpartyName") {
         const response = await axios.get(
           `${api}/api/accounts/${account_id}/portal/counterpartySearch?` +
@@ -58,7 +55,6 @@ const GlobalSearchProvider = ({ children }) => {
           { headers }
         );
         setGlobalSearchData(response.data);
-        setGlobalFilteredData(response.data);
       }
     } catch (error) {
       console.error("Error fetching contract data:", error);
@@ -66,10 +62,6 @@ const GlobalSearchProvider = ({ children }) => {
       setDataLoading(false);
     }
   }, [DropDownValue, sort, searchText]);
-
-  // useEffect(() => {
-  //   handleGlobalSearch();
-  // }, []);
 
   return (
     <GlobalSearchContext.Provider
@@ -82,9 +74,7 @@ const GlobalSearchProvider = ({ children }) => {
         setSearchText,
         searchText,
         GlobalSearchData,
-        DataLoading,
-        setGlobalFilteredData,
-        GlobalFilteredData,
+        DataLoading
       }}
     >
       {children}

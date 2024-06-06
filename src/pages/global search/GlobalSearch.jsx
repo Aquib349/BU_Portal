@@ -6,6 +6,7 @@ import { GlobalSearchContext } from "../../context/GlobalSearchContext";
 
 const GlobalSearch = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [GlobalFilteredData, setGlobalFilteredData] = useState([]);
   const {
     setSort,
     sort,
@@ -14,13 +15,11 @@ const GlobalSearch = () => {
     handleGlobalSearch,
     setSearchText,
     searchText,
-    setGlobalFilteredData,
-    GlobalFilteredData,
   } = useContext(GlobalSearchContext);
 
   const handleSearchChange = (e) => {
     const inputValue = e.target.value.toLowerCase();
-    setSearchText(inputValue);
+    setSearchQuery(inputValue);
 
     if (inputValue.length === 0) {
       // If search input is empty, show all data
@@ -36,7 +35,7 @@ const GlobalSearch = () => {
           ? GlobalSearchData.CounterpartySearch
           : []
       )?.filter((val) => val.DocumentName?.toLowerCase()?.includes(inputValue));
-      
+
       setGlobalFilteredData(filteredData?.length > 0 ? filteredData : []);
     }
   };
@@ -50,7 +49,7 @@ const GlobalSearch = () => {
   }, [sort]);
 
   useEffect(() => {
-    setSearchText("");
+    // setSearchText(searchQuery);
     setSearchQuery(searchText);
   }, []);
 
@@ -101,7 +100,7 @@ const GlobalSearch = () => {
               : []
           }
           renderComponent={({ data }) => (
-            <SearchResult results={data} DropDownValue={DropDownValue} />
+            <SearchResult results={data || []} DropDownValue={DropDownValue} />
           )}
         />
       </div>
