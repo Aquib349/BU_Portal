@@ -10,6 +10,8 @@ import ContractSummary from "../../contract-summary/ContractSummary";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { UserSubscription } from "../../../context/UserSubscriptionContext";
+import MultiChoiceDropdown from "../../../form-components/MultiChoiceDropdown";
+import MultiLineTextField from "../../../form-components/MultiLineTextField";
 
 function ManageBookmarks({
   DeleteBookmark,
@@ -23,6 +25,7 @@ function ManageBookmarks({
   const account_id = import.meta.env.VITE_USER_KEY;
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [AddNoteModal, setAddNoteModal] = useState(false);
   const [ContractDetails, setContractDetails] = useState({});
   const dropdownBookmark = useRef(null);
   const { userSub } = useContext(UserSubscription);
@@ -70,6 +73,7 @@ function ManageBookmarks({
       icon: <MdOutlineNoteAdd />,
       click: () => {
         setShow(!show);
+        setAddNoteModal(!AddNoteModal);
       },
     },
   ];
@@ -77,6 +81,9 @@ function ManageBookmarks({
   // function to handle the toggle state of modal
   function toggleModal() {
     setShowModal(!showModal);
+  }
+  function toggleAddNoteModal() {
+    setAddNoteModal(!AddNoteModal);
   }
 
   // function to get the contract summary
@@ -134,6 +141,39 @@ function ManageBookmarks({
         >
           <div className="p-2">
             <ContractSummary ContractDetails={ContractDetails} />
+          </div>
+        </Modal>
+      )}
+      {AddNoteModal && (
+        <Modal toggleModal={toggleAddNoteModal} heading="Add Note">
+          <div className="add-note pt-4">
+            <MultiLineTextField
+              title="Notes"
+              baseline=""
+              name="add_note"
+              required="true"
+            />
+            <MultiChoiceDropdown
+              multi={true}
+              title="Send Notification to"
+              baseline=""
+              required="false"
+            />
+            <div className="btn text-white flex justify-end gap-2 pt-4">
+              <button
+                type="button"
+                className="bg-slate-600 px-8 py-2 text-sm rounded-md"
+                onClick={() => setAddNoteModal(!AddNoteModal)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="bg-blue-500 px-8 py-2 text-sm rounded-md"
+              >
+                Add
+              </button>
+            </div>
           </div>
         </Modal>
       )}

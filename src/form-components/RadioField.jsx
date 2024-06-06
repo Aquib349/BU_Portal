@@ -1,7 +1,15 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
-const RadioField = ({ title, required, fieldname, validate }) => {
+const RadioField = ({
+  title,
+  required,
+  fieldname,
+  validate,
+  CommentYes,
+  CommentNo,
+  CommentRequired,
+}) => {
   const [RadioOptionValue, setRadioOptionValue] = useState(null);
   useEffect(() => {
     if (validate) {
@@ -24,6 +32,7 @@ const RadioField = ({ title, required, fieldname, validate }) => {
               value="Yes"
               checked={RadioOptionValue === "Yes"}
               onChange={(e) => {
+                console.log(CommentYes);
                 setRadioOptionValue(e.target.value);
                 validate(fieldname, e.target.value, required);
               }}
@@ -36,6 +45,7 @@ const RadioField = ({ title, required, fieldname, validate }) => {
               value="No"
               checked={RadioOptionValue === "No"}
               onChange={(e) => {
+                console.log(CommentNo);
                 setRadioOptionValue(e.target.value);
                 validate(fieldname, e.target.value, required);
               }}
@@ -48,7 +58,10 @@ const RadioField = ({ title, required, fieldname, validate }) => {
       <div
         className={`comment-box ${
           //  RadioOptionValue.toLowerCase() === "yes" ? "static" : "hidden"
-          RadioOptionValue === "Yes" ? "static" : "hidden"
+          (RadioOptionValue === "Yes" && CommentYes === "true") ||
+          (RadioOptionValue === "No" && CommentNo === "true")
+            ? "static"
+            : "hidden"
         }`}
       >
         <textarea
@@ -67,6 +80,9 @@ RadioField.propTypes = {
   required: PropTypes.string,
   fieldname: PropTypes.string.isRequired,
   validate: PropTypes.func,
+  CommentYes: PropTypes.string,
+  CommentNo: PropTypes.string,
+  CommentRequired: PropTypes.string,
 };
 
 export default RadioField;

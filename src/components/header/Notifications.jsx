@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { RxCross2 } from "react-icons/rx";
 import { useContext, useEffect, useState } from "react";
-import { differenceInMonths, parseISO } from "date-fns";
+import { formatDistanceToNow, parseISO } from "date-fns";
 import { UserSubscription } from "../../context/UserSubscriptionContext";
 import { FaEyeSlash } from "react-icons/fa";
 
@@ -9,7 +9,6 @@ function Notification({ showModal, setShowModal, NotificationData }) {
   const handleDrawerClose = () => setShowModal(false);
   const [Active, setActive] = useState("unread");
   const { userSub } = useContext(UserSubscription);
-  const now = new Date();
 
   useEffect(() => {
     // Prevent scrolling when the modal is open
@@ -80,12 +79,10 @@ function Notification({ showModal, setShowModal, NotificationData }) {
           </div>
           <div className="no-scrollbar h-screen overflow-y-auto bg-white">
             {NotificationData.map((val) => {
-              const monthsAgo = differenceInMonths(
-                now,
-                parseISO(val.NotificationDate)
-              );
-              const displayText =
-                monthsAgo === 0 ? "a month ago" : `${monthsAgo} months ago`;
+              const parsedDate = parseISO(val.NotificationDate);
+              const timeAgo = formatDistanceToNow(parsedDate, {
+                addSuffix: true,
+              });
               return (
                 <div
                   key={val.RowKey}
@@ -97,8 +94,8 @@ function Notification({ showModal, setShowModal, NotificationData }) {
                     {val.NotificationTitle.slice(0, 40)}
                     ...
                   </p>
-                  <small className="text-slate-500 text-[0.8rem]">
-                    {displayText}
+                  <small className="text-blue-500 text-[0.8rem]">
+                    {timeAgo}
                   </small>
                 </div>
               );

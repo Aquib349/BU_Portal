@@ -39,11 +39,11 @@ function RelatedContracts({
             </Link>
           </span>
         </td>
-        <td className="text-sm cursor-pointer">
+        {/* <td className="text-sm cursor-pointer">
           <span className="flex justify-center items-center">
             <RiStickyNoteAddFill onClick={toggleModal} />
           </span>
-        </td>
+        </td> */}
       </tr>
     </>
   );

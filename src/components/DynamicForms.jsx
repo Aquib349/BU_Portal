@@ -84,8 +84,16 @@ function DynamicForms({ DynamicFormData, validationErrors, validateField }) {
   // Trigger re-render when DynamicFormData changes
   useEffect(() => {
     const components = DynamicFormData?.map((val) => {
-      const { FieldName, FieldType, FieldDisplayName, HelpText, Required } =
-        val;
+      const {
+        FieldName,
+        FieldType,
+        FieldDisplayName,
+        HelpText,
+        Required,
+        CommentYes,
+        CommentNo,
+        CommentRequired,
+      } = val;
       const componentInfo = componentMap[FieldType];
       if (componentInfo) {
         const { component: Component, props } = componentInfo;
@@ -95,6 +103,9 @@ function DynamicForms({ DynamicFormData, validationErrors, validateField }) {
           baseline: HelpText ? HelpText : "",
           required: Required,
           fieldname: FieldName,
+          CommentYes: CommentYes,
+          CommentNo: CommentNo,
+          CommentRequired: CommentRequired,
           validate: validateField,
           ...props,
         };

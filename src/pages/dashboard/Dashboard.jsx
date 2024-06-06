@@ -75,7 +75,7 @@ function Dashboard() {
   return (
     <>
       {ShowSpinner && <LoadingSpinner />}
-      {show && (
+      {/* {show && (
         <Modal toggleModal={toggleModal} heading="Add Note">
           <div className="add-note pt-4">
             <MultiLineTextField
@@ -106,7 +106,7 @@ function Dashboard() {
             </div>
           </div>
         </Modal>
-      )}
+      )} */}
       <div className="dashboard-component px-6 no-scrollbar">
         <div className="p-2">
           <div className="pt-2">

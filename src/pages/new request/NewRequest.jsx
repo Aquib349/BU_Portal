@@ -79,7 +79,7 @@ const NewRequest = () => {
     setFieldValues((prevValues) => {
       const updatedValues = { ...prevValues };
 
-      if (Array.isArray(value)) {
+      if (Array.isArray(value) && fieldname !== "Attachments") {
         // If value is an array, iterate over each object in the array
         value.forEach((field) => {
           // Assuming each field object contains only one key-value pair
@@ -95,8 +95,8 @@ const NewRequest = () => {
       }
 
       // Ensure RequestType and BusinessArea fields are set
-      updatedValues["RequestType"] = encodeURIComponent(RequestType);
-      updatedValues["BusinessArea"] = encodeURIComponent(BusinessArea);
+      updatedValues["&RequestType"] = encodeURIComponent(RequestType);
+      updatedValues["&BusinessArea"] = encodeURIComponent(BusinessArea);
 
       return updatedValues;
     });
@@ -139,37 +139,48 @@ const NewRequest = () => {
       // Form is valid, proceed with submission
       let QueryString = convertToQueryString(fieldValues);
       QueryString += "&CreatedFromPortal=YES";
+
       // Append the querystring and accountID fields to the FormData object
       formData.append("SearializeControls", QueryString);
       formData.append("AccountID", account_id);
+
       // Log FormData contents
       for (let [key, value] of formData.entries()) {
         console.log(key, value);
       }
 
-      // console.log(QueryString);
-      // mehtod post to crete the new request
-      // try {
-      //   const response = await axios.post(
-      //     `${api}/api/accounts/${account_id}/Requests`,
-      //     formData,
-      //     { headers }
-      //   );
-      //   if (response.status === 200 || response.status === 201) {
-      //     toast.success("Form submitted successfully", {
-      //       duration: 1000,
-      //       position: "top-center",
-      //       style: {
-      //         backgroundColor: "black",
-      //         color: "white",
-      //         fontSize: "0.8rem",
-      //       },
-      //     });
-      //     setFieldValues({});
-      //   }
-      // } catch (error) {
-      //   console.log(error);
-      // }
+      // POST request to create the new request
+      try {
+        const response = await axios.post(
+          `${api}/api/accounts/${account_id}/Requests`,
+          formData,
+          { headers }
+        );
+        if (response.status === 200 || response.status === 201) {
+          toast.success("Form submitted successfully", {
+            duration: 1000,
+            position: "top-center",
+            style: {
+              backgroundColor: "black",
+              color: "white",
+              fontSize: "0.8rem",
+            },
+          });
+          setFieldValues({});
+        }
+      } catch (error) {
+        console.log(error);
+        // Optionally display an error toast
+        toast.error("Submission failed. Please try again.", {
+          duration: 1500,
+          position: "top-center",
+          style: {
+            backgroundColor: "black",
+            color: "white",
+            fontSize: "0.8rem",
+          },
+        });
+      }
     } else {
       // Form is invalid, show errors
       toast.error("Please fill all the required fields", {

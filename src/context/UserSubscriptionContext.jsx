@@ -32,7 +32,7 @@ function UserSubscriptionProvider({ children }) {
 
   useEffect(() => {
     getUserSubscription();
-  }, [getUserSubscription]);
+  }, []);
 
   return (
     <UserSubscription.Provider value={{ userSub, getUserSubscription }}>

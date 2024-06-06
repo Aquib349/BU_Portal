@@ -5,11 +5,12 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import ViewRequestDetail from "./pages/dashboard/view request detail/ViewRequestDetail";
 import UserProvider from "./context/UserContext";
-import NewHomePage from "./pages/NewHomePage";
 import ScrollToTop from "./components/ScrollToTop";
 import RequestTypesProvider from "./context/RequestTypesContext";
 import StatusProvider from "./context/StatusContext";
 import UserSubscriptionProvider from "./context/UserSubscriptionContext";
+import GlobalSearch from "./pages/global search/GlobalSearch";
+import GlobalSearchProvider from "./context/GlobalSearchContext";
 
 function App() {
   return (
@@ -17,7 +18,9 @@ function App() {
       <div>
         <ScrollToTop />
         <UserSubscriptionProvider>
+          {/* <GlobalSearchProvider> */}
           <Header />
+          {/* </GlobalSearchProvider> */}
         </UserSubscriptionProvider>
         <Outlet />
       </div>
@@ -30,7 +33,11 @@ const Router = createBrowserRouter([
     path: "/",
     element: (
       <UserProvider>
-        <App />
+        <StatusProvider>
+          <GlobalSearchProvider>
+            <App />
+          </GlobalSearchProvider>
+        </StatusProvider>
       </UserProvider>
     ),
     children: [
@@ -40,9 +47,7 @@ const Router = createBrowserRouter([
           <RequestProvider>
             <UserSubscriptionProvider>
               <RequestTypesProvider>
-                <StatusProvider>
-                  <Dashboard />
-                </StatusProvider>
+                <Dashboard />
               </RequestTypesProvider>
             </UserSubscriptionProvider>
           </RequestProvider>
@@ -50,19 +55,15 @@ const Router = createBrowserRouter([
       },
       {
         path: "newRequest",
-        element: (
-          <StatusProvider>
-            <NewRequest />,
-          </StatusProvider>
-        ),
+        element: <NewRequest />,
       },
       {
         path: "requestDetail/:RowKey",
         element: <ViewRequestDetail />,
       },
       {
-        path: "new",
-        element: <NewHomePage />,
+        path: "globalSearch",
+        element: <GlobalSearch />,
       },
     ],
   },

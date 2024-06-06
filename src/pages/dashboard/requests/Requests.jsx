@@ -24,7 +24,7 @@ function Requests({ toggleModal, currentItems }) {
                 <th className="p-2">Assigned To</th>
                 <th className="p-2">Due Date</th>
                 <th className="p-2">Details</th>
-                <th className="p-2">Add Note</th>
+                {/* <th className="p-2">Add Note</th> */}
               </tr>
             </thead>
 
@@ -47,18 +47,18 @@ function Requests({ toggleModal, currentItems }) {
                       </td>
                       <td className="p-2">{val.AssignedTo}</td>
                       <td className="">{dateObject.toLocaleDateString()}</td>
-                      <td className="relative text-xl cursor-pointer">
+                      <td className="relative text-xl cursor-pointer py-2">
                         <span className="flex justify-center items-center text-slate-600">
                           <Link to={`requestDetail/${val.RowKey}`}>
                             <FaEye />
                           </Link>
                         </span>
                       </td>
-                      <td className="py-2 text-xl cursor-pointer">
+                      {/* <td className="py-2 text-xl cursor-pointer">
                         <span className="flex justify-center items-center text-slate-600">
                           <RiStickyNoteAddFill onClick={toggleModal} />
                         </span>
-                      </td>
+                      </td> */}
                     </tr>
                     {/* Additional row */}
 
@@ -95,8 +95,8 @@ function Requests({ toggleModal, currentItems }) {
 }
 
 Requests.propTypes = {
-  currentItems: PropTypes.array.isRequired,
-  toggleModal: PropTypes.func.isRequired,
+  currentItems: PropTypes.array,
+  toggleModal: PropTypes.func,
 };
 
 export default Requests;

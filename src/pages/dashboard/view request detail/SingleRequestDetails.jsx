@@ -10,12 +10,22 @@ function SingleRequestDetails({ Data }) {
     <>
       <div className="bg-white shadow-sm">
         <div className="p-4 border-b">
-          <h1 className="text-2xl pb-4 font-semibold">
-            {Data?.Metadata?.RequestTitle?._text}
-          </h1>
+          <div className="flex justify-between">
+            <h1 className="text-2xl pb-4 font-semibold">
+              {Data?.Metadata?.RequestTitle?._text}
+            </h1>
+            <button
+              type="button"
+              className="flex justify-center items-center px-4 h-8 rounded  border border-slate-500
+               hover:bg-slate-500 hover:text-white text-slate-400 text-sm"
+            >
+              Edit
+            </button>
+          </div>
+
           <div className="flex justify-between items-center">
             <div className="text-sm">{Data?.Metadata?.ContractArea?._text}</div>
-            <div className="flex gap-4 items-center text-lg">
+            <div className="flex gap-2 items-center text-lg">
               <Tooltip
                 message="Request will be due on this date"
                 header={<LuCalendarDays />}
@@ -24,7 +34,7 @@ function SingleRequestDetails({ Data }) {
                 {dateObject.toLocaleDateString()}
               </span>
             </div>
-            <div className="flex gap-4 items-center text-lg">
+            <div className="flex gap-2 items-center text-lg">
               <Tooltip
                 message="Request is assigned to this user"
                 header={<HiUsers />}
@@ -33,7 +43,7 @@ function SingleRequestDetails({ Data }) {
                 {Data?.Metadata?.AssignedTo?._text}
               </span>
             </div>
-            <div className="flex gap-4 items-center text-lg">
+            <div className="flex gap-2 items-center text-lg">
               <Tooltip message="Priority" header={<FiFlag />} />
               <span className="pt-1 text-sm">
                 {Data?.Metadata?.Priority?._text}

@@ -1,25 +1,23 @@
 import React, { useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
+import PropTypes from "prop-types";
 
-// const newFiles = { ...files };
-//     const objectURL = URL.createObjectURL(file);
-//     newFiles[objectURL] = file;
-//     setFiles(newFiles);
-
-const MultiFileUploader = () => {
-  const [files, setFiles] = useState({});
+const MultiFileUploader = ({
+  toggleModal,
+  setUploadFile,
+  validate,
+  fieldname,
+  required,
+}) => {
+  const [files, setFiles] = useState([]);
   const [isDraggedOver, setIsDraggedOver] = useState(false);
-
-  const addFile = (file) => {
-    setFiles((prevFiles) => ({ ...prevFiles }, file));
-  };
 
   const handleDrop = (event) => {
     event.preventDefault();
     setIsDraggedOver(false);
-    for (const file of event.dataTransfer.files) {
-      addFile(file);
-    }
+    const newFiles = Array.from(event.target.files);
+    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    event.target.value = null;
   };
 
   const handleDragEnter = (event) => {
@@ -40,23 +38,20 @@ const MultiFileUploader = () => {
   };
 
   const handleFileInputChange = (event) => {
-    for (const file of event.target.files) {
-      addFile(file);
-    }
+    const newFiles = Array.from(event.target.files);
+    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    event.target.value = null;
   };
 
-  const handleFileDelete = (objectURL) => {
-    const newFiles = { ...files };
-    delete newFiles[objectURL];
-    setFiles(newFiles);
+  const handleFileDelete = (fileToDelete) => {
+    setFiles(files.filter((file) => file !== fileToDelete));
   };
 
   const handleSubmit = () => {
-    console.log(files);
-  };
-
-  const handleCancel = () => {
-    setFiles({});
+    validate(fieldname, files, required);
+    setUploadFile(files);
+    setFiles([]);
+    toggleModal();
   };
 
   return (
@@ -99,14 +94,14 @@ const MultiFileUploader = () => {
             {/* Display uploaded files */}
             <div className="mt-4">
               <h2 className="text-lg font-semibold mb-2">Uploaded Files:</h2>
-              {Object.keys(files).map((objectURL, index) => (
+              {files.map((file, index) => (
                 <div
                   key={index}
                   className="flex items-center gap-4 border-gray-400 py-1 text-sm"
                 >
-                  <div>{files[objectURL].name}</div>
+                  <div>{file.name}</div>
                   <button
-                    onClick={() => handleFileDelete(objectURL)}
+                    onClick={() => handleFileDelete(file)}
                     className="text-red-600 hover:text-red-800 text-lg"
                   >
                     <MdDeleteForever />
@@ -119,16 +114,16 @@ const MultiFileUploader = () => {
             <button
               id="submit"
               type="button"
-              className="rounded-sm px-3 py-1 bg-blue-700 hover:bg-blue-500 text-white focus:shadow-outline focus:outline-none"
+              className="rounded-sm px-3 py-1 bg-blue-700 hover:bg-blue-600 text-white focus:shadow-outline focus:outline-none"
               onClick={handleSubmit}
             >
-              Upload now
+              Submit
             </button>
             <button
               id="cancel"
               type="button"
-              className="ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:shadow-outline focus:outline-none"
-              onClick={handleCancel}
+              className="ml-3 rounded-sm px-3 py-1 bg-gray-500 text-white hover:bg-gray-600 focus:shadow-outline focus:outline-none"
+              onClick={toggleModal}
             >
               Cancel
             </button>
@@ -137,6 +132,10 @@ const MultiFileUploader = () => {
       </main>
     </div>
   );
+};
+
+MultiFileUploader.propTypes = {
+  toggleModal: PropTypes.func,
 };
 
 export default MultiFileUploader;
