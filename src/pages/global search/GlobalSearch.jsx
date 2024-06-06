@@ -6,29 +6,53 @@ import { GlobalSearchContext } from "../../context/GlobalSearchContext";
 
 const GlobalSearch = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [GlobalData, setGlobalData] = useState([]);
   const {
     setSort,
     sort,
     GlobalSearchData,
-    DataLoading,
     DropDownValue,
     handleGlobalSearch,
+    setSearchText,
+    searchText,
+    setGlobalFilteredData,
+    GlobalFilteredData,
   } = useContext(GlobalSearchContext);
 
-  const handleSearchChange = (e) => setSearchQuery(e.target.value);
-  const handleSortChange = (e) => {
-    setSort(e.target.value);
-    handleGlobalSearch(e);
+  const handleSearchChange = (e) => {
+    const inputValue = e.target.value.toLowerCase();
+    setSearchText(inputValue);
+
+    if (inputValue.length === 0) {
+      // If search input is empty, show all data
+      setGlobalFilteredData(GlobalSearchData);
+    } else {
+      // Filter data based on search input
+      const filteredData = (
+        DropDownValue === "ContractTitle"
+          ? GlobalSearchData.ContractSearch
+          : DropDownValue === "DocumentName"
+          ? GlobalSearchData.DocumentSearch
+          : DropDownValue === "CounterpartyName"
+          ? GlobalSearchData.CounterpartySearch
+          : []
+      )?.filter((val) => val.DocumentName?.toLowerCase()?.includes(inputValue));
+      
+      setGlobalFilteredData(filteredData?.length > 0 ? filteredData : []);
+    }
   };
 
-  if (DataLoading) {
-    return <p>Loading...</p>;
-  }
+  const handleSortChange = (e) => {
+    setSort(e.target.value);
+  };
 
   useEffect(() => {
-    setGlobalData(GlobalSearchData);
-  }, [GlobalSearchData]);
+    handleGlobalSearch();
+  }, [sort]);
+
+  useEffect(() => {
+    setSearchText("");
+    setSearchQuery(searchText);
+  }, []);
 
   return (
     <>
@@ -66,16 +90,18 @@ const GlobalSearch = () => {
         <Pagination
           itemsPerPage={10}
           data={
-            DropDownValue === "ContractTitle"
-              ? GlobalData.ContractSearch
+            GlobalFilteredData.length > 0
+              ? GlobalFilteredData
+              : DropDownValue === "ContractTitle"
+              ? GlobalSearchData.ContractSearch
               : DropDownValue === "DocumentName"
-              ? GlobalData.DocumentSearch
+              ? GlobalSearchData.DocumentSearch
               : DropDownValue === "CounterpartyName"
-              ? GlobalData.CounterpartyName
+              ? GlobalSearchData.CounterpartyName
               : []
           }
           renderComponent={({ data }) => (
-            <SearchResult results={data || []} DropDownValue={DropDownValue} />
+            <SearchResult results={data} DropDownValue={DropDownValue} />
           )}
         />
       </div>

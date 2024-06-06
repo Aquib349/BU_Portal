@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { IoSearchSharp } from "react-icons/io5";
 import { GlobalSearchContext } from "../../context/GlobalSearchContext";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -11,13 +11,8 @@ const SearchBar = () => {
     { id: 2, name: "Document Title", value: "DocumentName" },
     { id: 3, name: "Counterparty Name", value: "CounterpartyName" },
   ];
-  const {
-    handleGlobalSearch,
-    setDropDownValue,
-    setSearchText,
-    searchText,
-    GlobalSearchData,
-  } = useContext(GlobalSearchContext);
+  const { handleGlobalSearch, setDropDownValue, setSearchText, searchText } =
+    useContext(GlobalSearchContext);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -26,16 +21,14 @@ const SearchBar = () => {
   };
 
   const handleSearch = (e) => {
-    handleGlobalSearch(e);
-  };
+    e.preventDefault();
 
-  useEffect(() => {
-    if (GlobalSearchData && Object.keys(GlobalSearchData).length > 0) {
-      if (location.pathname !== "globalSearch") {
-        navigate("/globalSearch");
-      }
+    if (location.pathname !== "globalSearch") {
+      navigate("/globalSearch");
     }
-  }, [GlobalSearchData]);
+
+    handleGlobalSearch();
+  };
 
   return (
     <div className="search-box text-sm">
@@ -44,7 +37,7 @@ const SearchBar = () => {
           <button
             type="button"
             className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center
-             text-white border hover:border-none rounded-s-3xl bg-blue-500"
+             text-white rounded-s-3xl bg-blue-500"
             onClick={toggleDropdown}
           >
             {DropDownName}
