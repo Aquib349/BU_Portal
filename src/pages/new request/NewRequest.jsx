@@ -1,7 +1,7 @@
 import usePortalConfig from "../../customhooks/usePortalConfig";
 import { useCallback, useState } from "react";
 import NewRequestShimmer from "../../shimmer/NewRequestShimmer";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import LoadingSpinner from "../../Elements/loading spinner/LoadingSpinner";
 import NewRequestForm from "./NewRequestForm";
 import axios from "axios";
@@ -221,7 +221,6 @@ const NewRequest = () => {
           />
         </div>
       </div>
-      <Toaster />
     </>
   );
 };

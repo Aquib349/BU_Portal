@@ -11,11 +11,13 @@ import StatusProvider from "./context/StatusContext";
 import UserSubscriptionProvider from "./context/UserSubscriptionContext";
 import GlobalSearch from "./pages/global search/GlobalSearch";
 import GlobalSearchProvider from "./context/GlobalSearchContext";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <>
       <div>
+        <Toaster />
         <ScrollToTop />
         <UserSubscriptionProvider>
           {/* <GlobalSearchProvider> */}

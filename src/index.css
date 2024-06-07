@@ -117,3 +117,36 @@ body::-webkit-scrollbar {
     background-color: transparent;
   }
 }
+
+
+/* custom toast */
+
+@keyframes enterAnimation {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes leaveAnimation {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.animate-enter {
+  animation: enterAnimation 0.5s forwards;
+}
+
+.animate-leave {
+  animation: leaveAnimation 0.5s forwards;
+}

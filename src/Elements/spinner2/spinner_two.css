@@ -1,6 +1,6 @@
 .loader {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   display: inline-block;
   border-top: 4px solid rgb(59 130 246);
@@ -14,8 +14,8 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   border-bottom: 4px solid #ff3d00;
   border-left: 4px solid transparent;

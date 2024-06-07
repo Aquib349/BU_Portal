@@ -2,7 +2,7 @@ import { GoBookmarkFill } from "react-icons/go";
 import ManageBookmarks from "./ManageBookmarks";
 import PropTypes from "prop-types";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useContext, useState } from "react";
 import { UserSubscription } from "../../../context/UserSubscriptionContext";
 import Tooltip from "../../../Elements/Tooltip";
@@ -146,7 +146,6 @@ const Bookmarks = ({ BookmarkData, getAllBookmarks, setShowSpinner }) => {
           </div>
         </div>
       </div>
-      <Toaster />
     </>
   );
 };

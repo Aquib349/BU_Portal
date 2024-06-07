@@ -11,11 +11,13 @@ const GlobalSearchProvider = ({ children }) => {
   const [DropDownValue, setDropDownValue] = useState("ContractTitle");
   const [sort, setSort] = useState("Recently Updated");
   const [searchText, setSearchText] = useState("");
+  const [SearchQuery, setSearchQuery] = useState("");
   const [GlobalSearchData, setGlobalSearchData] = useState([]);
   const [DataLoading, setDataLoading] = useState(false);
 
   // function to handle the global search
   const handleGlobalSearch = useCallback(async () => {
+    console.log(SearchQuery);
     setDataLoading(true);
     const headers = {
       "Content-Type": "application/json",
@@ -27,7 +29,9 @@ const GlobalSearchProvider = ({ children }) => {
         const response = await axios.get(
           `${api}/api/accounts/${account_id}/portal/contractSearch?customquery=` +
             "&searchkeyword=" +
-            encodeURIComponent(`${DropDownValue}: ${searchText}`) +
+            encodeURIComponent(
+              `${DropDownValue}: ${searchText || SearchQuery}`
+            ) +
             `&MatchExact=Exact Keyword` +
             `&userType=Global Contract Owner;Account Owner;Contract Area Administrator;Business Area Owner;Business User;Portal User` +
             `&sortBy=${sort}`,
@@ -38,7 +42,7 @@ const GlobalSearchProvider = ({ children }) => {
         const response = await axios.get(
           `${api}/api/accounts/${account_id}/portal/documentSearch?` +
             `customquery=` +
-            `&searchkeyword=${DropDownValue}: ${searchText}` +
+            `&searchkeyword=${DropDownValue}: ${searchText || SearchQuery}` +
             `&MatchExact=Exact Keyword` +
             `&userType=Global Contract Owner;Account Owner;Contract Area Administrator;Business Area Owner;Business User;Portal User` +
             `&sortBy=${sort}`,
@@ -49,7 +53,7 @@ const GlobalSearchProvider = ({ children }) => {
         const response = await axios.get(
           `${api}/api/accounts/${account_id}/portal/counterpartySearch?` +
             `customquery=` +
-            `&searchkeyword=${DropDownValue}: ${searchText}` +
+            `&searchkeyword=${DropDownValue}: ${searchText || SearchQuery}` +
             `&MatchExact=Exact Keyword` +
             `&sortBy=${sort}`,
           { headers }
@@ -61,7 +65,7 @@ const GlobalSearchProvider = ({ children }) => {
     } finally {
       setDataLoading(false);
     }
-  }, [DropDownValue, sort, searchText]);
+  }, [DropDownValue, sort, searchText, SearchQuery]);
 
   return (
     <GlobalSearchContext.Provider
@@ -74,7 +78,9 @@ const GlobalSearchProvider = ({ children }) => {
         setSearchText,
         searchText,
         GlobalSearchData,
-        DataLoading
+        DataLoading,
+        SearchQuery,
+        setSearchQuery,
       }}
     >
       {children}

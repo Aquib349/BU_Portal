@@ -11,8 +11,13 @@ const SearchBar = () => {
     { id: 2, name: "Document Title", value: "DocumentName" },
     { id: 3, name: "Counterparty Name", value: "CounterpartyName" },
   ];
-  const { handleGlobalSearch, setDropDownValue, setSearchText, searchText } =
-    useContext(GlobalSearchContext);
+  const {
+    handleGlobalSearch,
+    setDropDownValue,
+    setSearchText,
+    searchText,
+    setSearchQuery,
+  } = useContext(GlobalSearchContext);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -23,10 +28,12 @@ const SearchBar = () => {
   const handleSearch = (e) => {
     e.preventDefault();
 
-    if (location.pathname !== "globalSearch") {
+    if (location.pathname !== "/globalSearch") {
+      console.log(location.pathname);
       navigate("/globalSearch");
     }
-
+    setSearchQuery(searchText);
+    setSearchText("");
     handleGlobalSearch();
   };
 
@@ -58,16 +65,16 @@ const SearchBar = () => {
             </svg>
           </button>
           {showDropdown && (
-            <div className="z-10 absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dropdown-menu mt-12">
+            <div className="z-10 absolute border border-slate-200 bg-white divide-y divide-gray-100 rounded-lg w-44 dropdown-menu mt-12">
               <ul
-                className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                className="py-2 text-sm text-gray-700"
                 aria-labelledby="dropdown-button"
               >
                 {data.map((item) => (
                   <li key={item.id}>
                     <button
                       type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100"
                       onClick={() => {
                         setDropDownValue(item.value);
                         setDropDownName(item.name);

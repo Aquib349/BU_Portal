@@ -5,7 +5,7 @@ import SearchResult from "./SearchResult";
 import { GlobalSearchContext } from "../../context/GlobalSearchContext";
 
 const GlobalSearch = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  // const [searchQuery, setSearchQuery] = useState("");
   const [GlobalFilteredData, setGlobalFilteredData] = useState([]);
   const {
     setSort,
@@ -13,7 +13,9 @@ const GlobalSearch = () => {
     GlobalSearchData,
     DropDownValue,
     handleGlobalSearch,
+    SearchQuery,
     setSearchText,
+    setSearchQuery,
     searchText,
   } = useContext(GlobalSearchContext);
 
@@ -26,17 +28,26 @@ const GlobalSearch = () => {
       setGlobalFilteredData(GlobalSearchData);
     } else {
       // Filter data based on search input
-      const filteredData = (
-        DropDownValue === "ContractTitle"
-          ? GlobalSearchData.ContractSearch
-          : DropDownValue === "DocumentName"
-          ? GlobalSearchData.DocumentSearch
-          : DropDownValue === "CounterpartyName"
-          ? GlobalSearchData.CounterpartySearch
-          : []
-      )?.filter((val) => val.DocumentName?.toLowerCase()?.includes(inputValue));
+      if (DropDownValue === "ContractTitle") {
+        const filteredData = GlobalSearchData.ContractSearch?.filter((val) =>
+          val.ContractTitle?.toLowerCase()?.includes(inputValue)
+        );
+        setGlobalFilteredData(filteredData.length > 0 ? filteredData : []);
+      }
 
-      setGlobalFilteredData(filteredData?.length > 0 ? filteredData : []);
+      if (DropDownValue === "DocumentName") {
+        const filteredData = GlobalSearchData.DocumentSearch?.filter((val) =>
+          val.DocumentName?.toLowerCase()?.includes(inputValue)
+        );
+        setGlobalFilteredData(filteredData.length > 0 ? filteredData : []);
+      }
+      if (DropDownValue === "CounterpartyName") {
+        const filteredData = GlobalSearchData.CounterpartySearch?.filter(
+          (val) => val.DocumentName?.toLowerCase()?.includes(inputValue)
+        );
+        console.log(filteredData);
+        setGlobalFilteredData(filteredData.length > 0 ? filteredData : []);
+      }
     }
   };
 
@@ -48,11 +59,6 @@ const GlobalSearch = () => {
     handleGlobalSearch();
   }, [sort]);
 
-  useEffect(() => {
-    // setSearchText(searchQuery);
-    setSearchQuery(searchText);
-  }, []);
-
   return (
     <>
       <div className="p-4 w-9/12 m-auto text-sm">
@@ -62,7 +68,7 @@ const GlobalSearch = () => {
             type="search"
             className="border rounded p-2 w-9/12 focus:ring-2 outline-none"
             placeholder="Search..."
-            value={searchQuery}
+            value={SearchQuery}
             onChange={handleSearchChange}
           />
           <div className="flex items-center gap-2">
@@ -96,7 +102,7 @@ const GlobalSearch = () => {
               : DropDownValue === "DocumentName"
               ? GlobalSearchData.DocumentSearch
               : DropDownValue === "CounterpartyName"
-              ? GlobalSearchData.CounterpartyName
+              ? GlobalSearchData.CounterpartySearch
               : []
           }
           renderComponent={({ data }) => (
