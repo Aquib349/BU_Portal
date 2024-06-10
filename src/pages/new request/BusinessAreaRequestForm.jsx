@@ -13,6 +13,8 @@ function BusinessAreaDynamicRequestForm({
   validateField,
   setBusinessArea,
   BusinessArea,
+  RequestType,
+  EditRequestMetadataValue,
 }) {
   return (
     <>
@@ -34,14 +36,18 @@ function BusinessAreaDynamicRequestForm({
               name="request_type"
               className="text-sm p-2 rounded-md border border-slate-300 outline-blue-300 text-black"
               onChange={handleRequestType}
+              value={RequestType}
             >
-              <option>-select-</option>
+              <option value="" disabled>
+                -select-
+              </option>
               {RequestTypes.map((req) => (
                 <option key={req.id} value={req.type}>
                   {req.type}
                 </option>
               ))}
             </select>
+
             <small className="px-1 text-slate-500">
               Type of contract or related document requested
             </small>
@@ -52,6 +58,7 @@ function BusinessAreaDynamicRequestForm({
             DynamicFormData={DynamicForm}
             validationErrors={validationErrors}
             validateField={validateField}
+            EditRequestMetadataValue={EditRequestMetadataValue}
           />
 
           <div className="submit-button flex items-center gap-4 justify-end mt-4 text-sm">
@@ -85,6 +92,8 @@ BusinessAreaDynamicRequestForm.propTypes = {
   validateField: PropTypes.func,
   setBusinessArea: PropTypes.func,
   BusinessArea: PropTypes.string,
+  RequestType: PropTypes.string,
+  EditRequestMetadataValue: PropTypes.object,
 };
 
 export default BusinessAreaDynamicRequestForm;

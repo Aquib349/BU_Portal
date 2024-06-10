@@ -1,16 +1,16 @@
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import PropTypes from "prop-types";
-import Tooltip from "../../Elements/Tooltip";
 import Select from "react-select";
 import { useContext, useState } from "react";
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../../../../context/UserContext";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoIosArrowDown } from "react-icons/io";
-import FormatDate from "../../constants/FormatDate";
+import FormatDate from "../../../../constants/FormatDate";
+import Tooltip from "../../../../Elements/Tooltip";
 
 function Notes({ NotesDetail }) {
   const { AllUser } = useContext(UserContext);
-  const [SendNotificationTo, setSendNotificationTo] = useState(null); // Fixed state setter name
+  const [SendNotificationTo, setSendNotificationTo] = useState("");
   const [ShowAddForm, setShowAddForm] = useState(false);
 
   const handleChange = (selectedOption) => {
@@ -60,7 +60,7 @@ function Notes({ NotesDetail }) {
                     <div className="flex flex-col pt-2">
                       <span className="font-medium">Send Notification To</span>
                       <Select
-                        value={SendNotificationTo} // Changed from defaultValue to value
+                        value={SendNotificationTo}
                         onChange={handleChange}
                         options={AllUser}
                         isMulti={true}

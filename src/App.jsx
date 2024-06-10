@@ -12,6 +12,7 @@ import UserSubscriptionProvider from "./context/UserSubscriptionContext";
 import GlobalSearch from "./pages/global search/GlobalSearch";
 import GlobalSearchProvider from "./context/GlobalSearchContext";
 import { Toaster } from "react-hot-toast";
+import EditRequestProvider from "./context/EditRequestContext";
 
 function App() {
   return (
@@ -37,7 +38,9 @@ const Router = createBrowserRouter([
       <UserProvider>
         <StatusProvider>
           <GlobalSearchProvider>
-            <App />
+            <EditRequestProvider>
+              <App />
+            </EditRequestProvider>
           </GlobalSearchProvider>
         </StatusProvider>
       </UserProvider>

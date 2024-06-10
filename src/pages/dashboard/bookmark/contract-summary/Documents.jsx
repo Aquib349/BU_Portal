@@ -1,11 +1,11 @@
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { GoDotFill } from "react-icons/go";
-import Tooltip from "../../Elements/Tooltip";
 import { CiFileOn } from "react-icons/ci";
 import { CiCalendarDate } from "react-icons/ci";
 import { IoIosArrowDown } from "react-icons/io";
 import PropTypes from "prop-types";
-import GetFileIcon from "../../constants/FileExtensionName";
+import GetFileIcon from "../../../../constants/FileExtensionName";
+import Tooltip from "../../../../Elements/Tooltip";
 
 function Documents({ DocumentDetails }) {
   return (

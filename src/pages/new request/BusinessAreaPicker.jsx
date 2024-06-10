@@ -17,7 +17,7 @@ function BusinessAreaPicker({
               <div
                 className="flex items-center gap-2 px-3 py-2"
                 onClick={() => {
-                  setBusinessArea("Human Resource- Business Area");
+                  setBusinessArea(val.businessArea);
                   setShowModal(!showModal);
                 }}
               >

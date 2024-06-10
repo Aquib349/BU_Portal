@@ -1,10 +1,10 @@
-import Tooltip from "../../Elements/Tooltip";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { GoDotFill } from "react-icons/go";
 import { IoIosArrowDown } from "react-icons/io";
 import PropTypes from "prop-types";
+import Tooltip from "../../../../Elements/Tooltip";
 
-function StatusUpdates({ Status,Stage }) {
+function StatusUpdates({ Status, Stage }) {
   return (
     <>
       <div className="status-updates border border-slate-300 rounded-md p-2 mt-3">
@@ -38,7 +38,9 @@ function StatusUpdates({ Status,Stage }) {
                     <span>
                       <GoDotFill />
                     </span>
-                    <span>{Status} ({Stage})</span>
+                    <span>
+                      {Status} ({Stage})
+                    </span>
                   </div>
                   <p className="text-xs text-slate-400 py-1 pl-5">
                     Santosh Dutta posted on 11/22/2023

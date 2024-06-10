@@ -1,10 +1,12 @@
 import usePortalConfig from "../../customhooks/usePortalConfig";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import NewRequestShimmer from "../../shimmer/NewRequestShimmer";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../Elements/loading spinner/LoadingSpinner";
 import NewRequestForm from "./NewRequestForm";
 import axios from "axios";
+import { EditReqeustContext } from "../../context/EditRequestContext";
+import useXmlConverter from "../../customhooks/useXmlConverter";
 
 const headers = {
   "Content-Type": "application/json",
@@ -24,13 +26,23 @@ const NewRequest = () => {
   const [validationErrors, setValidationErrors] = useState({});
   const [fieldValues, setFieldValues] = useState({});
 
+  // edit Request context
+  const [EditRequestMetadataValue, setEditRequestMetadataValue] = useState({});
+  const { EditRequest, EditRequestMode } = useContext(EditReqeustContext);
+  const jsonResult = useXmlConverter(EditRequest);
+
   // function to handle the request-types
   const handleRequestType = useCallback(async (event) => {
     setRequestType(event.target.value);
     setLoadSpinner(true);
+    await createDynamicForm(event.target.value);
+  }, []);
+
+  // function to create a dynamic form based on the request type
+  async function createDynamicForm(requestType) {
     try {
       const response = await axios.get(
-        `${api}/api/accounts/${account_id}/Requests/requesttypes/metadatas?requesttypename=${event.target.value}`,
+        `${api}/api/accounts/${account_id}/Requests/requesttypes/metadatas?requesttypename=${requestType}`,
         { headers }
       );
 
@@ -68,11 +80,12 @@ const NewRequest = () => {
           item.FieldDisplayName !== "Request Type" &&
           item.FieldDisplayName !== "Business Area"
       );
+      // console.log(filteredData);
       setDynamicForm(filteredData);
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }
 
   // function to set the all the field values !!
   function SetAllFieldValues(fieldname, value) {
@@ -195,6 +208,17 @@ const NewRequest = () => {
     }
   };
 
+  // creating dynamic form for to edit the reqeust !!
+  useEffect(() => {
+    if (EditRequestMode && jsonResult != "") {
+      console.log(JSON.parse(jsonResult));
+      setEditRequestMetadataValue(JSON.parse(jsonResult));
+      setRequestType(JSON.parse(jsonResult)?.Metadata?.RequestType?._text);
+      setBusinessArea(JSON.parse(jsonResult)?.Metadata?.BusinessArea?._text);
+      createDynamicForm(JSON.parse(jsonResult)?.Metadata?.RequestType?._text);
+    }
+  }, [jsonResult, EditRequestMode]);
+
   if (loading) {
     return (
       <>
@@ -218,6 +242,8 @@ const NewRequest = () => {
             validateField={SetAllFieldValues}
             setBusinessArea={setBusinessArea}
             BusinessArea={BusinessArea}
+            RequestType={RequestType}
+            EditRequestMetadataValue={EditRequestMetadataValue}
           />
         </div>
       </div>

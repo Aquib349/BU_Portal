@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import { IoMdInformationCircleOutline } from "react-icons/io";
-import Tooltip from "../../Elements/Tooltip";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
+import Tooltip from "../../../../Elements/Tooltip";
 
 function KeyProvision({ KeyProvisionDetail }) {
   return (

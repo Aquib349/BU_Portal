@@ -60,7 +60,7 @@ function ViewRequestDetail() {
         <div
           className={`main my-2 ${showStatus ? "col-span-3" : "col-span-4"}`}
         >
-          <SingleRequestDetails Data={Data} />
+          <SingleRequestDetails Data={Data} RowKey={RowKey} />
           <hr />
 
           {/* All the related documents */}

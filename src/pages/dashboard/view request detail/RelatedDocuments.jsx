@@ -281,8 +281,8 @@ function RelatedDocuments({ status, RowKey }) {
 }
 
 RelatedDocuments.propTypes = {
-  status: PropTypes.string.isRequired,
-  RowKey: PropTypes.string.isRequired,
+  status: PropTypes.string,
+  RowKey: PropTypes.string,
 };
 
 export default RelatedDocuments;

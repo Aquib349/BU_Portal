@@ -18,6 +18,7 @@ const LookupField = ({
   baseline,
   required,
   validate,
+  value,
 }) => {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;

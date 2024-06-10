@@ -10,7 +10,9 @@ function NewRequestForm({
   validationErrors,
   validateField,
   setBusinessArea,
-  BusinessArea
+  BusinessArea,
+  RequestType,
+  EditRequestMetadataValue,
 }) {
   return (
     <>
@@ -53,6 +55,8 @@ function NewRequestForm({
                   validateField={validateField}
                   setBusinessArea={setBusinessArea}
                   BusinessArea={BusinessArea}
+                  RequestType={RequestType}
+                  EditRequestMetadataValue={EditRequestMetadataValue}
                 />
               </div>
             </div>
@@ -72,6 +76,8 @@ NewRequestForm.propTypes = {
   validateField: PropTypes.func,
   setBusinessArea: PropTypes.func,
   BusinessArea: PropTypes.string,
+  RequestType: PropTypes.string,
+  EditRequestMetadataValue: PropTypes.object,
 };
 
 export default NewRequestForm;

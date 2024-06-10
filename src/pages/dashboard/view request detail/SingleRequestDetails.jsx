@@ -3,8 +3,14 @@ import { LuCalendarDays } from "react-icons/lu";
 import { HiUsers } from "react-icons/hi";
 import PropTypes from "prop-types";
 import Tooltip from "../../../Elements/Tooltip";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { EditReqeustContext } from "../../../context/EditRequestContext";
 
-function SingleRequestDetails({ Data }) {
+function SingleRequestDetails({ Data, RowKey }) {
+  const navigate = useNavigate();
+  const { EditRequestMetaData, setEditRequetMode } =
+    useContext(EditReqeustContext);
   const dateObject = new Date();
   return (
     <>
@@ -18,6 +24,11 @@ function SingleRequestDetails({ Data }) {
               type="button"
               className="flex justify-center items-center px-4 h-8 rounded  border border-slate-500
                hover:bg-slate-500 hover:text-white text-slate-400 text-sm"
+              onClick={() => {
+                EditRequestMetaData(RowKey);
+                setEditRequetMode(true);
+                navigate("/newRequest");
+              }}
             >
               Edit
             </button>

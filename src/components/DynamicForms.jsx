@@ -12,7 +12,7 @@ import RadioField from "../form-components/RadioField";
 import FileUpload from "../form-components/FileUpload";
 import ChoiceField from "../form-components/ChoiceField";
 import MultiChoiceDropdown from "../form-components/MultiChoiceDropdown";
-import MultiChoiceBrowse from "../form-components/MultiChoiceBrowse";
+// import MultiChoiceBrowse from "../form-components/MultiChoiceBrowse";
 import ValueFinancialsField from "../form-components/ValueFinancialsField";
 import LookupMultiSelect from "../form-components/LookupMultiSelect";
 import NumberField from "../form-components/NumberField";
@@ -21,7 +21,12 @@ import EmailField from "../form-components/EmailField";
 import HyperLinkField from "../form-components/HyperLinkField";
 import { StatusContext } from "../context/StatusContext";
 
-function DynamicForms({ DynamicFormData, validationErrors, validateField }) {
+function DynamicForms({
+  DynamicFormData,
+  validationErrors,
+  validateField,
+  EditRequestMetadataValue,
+}) {
   // Use state for component rendering
   const [componentsToRender, setComponentsToRender] = useState([]);
   const { AllStatus } = useContext(StatusContext);
@@ -58,9 +63,9 @@ function DynamicForms({ DynamicFormData, validationErrors, validateField }) {
     "Multi- Choice (Dropdown)": {
       component: MultiChoiceDropdown,
     },
-    "Multi- Choice (Browse)": {
-      component: MultiChoiceBrowse,
-    },
+    // "Multi- Choice (Browse)": {
+    //   component: MultiChoiceBrowse,
+    // },
     "Value/Financials": {
       component: ValueFinancialsField,
     },
@@ -94,6 +99,7 @@ function DynamicForms({ DynamicFormData, validationErrors, validateField }) {
         CommentNo,
         CommentRequired,
       } = val;
+      console.log(EditRequestMetadataValue?.Metadata[FieldName]?._text)
       const componentInfo = componentMap[FieldType];
       if (componentInfo) {
         const { component: Component, props } = componentInfo;
@@ -107,6 +113,10 @@ function DynamicForms({ DynamicFormData, validationErrors, validateField }) {
           CommentNo: CommentNo,
           CommentRequired: CommentRequired,
           validate: validateField,
+          value:
+            EditRequestMetadataValue != null
+              ? EditRequestMetadataValue?.Metadata[FieldName]?._text
+              : "",
           ...props,
         };
         return (
