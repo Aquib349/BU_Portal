@@ -10,8 +10,24 @@ const LookupMultiSelect = ({
   required,
   fieldname,
   validate,
+  initialValue,
 }) => {
   const [LookupMultiValue, setLookupMultiValue] = useState(null);
+
+  useEffect(() => {
+    if (initialValue && options) {
+      if (multi) {
+        const initialOptions = initialValue.split(";").map((label) => ({
+          label,
+          value: label,
+        }));
+        setLookupMultiValue(initialOptions);
+      } else {
+        setLookupMultiValue({ label: initialValue, value: initialValue });
+      }
+    }
+  }, [initialValue, multi, options]);
+
   useEffect(() => {
     if (validate) {
       validate(fieldname, LookupMultiValue, required);

@@ -18,7 +18,7 @@ const LookupField = ({
   baseline,
   required,
   validate,
-  value,
+  initialValue,
 }) => {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
@@ -26,9 +26,24 @@ const LookupField = ({
 
   const [CounterParty, setCounterparty] = useState([]);
   const [ProjectName, setProjectName] = useState([]);
-  const [SelectedProjectName, setSelectedProjectName] = useState("");
-  const [SelectedProjectTask, setSelectedProjectTask] = useState("");
+  const [SelectedProjectName, setSelectedProjectName] = useState(
+    initialValue || ""
+  );
+  const [SelectedProjectTask, setSelectedProjectTask] = useState(
+    initialValue || ""
+  );
   const [SelectedCounterPartyName, setSelectedCounterPartyName] = useState("");
+
+  useEffect(() => {
+    if (initialValue) {
+      const initialOption = options.find(
+        (option) => option.label === initialValue
+      );
+      if (initialOption) {
+        setLookupValue(initialOption);
+      }
+    }
+  }, [initialValue, options]);
 
   // if the field type is normal lookup
   const handleChange = (selectedOption) => {
@@ -98,6 +113,7 @@ const LookupField = ({
           baseline={baseline}
           setSelectedProjectName={setSelectedProjectName}
           setSelectedProjectTask={setSelectedProjectTask}
+          initialValue={initialValue}
         />
       </div>
     );
@@ -115,6 +131,7 @@ const LookupField = ({
         <CounterpartyLookUp
           CounterParty={CounterParty}
           setSelectedCounterPartyName={setSelectedCounterPartyName}
+          initialValue={initialValue}
         />
         <small className="text-slate-500">{baseline}</small>
       </div>
@@ -130,7 +147,7 @@ const LookupField = ({
           )}
         </label>
         <Select
-          defaultValue={LookupValue}
+          value={LookupValue}
           onChange={handleChange}
           options={options}
           menuPortalTarget={document.body}
@@ -145,10 +162,10 @@ const LookupField = ({
 LookupField.propTypes = {
   fieldname: PropTypes.string,
   options: PropTypes.array,
-  title: PropTypes.string,
+  title: PropTypes.any,
   baseline: PropTypes.string,
-  required: PropTypes.string,
-  LookupValue: PropTypes.string,
+  required: PropTypes.any,
+  LookupValue: PropTypes.any,
   setLookupValue: PropTypes.func,
   validate: PropTypes.func,
 };

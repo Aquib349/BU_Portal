@@ -10,8 +10,23 @@ const MultiChoiceDropdown = ({
   required,
   fieldname,
   validate,
+  initialValue,
 }) => {
   const [MultiSelectValue, setMultiSelectValue] = useState(null);
+
+  useEffect(() => {
+    if (initialValue && options) {
+      if (multi) {
+        const initialOptions = initialValue.split(";").map((label) => ({
+          label,
+          value: label,
+        }));
+        setMultiSelectValue(initialOptions);
+      } else {
+        setMultiSelectValue({ label: initialValue, value: initialValue });
+      }
+    }
+  }, [initialValue, multi, options]);
 
   useEffect(() => {
     if (validate) {

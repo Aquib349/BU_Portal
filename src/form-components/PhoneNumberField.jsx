@@ -9,8 +9,15 @@ const PhoneNumberField = ({
   required,
   fieldname,
   validate,
+  initialValue,
 }) => {
   const [PhoneValue, setPhoneValue] = useState(null);
+
+  useEffect(() => {
+    if (initialValue) {
+      setPhoneValue(initialValue);
+    }
+  }, [initialValue]);
 
   useEffect(() => {
     if (validate) {
@@ -55,6 +62,7 @@ PhoneNumberField.propTypes = {
   required: PropTypes.string,
   fieldname: PropTypes.string.isRequired,
   validate: PropTypes.func,
+  initialValue: PropTypes.string,
 };
 
 export default PhoneNumberField;

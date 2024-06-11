@@ -8,8 +8,9 @@ const EmailField = ({
   required,
   fieldname,
   validate,
+  initialValue,
 }) => {
-  const [Emailvalue, setEmailValue] = useState("");
+  const [Emailvalue, setEmailValue] = useState(initialValue || "");
   useEffect(() => {
     if (validate) {
       validate(fieldname, Emailvalue, required);

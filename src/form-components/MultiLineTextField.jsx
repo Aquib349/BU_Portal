@@ -8,8 +8,9 @@ const MultiLineTextField = ({
   required,
   fieldname,
   validate,
+  initialValue,
 }) => {
-  const [MultiLineValue, setMultiLineValue] = useState("");
+  const [MultiLineValue, setMultiLineValue] = useState(initialValue || "");
   useEffect(() => {
     if (validate) {
       validate(fieldname, MultiLineValue, required);

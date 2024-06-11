@@ -1,6 +1,7 @@
 import { RxCross2 } from "react-icons/rx";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { useEffect } from "react";
 
 function SelectedProject({
   SelectedProjects,
@@ -14,12 +15,15 @@ function SelectedProject({
   showModal,
   setProjectTask,
   setSelectedProjectName,
+  setIsEdited,
+  SelectedProjectFunction,
 }) {
+  const api = import.meta.env.VITE_API_URL;
+  const account_id = import.meta.env.VITE_USER_KEY;
+
   // function to handle selected projects
   async function handleSelectedProjects() {
-    const api = import.meta.env.VITE_API_URL;
-    const account_id = import.meta.env.VITE_USER_KEY;
-
+    setIsEdited(true);
     const concatedString = SelectedProjects.map((val) => val.name).join(";");
     setSelectedProjectName(concatedString);
     setSelectedProjectValue(concatedString);
@@ -58,6 +62,7 @@ function SelectedProject({
         : false;
     setAllChecked(allChecked);
   }
+
   return (
     <>
       <div className="grid grid-cols-4">

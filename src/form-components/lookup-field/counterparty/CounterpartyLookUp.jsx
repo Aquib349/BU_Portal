@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../../../Elements/Modal";
 import PropTypes from "prop-types";
 import Pagination from "../../../Elements/Pagination";
@@ -7,15 +7,21 @@ import SearchCounterParty from "./SearchCounterParty";
 import AllCounterParty from "./AllCounterParty";
 import SelectedCounterparty from "./SelectedCounterParty";
 
-function CounterpartyLookUp({ CounterParty, setSelectedCounterPartyName }) {
+function CounterpartyLookUp({
+  CounterParty,
+  setSelectedCounterPartyName,
+  initialValue,
+}) {
   const [showModal, setShowModal] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [AllChecked, setAllChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
   const [SelectedCounterParty, setSelectedCounterParty] = useState([]);
-  const [SelectedCounterPartyValue, setSelectedCounterPartyValue] =
-    useState("");
+  const [SelectedCounterPartyValue, setSelectedCounterPartyValue] = useState(
+    initialValue || ""
+  );
   const [filteredCounterParty, setFilteredCounterParty] = useState([]);
+  const [IsEdited, setIsEdited] = useState(false);
 
   // function to handle the modal
   function toggleCounterPartyModal() {
@@ -59,15 +65,48 @@ function CounterpartyLookUp({ CounterParty, setSelectedCounterPartyName }) {
         : false;
     setAllChecked(allChecked);
 
-    const updateSelectedCounterPartys = checkedItems[itemId] // If the item is unchecked
-      ? SelectedCounterParty.filter((project) => project.name !== itemName) // Remove the unchecked item
-      : [...SelectedCounterParty, { id: itemId, name: itemName }]; // Add the checked item
+    const updateSelectedCounterPartys = checkedItems[itemId]
+      ? SelectedCounterParty.filter((project) => project.name !== itemName)
+      : [...SelectedCounterParty, { id: itemId, name: itemName }];
     updateSelectedCounterParty(updateSelectedCounterPartys);
   };
 
   const updateSelectedCounterParty = (projects) => {
     setSelectedCounterParty(projects);
   };
+
+  // Effect to handle initial value
+  useEffect(() => {
+    if (initialValue && CounterParty.length > 0 && !IsEdited) {
+      // Split the initialValue string into individual Counterparty names
+      const initialCounterpartyNames = initialValue.split(";");
+      const initialCounterparties = [];
+      const updatedCheckedItems = { ...checkedItems };
+
+      // Iterate over each Counterparty name
+      initialCounterpartyNames.forEach((name) => {
+        // Find the Counterparty data that matches the name
+        const initialCounterparty = CounterParty.find(
+          (counterparty) => counterparty.CounterpartyName === name.trim()
+        );
+
+        // If a matching Counterparty is found, add it to the list
+        if (initialCounterparty) {
+          initialCounterparties.push({
+            id: initialCounterparty.RowKey,
+            name: initialCounterparty.CounterpartyName,
+          });
+          updatedCheckedItems[initialCounterparty.RowKey] = true;
+        }
+      });
+
+      // Update the selected Counterparties state
+      setSelectedCounterParty(initialCounterparties);
+
+      // Update the checked items state to ensure checkboxes are checked
+      setCheckedItems(updatedCheckedItems);
+    }
+  }, [initialValue, CounterParty]);
 
   return (
     <>
@@ -88,19 +127,19 @@ function CounterpartyLookUp({ CounterParty, setSelectedCounterPartyName }) {
           }
           set_Width={true}
         >
-          {/* pick the projec type */}
+          {/* pick the counterparty type */}
           <div className="main-project">
             <div className="show-entries-search flex justify-between items-center py-3">
               {/* items per page to show */}
               <CounterPartyPerPage setItemsPerPage={setItemsPerPage} />
-              {/* search input project */}
+              {/* search input counterparty */}
               <SearchCounterParty
                 setFilteredCounterParty={setFilteredCounterParty}
                 CounterPartyName={CounterParty}
               />
             </div>
 
-            {/* all projects */}
+            {/* all counterparty */}
             <div className="border-b border-slate-300 pb-2">
               <Pagination
                 itemsPerPage={itemsPerPage}
@@ -123,7 +162,7 @@ function CounterpartyLookUp({ CounterParty, setSelectedCounterPartyName }) {
               />
             </div>
 
-            {/* selected projects */}
+            {/* selected counterparty */}
             <SelectedCounterparty
               SelectedCounterParty={SelectedCounterParty}
               setSelectedCounterParty={setSelectedCounterParty}
@@ -135,6 +174,7 @@ function CounterpartyLookUp({ CounterParty, setSelectedCounterPartyName }) {
               showModal={showModal}
               setShowModal={setShowModal}
               setSelectedCounterPartyName={setSelectedCounterPartyName}
+              setIsEdited={setIsEdited}
             />
           </div>
         </Modal>
@@ -162,6 +202,7 @@ function CounterpartyLookUp({ CounterParty, setSelectedCounterPartyName }) {
 CounterpartyLookUp.propTypes = {
   CounterParty: PropTypes.array,
   setSelectedCounterPartyName: PropTypes.func,
+  initialValue: PropTypes.string,
 };
 
 export default CounterpartyLookUp;

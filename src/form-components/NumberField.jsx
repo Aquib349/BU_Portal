@@ -8,8 +8,16 @@ const NumberField = ({
   required,
   fieldname,
   validate,
+  initialValue,
 }) => {
   const [NumberFieldValue, setNumberFieldValue] = useState(0);
+
+  useEffect(() => {
+    if (initialValue) {
+      setNumberFieldValue(initialValue);
+    }
+  }, [initialValue]);
+
   useEffect(() => {
     if (validate) {
       validate(fieldname, NumberFieldValue, required);

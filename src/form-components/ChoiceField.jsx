@@ -9,11 +9,24 @@ const ChoiceField = ({
   required,
   fieldname,
   validate,
+  initialValue,
 }) => {
   const [ChoiceOption, setChoiceOption] = useState(null);
+
+  useEffect(() => {
+    if (initialValue) {
+      const initialOption = options.find(
+        (option) => option.label === initialValue
+      );
+      if (initialOption) {
+        setChoiceOption(initialOption);
+      }
+    }
+  }, [initialValue, options]);
+
   useEffect(() => {
     if (validate) {
-      validate(fieldname, ChoiceOption, required);
+      validate(fieldname, ChoiceOption ? ChoiceOption.label : null, required);
     }
   }, []);
 
@@ -51,6 +64,7 @@ ChoiceField.propTypes = {
   required: PropTypes.string,
   validate: PropTypes.func,
   fieldname: PropTypes.string,
+  initialValue: PropTypes.string, // Add initialValue to prop types
 };
 
 export default ChoiceField;

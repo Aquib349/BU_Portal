@@ -28,7 +28,8 @@ const NewRequest = () => {
 
   // edit Request context
   const [EditRequestMetadataValue, setEditRequestMetadataValue] = useState({});
-  const { EditRequest, EditRequestMode } = useContext(EditReqeustContext);
+  const { EditRequest, EditRequestMode, setEditRequestMode } =
+    useContext(EditReqeustContext);
   const jsonResult = useXmlConverter(EditRequest);
 
   // function to handle the request-types
@@ -140,6 +141,7 @@ const NewRequest = () => {
   // function to validate the form component on submit
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setEditRequestMode(false);
     const formData = new FormData();
 
     // Validate all fields before submission

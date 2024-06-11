@@ -9,19 +9,34 @@ const RadioField = ({
   CommentYes,
   CommentNo,
   CommentRequired,
+  initialValue,
 }) => {
   const [RadioOptionValue, setRadioOptionValue] = useState(null);
+
+  useEffect(() => {
+    if (initialValue) {
+      setRadioOptionValue(initialValue);
+    }
+  }, [initialValue]);
+
   useEffect(() => {
     if (validate) {
       validate(fieldname, RadioOptionValue, required);
     }
   }, []);
+
+  const handleChange = (e) => {
+    const { value } = e.target;
+    setRadioOptionValue(value);
+    validate(fieldname, value, required);
+  };
+
   return (
     <>
       <label className="text-sm px-1">
         {title}
         {required === "true" && (
-          <span className={`text-red-500 font-bold`}>*</span>
+          <span className="text-red-500 font-bold">*</span>
         )}
       </label>
       <div className="py-2 text-sm flex justify-between items-center">
@@ -31,11 +46,7 @@ const RadioField = ({
               type="radio"
               value="Yes"
               checked={RadioOptionValue === "Yes"}
-              onChange={(e) => {
-                console.log(CommentYes);
-                setRadioOptionValue(e.target.value);
-                validate(fieldname, e.target.value, required);
-              }}
+              onChange={handleChange}
             />
             Yes
           </label>
@@ -44,11 +55,7 @@ const RadioField = ({
               type="radio"
               value="No"
               checked={RadioOptionValue === "No"}
-              onChange={(e) => {
-                console.log(CommentNo);
-                setRadioOptionValue(e.target.value);
-                validate(fieldname, e.target.value, required);
-              }}
+              onChange={handleChange}
             />
             No
           </label>
@@ -57,7 +64,6 @@ const RadioField = ({
 
       <div
         className={`comment-box ${
-          //  RadioOptionValue.toLowerCase() === "yes" ? "static" : "hidden"
           (RadioOptionValue === "Yes" && CommentYes === "true") ||
           (RadioOptionValue === "No" && CommentNo === "true")
             ? "static"
@@ -66,7 +72,6 @@ const RadioField = ({
       >
         <textarea
           name="comment"
-          id="comment"
           className="border border-slate-300 w-full rounded-md text-sm p-2"
           placeholder="Add your comment.."
         />
@@ -83,6 +88,7 @@ RadioField.propTypes = {
   CommentYes: PropTypes.string,
   CommentNo: PropTypes.string,
   CommentRequired: PropTypes.string,
+  initialValue: PropTypes.string,
 };
 
 export default RadioField;

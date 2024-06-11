@@ -8,8 +8,9 @@ const HyperLinkField = ({
   required,
   fieldname,
   validate,
+  initialValue,
 }) => {
-  const [EnteredUrl, setEnteredUrl] = useState("");
+  const [EnteredUrl, setEnteredUrl] = useState(initialValue || "");
   useEffect(() => {
     if (validate) {
       validate(fieldname, EnteredUrl, required);

@@ -12,9 +12,11 @@ function SelectedCounterparty({
   setShowModal,
   showModal,
   setSelectedCounterPartyName,
+  setIsEdited
 }) {
   // function to handle selected projects
   async function handleSelectedCounterparty() {
+    setIsEdited(true);
     const concatedString = SelectedCounterParty.map((val) => val.name).join(
       ";"
     );

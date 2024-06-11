@@ -14,7 +14,7 @@ function EditRequestProvider({ children }) {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
 
-  const [EditRequestMode, setEditRequetMode] = useState(false);
+  const [EditRequestMode, setEditRequestMode] = useState(false);
   const [EditRequest, setEditRequest] = useState("");
 
   // function to get the business area to edit the request
@@ -35,7 +35,7 @@ function EditRequestProvider({ children }) {
       value={{
         EditRequestMetaData,
         EditRequest,
-        setEditRequetMode,
+        setEditRequestMode,
         EditRequestMode,
       }}
     >

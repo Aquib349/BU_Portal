@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "../../../Elements/Modal";
 import ProjectTaskLookUp from "../project-task/ProjectTaskLookUp";
 import PropTypes from "prop-types";
@@ -13,21 +13,26 @@ function ProjectLookUp({
   baseline,
   setSelectedProjectName,
   setSelectedProjectTask,
+  initialValue,
 }) {
   const [showModal, setShowModal] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [AllChecked, setAllChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
   const [SelectedProjects, setSelectedProjects] = useState([]);
-  const [SelectedProjectValue, setSelectedProjectValue] = useState("");
+  const [SelectedProjectValue, setSelectedProjectValue] = useState(
+    initialValue || ""
+  );
   const [ProjectTask, setProjectTask] = useState([]);
   const [filteredProject, setFilteredProject] = useState([]);
+  const [IsEdited, setIsEdited] = useState(false);
 
-  // function to handle the modal
+  // Function to handle the modal
   function toggleProjectModal() {
     setShowModal(!showModal);
   }
 
+  // Function to toggle the top checkbox
   const toggleSelectAll = () => {
     const newSelectAll = !AllChecked;
     setAllChecked(newSelectAll);
@@ -46,10 +51,10 @@ function ProjectLookUp({
           (item) => ({ id: item.RowKey, name: item.ProjectName })
         )
       : [];
-    updateSelectedProjects(updatedSelectedProjects);
+    setSelectedProjects(updatedSelectedProjects);
   };
 
-  // function to toggle checkbox
+  // Function to toggle checkbox
   const toggleCheckBox = (itemId, itemName) => {
     const newCheckedItems = {
       ...checkedItems,
@@ -63,15 +68,43 @@ function ProjectLookUp({
         : false;
     setAllChecked(allChecked);
 
-    const updatedSelectedProjects = checkedItems[itemId] // If the item is unchecked
-      ? SelectedProjects.filter((project) => project.name !== itemName) // Remove the unchecked item
-      : [...SelectedProjects, { id: itemId, name: itemName }]; // Add the checked item
-    updateSelectedProjects(updatedSelectedProjects);
+    const updatedSelectedProjects = checkedItems[itemId]
+      ? SelectedProjects.filter((project) => project.name !== itemName)
+      : [...SelectedProjects, { id: itemId, name: itemName }];
+    setSelectedProjects(updatedSelectedProjects);
   };
 
-  const updateSelectedProjects = (projects) => {
-    setSelectedProjects(projects);
-  };
+  useEffect(() => {
+    if (initialValue && ProjectName.length > 0 && !IsEdited) {
+      // Split the initialValue string into individual project names
+      const initialProjectNames = initialValue.split(";");
+      const initialProjects = [];
+      const updatedCheckedItems = {};
+      let allProjectsChecked = true;
+
+      // Iterate over each project name
+      ProjectName.forEach((project) => {
+        const checked = initialProjectNames.includes(project.ProjectName);
+        updatedCheckedItems[project.RowKey] = checked;
+        if (!checked) allProjectsChecked = false;
+        if (checked) {
+          initialProjects.push({
+            id: project.RowKey,
+            name: project.ProjectName,
+          });
+        }
+      });
+
+      // Update the selected projects state
+      setSelectedProjects(initialProjects);
+
+      // Update the checked items state to ensure checkboxes are checked
+      setCheckedItems(updatedCheckedItems);
+
+      // Update the AllChecked state based on the checked status of all items
+      setAllChecked(allProjectsChecked);
+    }
+  }, [initialValue, ProjectName, IsEdited]);
 
   return (
     <>
@@ -81,19 +114,15 @@ function ProjectLookUp({
           heading="Project Picker"
           set_Width={true}
         >
-          {/* pick the projec type */}
           <div className="main-project">
             <div className="show-entries-search flex justify-between items-center py-3">
-              {/* items per page to show */}
               <ProjectsPerPage setItemsPerPage={setItemsPerPage} />
-              {/* search input project */}
               <SearchProjects
                 setFilteredProject={setFilteredProject}
                 ProjectName={ProjectName}
               />
             </div>
 
-            {/* all projects */}
             <div className="border-b border-slate-300 pb-2">
               <Pagination
                 itemsPerPage={itemsPerPage}
@@ -114,7 +143,6 @@ function ProjectLookUp({
               />
             </div>
 
-            {/* selected projects */}
             <SelectedProject
               SelectedProjects={SelectedProjects}
               setSelectedProjects={setSelectedProjects}
@@ -127,6 +155,7 @@ function ProjectLookUp({
               showModal={showModal}
               setShowModal={setShowModal}
               setProjectTask={setProjectTask}
+              setIsEdited={setIsEdited}
             />
           </div>
         </Modal>
@@ -160,9 +189,9 @@ function ProjectLookUp({
 ProjectLookUp.propTypes = {
   ProjectName: PropTypes.array,
   baseline: PropTypes.string,
-  validationError: PropTypes.string,
   setSelectedProjectName: PropTypes.func,
   setSelectedProjectTask: PropTypes.func,
+  initialValue: PropTypes.string,
 };
 
 export default ProjectLookUp;

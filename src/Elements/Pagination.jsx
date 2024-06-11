@@ -42,7 +42,7 @@ function Pagination({ itemsPerPage, data, toggleModal, renderComponent }) {
 }
 
 Pagination.propTypes = {
-  itemsPerPage: PropTypes.number,
+  itemsPerPage: PropTypes.any,
   toggleModal: PropTypes.func,
   data: PropTypes.array,
   renderComponent: PropTypes.func,

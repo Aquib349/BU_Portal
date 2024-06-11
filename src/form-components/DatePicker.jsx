@@ -4,8 +4,23 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 
-const Datepicker = ({ title, baseline, required, fieldname, validate }) => {
+const Datepicker = ({
+  title,
+  baseline,
+  required,
+  fieldname,
+  validate,
+  initialValue,
+}) => {
+  // Add initialValue prop
   const [date, setDate] = useState(null);
+
+  useEffect(() => {
+    if (initialValue) {
+      const newDate = initialValue.split(" ")[0];
+      setDate(newDate);
+    }
+  }, [initialValue]);
 
   useEffect(() => {
     if (validate) {
@@ -46,6 +61,7 @@ Datepicker.propTypes = {
   required: PropTypes.string,
   fieldname: PropTypes.string,
   validate: PropTypes.func,
+  initialValue: PropTypes.string,
 };
 
 export default Datepicker;

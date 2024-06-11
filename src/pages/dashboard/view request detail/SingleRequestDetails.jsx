@@ -9,7 +9,7 @@ import { EditReqeustContext } from "../../../context/EditRequestContext";
 
 function SingleRequestDetails({ Data, RowKey }) {
   const navigate = useNavigate();
-  const { EditRequestMetaData, setEditRequetMode } =
+  const { EditRequestMetaData, setEditRequestMode } =
     useContext(EditReqeustContext);
   const dateObject = new Date();
   return (
@@ -26,7 +26,7 @@ function SingleRequestDetails({ Data, RowKey }) {
                hover:bg-slate-500 hover:text-white text-slate-400 text-sm"
               onClick={() => {
                 EditRequestMetaData(RowKey);
-                setEditRequetMode(true);
+                setEditRequestMode(true);
                 navigate("/newRequest");
               }}
             >

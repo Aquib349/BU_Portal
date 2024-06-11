@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../../../Elements/Modal";
 import PropTypes from "prop-types";
 import SelectedProjectTask from "./SelectedProjectTask";
@@ -7,6 +7,23 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
   const [showModal, setShowModal] = useState(false);
   const [checkedTasks, setCheckedTasks] = useState({});
   const [SelectedTask, setSelectedTasks] = useState("");
+
+  // let initialValue = "Test:Default Task; Test:DEFAULT";
+  // useEffect(() => {
+  //   const initialCheckedTasks = {};
+  //   initialValue.split(";").forEach((task) => {
+  //     const [description, id] = task.split(":");
+  //     const taskItem = ProjectTask.find((t) => t.TaskID === id);
+  //     if (taskItem) {
+  //       initialCheckedTasks[taskItem.RowKey] = {
+  //         nameChecked: true,
+  //         descChecked: true,
+  //       };
+  //     }
+  //   });
+  //   console.log(initialCheckedTasks);
+  //   setCheckedTasks(initialCheckedTasks);
+  // }, [initialValue, ProjectTask]);
 
   // Toggle the modal visibility
   const toggleProjectTaskModal = () => {

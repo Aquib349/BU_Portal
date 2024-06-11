@@ -20,6 +20,7 @@ import PhoneNumberField from "../form-components/PhoneNumberField";
 import EmailField from "../form-components/EmailField";
 import HyperLinkField from "../form-components/HyperLinkField";
 import { StatusContext } from "../context/StatusContext";
+import { EditReqeustContext } from "../context/EditRequestContext";
 
 function DynamicForms({
   DynamicFormData,
@@ -30,6 +31,7 @@ function DynamicForms({
   // Use state for component rendering
   const [componentsToRender, setComponentsToRender] = useState([]);
   const { AllStatus } = useContext(StatusContext);
+  const { EditRequestMode } = useContext(EditReqeustContext);
   const componentMap = {
     "Office 365 Sharepoint Taxonomy": {
       component: Taxonomy,
@@ -59,6 +61,7 @@ function DynamicForms({
     },
     Choice: {
       component: ChoiceField,
+      props: {},
     },
     "Multi- Choice (Dropdown)": {
       component: MultiChoiceDropdown,
@@ -99,10 +102,22 @@ function DynamicForms({
         CommentNo,
         CommentRequired,
       } = val;
-      console.log(EditRequestMetadataValue?.Metadata[FieldName]?._text)
+
+      // Skip rendering if the FieldName is "Attachments"
+      if (FieldName === "Attachments" && EditRequestMode) {
+        return null;
+      }
+
       const componentInfo = componentMap[FieldType];
       if (componentInfo) {
         const { component: Component, props } = componentInfo;
+
+        let initialValue =
+          EditRequestMetadataValue?.Metadata?.[FieldName]?._text || "";
+
+        if (FieldName === "Attachments") {
+        }
+
         const componentProps = {
           title: FieldDisplayName,
           name: FieldName,
@@ -112,11 +127,8 @@ function DynamicForms({
           CommentYes: CommentYes,
           CommentNo: CommentNo,
           CommentRequired: CommentRequired,
+          initialValue,
           validate: validateField,
-          value:
-            EditRequestMetadataValue != null
-              ? EditRequestMetadataValue?.Metadata[FieldName]?._text
-              : "",
           ...props,
         };
         return (
@@ -131,8 +143,9 @@ function DynamicForms({
         return null;
       }
     });
+
     setComponentsToRender(components);
-  }, [DynamicFormData, validationErrors]);
+  }, [DynamicFormData, validationErrors, EditRequestMetadataValue]);
 
   return <>{componentsToRender}</>;
 }
@@ -140,7 +153,7 @@ function DynamicForms({
 DynamicForms.propTypes = {
   DynamicFormData: PropTypes.array,
   validationErrors: PropTypes.object,
-  validateField: PropTypes.func.isRequired,
+  validateField: PropTypes.func,
 };
 
 export default DynamicForms;
