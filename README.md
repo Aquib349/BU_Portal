@@ -8,3 +8,6 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
 {/_ test for the form components _/}
+
+<!-- VITE_API_URL=" https://api-otbt-econ-test.azurewebsites.net" -->
+<!-- VITE_USER_KEY="3Xae5Udc" -->

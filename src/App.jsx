@@ -13,6 +13,7 @@ import GlobalSearch from "./pages/global search/GlobalSearch";
 import GlobalSearchProvider from "./context/GlobalSearchContext";
 import { Toaster } from "react-hot-toast";
 import EditRequestProvider from "./context/EditRequestContext";
+import NewHomePage from "./pages/NewHomePage";
 
 function App() {
   return (
@@ -21,9 +22,7 @@ function App() {
         <Toaster />
         <ScrollToTop />
         <UserSubscriptionProvider>
-          {/* <GlobalSearchProvider> */}
           <Header />
-          {/* </GlobalSearchProvider> */}
         </UserSubscriptionProvider>
         <Outlet />
       </div>
@@ -69,6 +68,10 @@ const Router = createBrowserRouter([
       {
         path: "globalSearch",
         element: <GlobalSearch />,
+      },
+      {
+        path: "new",
+        element: <NewHomePage />,
       },
     ],
   },

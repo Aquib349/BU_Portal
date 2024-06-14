@@ -1,29 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Modal from "../../../Elements/Modal";
 import PropTypes from "prop-types";
 import SelectedProjectTask from "./SelectedProjectTask";
+import { EditReqeustContext } from "../../../context/EditRequestContext";
+import useXmlConverter from "../../../customhooks/useXmlConverter";
 
 function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
   const [showModal, setShowModal] = useState(false);
   const [checkedTasks, setCheckedTasks] = useState({});
   const [SelectedTask, setSelectedTasks] = useState("");
-
-  // let initialValue = "Test:Default Task; Test:DEFAULT";
-  // useEffect(() => {
-  //   const initialCheckedTasks = {};
-  //   initialValue.split(";").forEach((task) => {
-  //     const [description, id] = task.split(":");
-  //     const taskItem = ProjectTask.find((t) => t.TaskID === id);
-  //     if (taskItem) {
-  //       initialCheckedTasks[taskItem.RowKey] = {
-  //         nameChecked: true,
-  //         descChecked: true,
-  //       };
-  //     }
-  //   });
-  //   console.log(initialCheckedTasks);
-  //   setCheckedTasks(initialCheckedTasks);
-  // }, [initialValue, ProjectTask]);
+  const { EditRequest } = useContext(EditReqeustContext);
+  const jsonResult = useXmlConverter(EditRequest);
 
   // Toggle the modal visibility
   const toggleProjectTaskModal = () => {
@@ -71,6 +58,57 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
     formatData();
     setShowModal(!showModal);
   };
+
+  useEffect(() => {
+    if (jsonResult !== "") {
+      let initialValue;
+      try {
+        initialValue = JSON.parse(jsonResult);
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+        return;
+      }
+
+      let initialCheckedTasks = {};
+      const projectTaskText = initialValue?.Metadata?.ProjectTask?._text;
+
+      if (projectTaskText) {
+        projectTaskText?.split(";").forEach((task) => {
+          const [description, id] = task.split(":");
+          const taskItem = ProjectTask.find((t) => t.TaskID === id);
+          if (taskItem) {
+            initialCheckedTasks[taskItem.RowKey] = {
+              nameChecked: true,
+              descChecked: true,
+            };
+          }
+        });
+      }
+
+      setCheckedTasks(initialCheckedTasks);
+
+      // Set initial selected task
+      const selectedTaskDescriptions = new Set(
+        projectTaskText?.split(";").map((task) => {
+          const [description, id] = task.split(":");
+          const taskItem = ProjectTask.find((t) => t.TaskID === id);
+          if (taskItem) {
+            return `${taskItem.TaskDescription.replace(
+              /(.*)\((.*)\)/,
+              "$1:$2"
+            )}:${taskItem.TaskID}`;
+          } else {
+            return "";
+          }
+        })
+      );
+      const uniqueTaskDescriptions = Array.from(selectedTaskDescriptions)
+        .filter((desc) => desc !== "")
+        .join(";");
+      setSelectedProjectTask(uniqueTaskDescriptions);
+      setSelectedTasks(uniqueTaskDescriptions);
+    }
+  }, [jsonResult, ProjectTask, setSelectedProjectTask]);
 
   return (
     <>

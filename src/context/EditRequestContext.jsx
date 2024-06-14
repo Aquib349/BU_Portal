@@ -24,7 +24,7 @@ function EditRequestProvider({ children }) {
         `${api}/api/accounts/${account_id}/Requests/IRequestDetails?requestid=${RowKey}`,
         { headers }
       );
-      //   console.log(response.data);
+      // console.log(response.data);
       setEditRequest(response.data);
     } catch (error) {
       console.log(error);
@@ -37,6 +37,7 @@ function EditRequestProvider({ children }) {
         EditRequest,
         setEditRequestMode,
         EditRequestMode,
+        setEditRequest,
       }}
     >
       {children}

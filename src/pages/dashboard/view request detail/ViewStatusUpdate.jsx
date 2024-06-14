@@ -2,22 +2,22 @@ import { GoDotFill } from "react-icons/go";
 import PropTypes from "prop-types";
 import Accordion from "../../../Elements/Accordion";
 
-function ViewStatusUpdates({ StatusUpdates, status }) {
+function ViewStatusUpdates({ StatusUpdates, status, UpdateStatus }) {
   const [currentStatus, ...olderStatuses] = StatusUpdates;
   if (StatusUpdates.length === 0) {
     return (
       <>
         <div className="status-update-component flex justify-between items-center">
           <h1 className="text-xl font-semibold">Status Updates</h1>
-          <div className="update-post-button">
-            <button
-              type="button"
-              className="px-2 py-2 border border-slate-600 text-slate-500 hover:bg-slate-500
-             hover:text-white rounded text-xs"
-            >
-              +Update/Post
-            </button>
-          </div>
+          <button
+            type="button"
+            className={`px-2 py-2 border border-slate-600 text-slate-500 hover:bg-slate-500
+             hover:text-white rounded text-xs ${
+               UpdateStatus === "Request Completed" ? "hidden" : ""
+             }`}
+          >
+            +Update/Post
+          </button>
         </div>
         <div className="mt-4 border rounded p-2 text-xs bg-blue-50">
           <div className="leading-5">
@@ -43,13 +43,15 @@ function ViewStatusUpdates({ StatusUpdates, status }) {
       <div className="status-update-component flex justify-between items-center">
         <h1 className="text-xl font-semibold">Status Updates</h1>
         <div className="update-post-button">
-          <button
-            type="button"
-            className="px-2 py-2 border border-slate-600 text-slate-500 hover:bg-slate-500
+          {UpdateStatus !== "Request Completed" && (
+            <button
+              type="button"
+              className="px-2 py-2 border border-slate-600 text-slate-500 hover:bg-slate-500
              hover:text-white rounded text-xs"
-          >
-            +Update/Post
-          </button>
+            >
+              +Update/Post
+            </button>
+          )}
         </div>
       </div>
       <div className="mt-4 border border-slate-300 rounded">

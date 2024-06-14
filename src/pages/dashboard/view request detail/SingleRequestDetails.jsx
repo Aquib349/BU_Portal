@@ -22,8 +22,12 @@ function SingleRequestDetails({ Data, RowKey }) {
             </h1>
             <button
               type="button"
-              className="flex justify-center items-center px-4 h-8 rounded  border border-slate-500
-               hover:bg-slate-500 hover:text-white text-slate-400 text-sm"
+              className={`flex justify-center items-center px-4 h-8 rounded  border border-slate-500
+               hover:bg-slate-500 hover:text-white text-slate-400 text-sm ${
+                 Data?.Metadata?.Status?._text === "Request Completed"
+                   ? "hidden"
+                   : "static"
+               }`}
               onClick={() => {
                 EditRequestMetaData(RowKey);
                 setEditRequestMode(true);

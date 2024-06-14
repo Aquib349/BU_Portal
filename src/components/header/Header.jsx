@@ -5,10 +5,13 @@ import Notification from "./Notifications";
 import { useEffect, useState } from "react";
 import SearchBar from "../../Elements/searchbox/Search";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { RxCross2 } from "react-icons/rx";
 
 function Header() {
   const [showModal, setShowModal] = useState(false);
   const [NotificationData, setNotificationData] = useState([]);
+  const [showProfile, setShowProfile] = useState(false);
 
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
@@ -34,6 +37,46 @@ function Header() {
   useEffect(() => {
     getUserNotification();
   }, []);
+
+  // function to handle the show profile
+  function handleShowProfile() {
+    {
+      toast.custom((t) => (
+        <div className="flex justify-end w-[100vw]">
+          <div
+            className={`${
+              t.visible ? "animate-enter" : "animate-leave"
+            } bg-white w-3/12 mt-14 mr-4 shadow-lg rounded-lg pointer-events-auto flex flex-col ring-1
+             ring-black ring-opacity-5 relative`}
+          >
+            <div className="flex p-4">
+              <div className="logo">
+                <img
+                  src="/assets/user_219986.png"
+                  alt="logo"
+                  className="w-16 h-16 rounded bg-white"
+                />
+              </div>
+              <div className="leading-4 px-6">
+                <h1 className="font-bold">Hello</h1>
+                <h1 className="text-sm">Santosh Dutta</h1>
+                <button
+                  type="button"
+                  className="border border-red-500 mt-2 text-red-600 h-4 font-bold tracking-[0.05rem] w-[4.5rem] p-1 text-[0.6rem]
+                  rounded-full flex justify-center items-center"
+                >
+                  SIGNOUT
+                </button>
+              </div>
+            </div>
+            <div className="absolute top-2 right-2 cursor-pointer">
+              <RxCross2 onClick={() => toast.dismiss(t.id)} />
+            </div>
+          </div>
+        </div>
+      ));
+    }
+  }
   return (
     <>
       <div className="Header-component shadow-md shadow-slate-300 h-16 flex items-center bg-white sticky top-0 z-20">
@@ -88,7 +131,10 @@ function Header() {
                   {NotificationData.length}
                 </div>
               </div>
-              <div className="flex items-center gap-1 cursor-pointer">
+              <div
+                className="flex items-center gap-1 cursor-pointer"
+                onClick={handleShowProfile}
+              >
                 <span className="text-[1.1rem]">
                   <FaCircleUser />
                 </span>

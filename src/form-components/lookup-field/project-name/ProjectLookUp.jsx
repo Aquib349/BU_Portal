@@ -7,6 +7,7 @@ import Pagination from "../../../Elements/Pagination";
 import SelectedProject from "./SelectedProjects";
 import ProjectsPerPage from "./ProjectsPerPage";
 import SearchProjects from "./SearchProjects";
+import axios from "axios";
 
 function ProjectLookUp({
   ProjectName,
@@ -15,6 +16,9 @@ function ProjectLookUp({
   setSelectedProjectTask,
   initialValue,
 }) {
+  const api = import.meta.env.VITE_API_URL;
+  const account_id = import.meta.env.VITE_USER_KEY;
+
   const [showModal, setShowModal] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [AllChecked, setAllChecked] = useState(false);
@@ -74,6 +78,29 @@ function ProjectLookUp({
     setSelectedProjects(updatedSelectedProjects);
   };
 
+  // function to handle selected projects
+  async function handleSelectedProjects() {
+    setIsEdited(true);
+    const concatedString = SelectedProjects.map((val) => val.name).join(";");
+    setSelectedProjectName(concatedString);
+    setSelectedProjectValue(concatedString);
+
+    const headers = {
+      "Content-Type": "application/json",
+      "eContracts-ApiKey":
+        "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
+    };
+    try {
+      const response = await axios.get(
+        `${api}/api/accounts/${account_id}/projecttasks?projectnames=${concatedString}`,
+        { headers }
+      );
+      setProjectTask(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     if (initialValue && ProjectName.length > 0 && !IsEdited) {
       // Split the initialValue string into individual project names
@@ -103,8 +130,11 @@ function ProjectLookUp({
 
       // Update the AllChecked state based on the checked status of all items
       setAllChecked(allProjectsChecked);
+      if (SelectedProjects.length > 0) {
+        handleSelectedProjects();
+      }
     }
-  }, [initialValue, ProjectName, IsEdited]);
+  }, [initialValue, ProjectName]);
 
   return (
     <>
@@ -146,16 +176,13 @@ function ProjectLookUp({
             <SelectedProject
               SelectedProjects={SelectedProjects}
               setSelectedProjects={setSelectedProjects}
-              setSelectedProjectName={setSelectedProjectName}
               checkedItems={checkedItems}
               setCheckedItems={setCheckedItems}
               ProjectName={ProjectName}
               setAllChecked={setAllChecked}
-              setSelectedProjectValue={setSelectedProjectValue}
               showModal={showModal}
               setShowModal={setShowModal}
-              setProjectTask={setProjectTask}
-              setIsEdited={setIsEdited}
+              handleSelectedProjects={handleSelectedProjects}
             />
           </div>
         </Modal>

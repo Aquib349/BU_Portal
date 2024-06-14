@@ -103,7 +103,7 @@ function DynamicForms({
         CommentRequired,
       } = val;
 
-      // Skip rendering if the FieldName is "Attachments"
+      // Skip rendering if the FieldName is "Attachments" in Edit Request
       if (FieldName === "Attachments" && EditRequestMode) {
         return null;
       }

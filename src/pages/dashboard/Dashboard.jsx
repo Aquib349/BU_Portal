@@ -9,6 +9,7 @@ import WelcomeScreen from "./WelcomeScreen";
 import axios from "axios";
 import Pagination from "../../Elements/Pagination";
 import LoadingSpinner from "../../Elements/loading spinner/LoadingSpinner";
+import { EditReqeustContext } from "../../context/EditRequestContext";
 
 function Dashboard() {
   const api = import.meta.env.VITE_API_URL;
@@ -17,6 +18,7 @@ function Dashboard() {
   const [ShowSpinner, setShowSpinner] = useState(false);
   const [BookmarkData, setBookmarkData] = useState([]);
   const { RequestData, AllRequestStatus } = useContext(RequestContext);
+  const { setEditRequestMode, setEditRequest } = useContext(EditReqeustContext);
   const [SearchInput, setSearchInput] = useState("");
   const [FilteredData, setFilteredData] = useState([]);
   const [show, setShow] = useState(false);
@@ -70,6 +72,8 @@ function Dashboard() {
   useEffect(() => {
     getAllBookmarks();
     setFilteredData(RequestData?.SubmittedRequests);
+    setEditRequestMode(false);
+    setEditRequest("");
   }, []);
 
   return (

@@ -1,7 +1,5 @@
 import { RxCross2 } from "react-icons/rx";
 import PropTypes from "prop-types";
-import axios from "axios";
-import { useEffect } from "react";
 
 function SelectedProject({
   SelectedProjects,
@@ -10,39 +8,10 @@ function SelectedProject({
   setCheckedItems,
   ProjectName,
   setAllChecked,
-  setSelectedProjectValue,
   setShowModal,
   showModal,
-  setProjectTask,
-  setSelectedProjectName,
-  setIsEdited,
-  SelectedProjectFunction,
+  handleSelectedProjects,
 }) {
-  const api = import.meta.env.VITE_API_URL;
-  const account_id = import.meta.env.VITE_USER_KEY;
-
-  // function to handle selected projects
-  async function handleSelectedProjects() {
-    setIsEdited(true);
-    const concatedString = SelectedProjects.map((val) => val.name).join(";");
-    setSelectedProjectName(concatedString);
-    setSelectedProjectValue(concatedString);
-
-    const headers = {
-      "Content-Type": "application/json",
-      "eContracts-ApiKey":
-        "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
-    };
-    try {
-      const response = await axios.get(
-        `${api}/api/accounts/${account_id}/projecttasks?projectnames=${concatedString}`,
-        { headers }
-      );
-      setProjectTask(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   // function to remove the project from selected list
   function RemoveSelectedProjectsFromList(itemID, itemName) {

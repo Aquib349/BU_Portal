@@ -96,9 +96,11 @@ function ViewRequestDetail() {
             </div>
           </div>
         </div>
+
         {showStatus && (
           <div className="bg-white my-2 shadow-sm p-4 col-span-2">
             <ViewStatusUpdates
+              UpdateStatus={Data?.Metadata?.Status?._text}
               StatusUpdates={StatusUpdates}
               status={
                 StatusUpdates.length === 0 ? Data?.Metadata?.Status?._text : {}

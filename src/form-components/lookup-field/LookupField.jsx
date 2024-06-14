@@ -20,6 +20,7 @@ const LookupField = ({
   validate,
   initialValue,
 }) => {
+  // console.log(initialValue);
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
   const [LookupValue, setLookupValue] = useState(null);

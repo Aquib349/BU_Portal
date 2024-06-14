@@ -34,7 +34,7 @@ function useRelatedDocuments(RowKey) {
       // Fetch or handle document data based on RowKey
       getRelatedDocument(RowKey).then((data) => setDocumentData(data));
     }
-  }, [RowKey, getRelatedDocument]);
+  }, [RowKey]);
 
   return { DocumentData, loader, getRelatedDocument, setLoader };
 }

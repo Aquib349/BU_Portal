@@ -41,28 +41,18 @@ const NewRequest = () => {
 
   // function to create a dynamic form based on the request type
   async function createDynamicForm(requestType) {
+    // console.log(requestType);
+    setLoadSpinner(true);
     try {
-      const response = await axios.get(
-        `${api}/api/accounts/${account_id}/Requests/requesttypes/metadatas?requesttypename=${requestType}`,
-        { headers }
-      );
-
-      const promise = toast.promise(
-        new Promise((resolve, reject) => {
-          if (response.status === 200) {
-            resolve(true);
-          } else {
-            reject(
-              new Error(
-                "Could not create. There might be some issue with the API"
-              )
-            );
-          }
-        }),
+      const response = await toast.promise(
+        axios.get(
+          `${api}/api/accounts/${account_id}/Requests/requesttypes/metadatas?requesttypename=${requestType}`,
+          { headers }
+        ),
         {
           loading: "Creating...",
           success: <b>Successfully Created!</b>,
-          error: <b>Could not create. There might some issue with API</b>,
+          error: <b>Could not create. There might be some issue with API</b>,
         },
         {
           position: "top-center",
@@ -73,18 +63,22 @@ const NewRequest = () => {
           },
         }
       );
-      await promise;
-      setLoadSpinner(false);
-      const Data = response.data;
-      const filteredData = Data.filter(
-        (item) =>
-          item.FieldDisplayName !== "Request Type" &&
-          item.FieldDisplayName !== "Business Area"
-      );
-      // console.log(filteredData);
-      setDynamicForm(filteredData);
+
+      if (response.status === 200) {
+        const Data = response.data;
+        const filteredData = Data.filter(
+          (item) =>
+            item.FieldDisplayName !== "Request Type" &&
+            item.FieldDisplayName !== "Business Area"
+        );
+        setDynamicForm(filteredData);
+      } else {
+        throw new Error("Could not create");
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadSpinner(false);
     }
   }
 
@@ -185,7 +179,7 @@ const NewRequest = () => {
         }
       } catch (error) {
         console.log(error);
-        // Optionally display an error toast
+        // Optionally display an error
         toast.error("Submission failed. Please try again.", {
           duration: 1500,
           position: "top-center",
@@ -213,7 +207,6 @@ const NewRequest = () => {
   // creating dynamic form for to edit the reqeust !!
   useEffect(() => {
     if (EditRequestMode && jsonResult != "") {
-      console.log(JSON.parse(jsonResult));
       setEditRequestMetadataValue(JSON.parse(jsonResult));
       setRequestType(JSON.parse(jsonResult)?.Metadata?.RequestType?._text);
       setBusinessArea(JSON.parse(jsonResult)?.Metadata?.BusinessArea?._text);
