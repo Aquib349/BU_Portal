@@ -3,14 +3,13 @@ import { TbCirclesRelation } from "react-icons/tb";
 import { RiStickyNoteAddFill } from "react-icons/ri";
 import { FaEye } from "react-icons/fa";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 
 function RelatedContracts({
   ContractTitle,
   status,
-  toggleModal,
   RelatedContracts,
   RowKey,
+  getContractSummary,
 }) {
   return (
     <>
@@ -22,7 +21,7 @@ function RelatedContracts({
         } bg-gray-100 text-[0.8rem] text-slate-400`}
       >
         <td className="">
-          <span className="flex text-lg text-blue-600 font-bold px-2 items-center">
+          <span className="flex items-center px-2 text-lg font-bold text-blue-600">
             <TbCirclesRelation />
           </span>
         </td>
@@ -32,11 +31,9 @@ function RelatedContracts({
         </td>
         <td className="text-center">{"-"}</td>
         <td className="text-center">{"-"}</td>
-        <td className=" text-sm cursor-pointer">
-          <span className="flex justify-center items-center">
-            <Link to={`contractSummary/${RowKey}`}>
-              <FaEye />
-            </Link>
+        <td className="cursor-pointer text-sm">
+          <span className="flex items-center justify-center">
+            <FaEye onClick={() => getContractSummary(RowKey)} />
           </span>
         </td>
         {/* <td className="text-sm cursor-pointer">
@@ -50,11 +47,11 @@ function RelatedContracts({
 }
 
 RelatedContracts.propTypes = {
-  RelatedContracts: PropTypes.string.isRequired,
-  ContractTitle: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
-  toggleModal: PropTypes.func.isRequired,
-  RowKey: PropTypes.string.isRequired,
+  RelatedContracts: PropTypes.string,
+  ContractTitle: PropTypes.string,
+  status: PropTypes.string,
+  toggleModal: PropTypes.func,
+  RowKey: PropTypes.string,
 };
 
 export default RelatedContracts;

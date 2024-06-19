@@ -118,7 +118,6 @@ body::-webkit-scrollbar {
   }
 }
 
-
 /* custom toast */
 
 @keyframes enterAnimation {
@@ -149,4 +148,44 @@ body::-webkit-scrollbar {
 
 .animate-leave {
   animation: leaveAnimation 0.5s forwards;
+}
+
+/* css for the faq button on home page */
+.box {
+  width: 35px;
+  height: 20px;
+  position: relative;
+  transform: translate(0);
+  transform-style: preserve-3d;
+  font-size: 0.7rem;
+  color: blue;
+  border-radius: 6px;
+  background: white;
+}
+.shadow-faq:before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  transform: translate3d(0, 0, -1px);
+  border-radius: 6px;
+  background: conic-gradient(
+    from 30deg at 40% -25%,
+    #ffecb3,
+    #ffd280,
+    #ffad66,
+    #ff8f4c,
+    #ff6655,
+    #f24a6d,
+    #e03c85,
+    #d11bb3,
+    #e03c85,
+    #f24a6d,
+    #ff6655,
+    #ff8f4c,
+    #ffad66,
+    #ffd280,
+    #ffecb3,
+    #ffecb3
+  );
+  filter: blur(2px);
 }

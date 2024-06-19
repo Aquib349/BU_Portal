@@ -7,6 +7,7 @@ function BusinessAreaPicker({
   showModal,
   setShowModal,
   RequestBusinessAreas,
+  setBusinessAreaName,
 }) {
   return (
     <>
@@ -18,6 +19,7 @@ function BusinessAreaPicker({
                 className="flex items-center gap-2 px-3 py-2"
                 onClick={() => {
                   setBusinessArea(val.businessArea);
+                  setBusinessAreaName(val.name);
                   setShowModal(!showModal);
                 }}
               >
@@ -35,10 +37,11 @@ function BusinessAreaPicker({
 }
 
 BusinessAreaPicker.propTypes = {
-  setBusinessArea: PropTypes.func.isRequired,
-  showModal: PropTypes.bool.isRequired,
-  setShowModal: PropTypes.func.isRequired,
-  RequestBusinessAreas: PropTypes.array.isRequired,
+  setBusinessArea: PropTypes.func,
+  setBusinessAreaName: PropTypes.func,
+  showModal: PropTypes.bool,
+  setShowModal: PropTypes.func,
+  RequestBusinessAreas: PropTypes.array,
 };
 
 export default BusinessAreaPicker;

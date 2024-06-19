@@ -8,23 +8,19 @@ import axios from "axios";
 import { EditReqeustContext } from "../../context/EditRequestContext";
 import useXmlConverter from "../../customhooks/useXmlConverter";
 
-const headers = {
-  "Content-Type": "application/json",
-  "eContracts-ApiKey":
-    "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
-};
-
 const NewRequest = () => {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
 
   const { ConfigData, loading } = usePortalConfig();
+  const [BusinessAreaName, setBusinessAreaName] = useState("");
   const [BusinessArea, setBusinessArea] = useState("");
   const [RequestType, setRequestType] = useState("");
   const [DynamicForm, setDynamicForm] = useState([]);
   const [LoadSpinner, setLoadSpinner] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   const [fieldValues, setFieldValues] = useState({});
+  // console.log(ConfigData)
 
   // edit Request context
   const [EditRequestMetadataValue, setEditRequestMetadataValue] = useState({});
@@ -44,10 +40,15 @@ const NewRequest = () => {
     // console.log(requestType);
     setLoadSpinner(true);
     try {
+      const headers = {
+        "eContracts-ApiKey":
+          "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
+      };
+
       const response = await toast.promise(
         axios.get(
           `${api}/api/accounts/${account_id}/Requests/requesttypes/metadatas?requesttypename=${requestType}`,
-          { headers }
+          { headers },
         ),
         {
           loading: "Creating...",
@@ -61,7 +62,7 @@ const NewRequest = () => {
             color: "white",
             fontSize: "0.8rem",
           },
-        }
+        },
       );
 
       if (response.status === 200) {
@@ -69,7 +70,7 @@ const NewRequest = () => {
         const filteredData = Data.filter(
           (item) =>
             item.FieldDisplayName !== "Request Type" &&
-            item.FieldDisplayName !== "Business Area"
+            item.FieldDisplayName !== "Business Area",
         );
         setDynamicForm(filteredData);
       } else {
@@ -127,7 +128,7 @@ const NewRequest = () => {
   const convertToQueryString = (fieldValues) => {
     return Object.keys(fieldValues)
       .map(
-        (key) => `${key}=${fieldValues[key] !== null ? fieldValues[key] : ""}`
+        (key) => `${key}=${fieldValues[key] !== null ? fieldValues[key] : ""}`,
       )
       .join("");
   };
@@ -148,6 +149,17 @@ const NewRequest = () => {
       // Form is valid, proceed with submission
       let QueryString = convertToQueryString(fieldValues);
       QueryString += "&CreatedFromPortal=YES";
+      QueryString += "&AutoIncrmentNumber=";
+      QueryString += "&CreatedBy=Santosh Dutta"; // dynamic
+      QueryString += "&ModifiedBy=Santosh Dutta"; // dynamic
+      QueryString += "&InRecycleBin=";
+      QueryString += `&ContractArea=${encodeURIComponent(BusinessAreaName)}`;
+      QueryString +=
+        "&ContractAreaAdministrators=Alok Jain;Ankit CAA; Hariharan N"; // to get after selecting business area
+      QueryString += "&BusinessAreaOwners=Alok Jain;Ankit BAO;Vishnu Karma"; // dynamic
+      QueryString += `&BusinessAreaPath=${encodeURIComponent(`${BusinessAreaName} > ${BusinessArea}`)}`;
+      QueryString += "&IsDraft=";
+      QueryString += "&Submittedby=Santosh Dutta"; // dynamic
 
       // Append the querystring and accountID fields to the FormData object
       formData.append("SearializeControls", QueryString);
@@ -160,10 +172,19 @@ const NewRequest = () => {
 
       // POST request to create the new request
       try {
+        const headers = {
+          "Content-Type": "multipart/form-data",
+          "eContracts-ApiKey":
+            "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
+        };
+        const config = {
+          headers: headers,
+          processData: false,
+        };
         const response = await axios.post(
           `${api}/api/accounts/${account_id}/Requests`,
           formData,
-          { headers }
+          config,
         );
         if (response.status === 200 || response.status === 201) {
           toast.success("Form submitted successfully", {
@@ -236,6 +257,7 @@ const NewRequest = () => {
             validationErrors={validationErrors}
             validateField={SetAllFieldValues}
             setBusinessArea={setBusinessArea}
+            setBusinessAreaName={setBusinessAreaName}
             BusinessArea={BusinessArea}
             RequestType={RequestType}
             EditRequestMetadataValue={EditRequestMetadataValue}

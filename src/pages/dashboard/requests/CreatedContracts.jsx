@@ -3,14 +3,13 @@ import { MdOutlineDoubleArrow } from "react-icons/md";
 import { RiStickyNoteAddFill } from "react-icons/ri";
 import { FaEye } from "react-icons/fa";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 
 function CreatedContracts({
-  toggleModal,
   ContractTitle,
   status,
   ContractCreated,
   RowKey,
+  getContractSummary,
 }) {
   return (
     <>
@@ -20,14 +19,12 @@ function CreatedContracts({
         } bg-gray-200 text-[0.8rem] text-slate-400`}
       >
         <td className="">
-          <span className="flex text-[0.8rem] px-2 items-center">
-            <div>
-              <img
-                src="/assets/contract-icon.png"
-                alt="agreement"
-                className="w-3"
-              />
-            </div>
+          <span className="flex items-center px-2 text-[0.8rem]">
+            <img
+              src="/assets/contract-icon.png"
+              alt="agreement"
+              className="w-3"
+            />
           </span>
         </td>
         <td className="w-3/12 pl-4">{ContractTitle}</td>
@@ -36,11 +33,9 @@ function CreatedContracts({
         </td>
         <td className="text-center">{"-"}</td>
         <td className="text-center">{"-"}</td>
-        <td className=" text-sm cursor-pointer">
-          <span className="flex justify-center items-center">
-            <Link to={`contractSummary/${RowKey}`}>
-              <FaEye />
-            </Link>
+        <td className="cursor-pointer text-sm">
+          <span className="flex items-center justify-center">
+            <FaEye onClick={() => getContractSummary(RowKey)} />
           </span>
         </td>
         {/* <td className="text-sm cursor-pointer">
@@ -54,11 +49,11 @@ function CreatedContracts({
 }
 
 CreatedContracts.propTypes = {
-  ContractCreated: PropTypes.bool.isRequired,
-  ContractTitle: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
-  toggleModal: PropTypes.func.isRequired,
-  RowKey: PropTypes.string.isRequired,
+  ContractCreated: PropTypes.bool,
+  ContractTitle: PropTypes.string,
+  status: PropTypes.string,
+  toggleModal: PropTypes.func,
+  RowKey: PropTypes.string,
 };
 
 export default CreatedContracts;

@@ -11,6 +11,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { UserSubscription } from "../../../context/UserSubscriptionContext";
 import AddNote from "./Add contract note/AddNote";
+import { motion, AnimatePresence } from "framer-motion";
 
 function ManageBookmarks({
   DeleteBookmark,
@@ -95,7 +96,7 @@ function ManageBookmarks({
 
     const response = await axios.get(
       `${api}/api/accounts/${account_id}/portal/contractDetails?contractId=${ID}`,
-      { headers }
+      { headers },
     );
     if (response.status === 200) {
       setShowSpinner(false);
@@ -128,6 +129,15 @@ function ManageBookmarks({
     }
   }, [ID, userSub]);
 
+  const dropdownVariants = {
+    open: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 300, damping: 24 },
+    },
+    closed: { opacity: 0, y: -20, transition: { duration: 0.2 } },
+  };
+
   return (
     <>
       {showModal && (
@@ -151,30 +161,36 @@ function ManageBookmarks({
         <div>
           <button
             type="button"
-            className="inline-flex w-full justify-center gap-x-1.5 rounded-[4px] bg-white px-3 py-[4px]
-                       text-[0.8rem] font-medium hover:bg-gray-50"
+            className="inline-flex w-full justify-center gap-x-1.5 rounded-[4px] bg-white px-3 py-[4px] text-[0.8rem] font-medium hover:bg-gray-50"
             onClick={() => setShow(!show)}
           >
             <BsThreeDotsVertical />
           </button>
         </div>
-        <div
-          className={`absolute right-4 z-10 mt-2 w-60 origin-top-right rounded-md bg-white border border-slate-400
-       ${show ? "static" : "hidden"}`}
-        >
-          <div className="py-1">
-            {list.map((val) => (
-              <div
-                key={val.id}
-                className="flex items-center gap-1 hover:bg-slate-100 px-4 cursor-pointer"
-                onClick={val.click}
-              >
-                <span>{val.icon}</span>
-                <span className="block p-2 text-sm">{val.name}</span>
+        <AnimatePresence>
+          {show && (
+            <motion.div
+              initial="closed"
+              animate="open"
+              exit="closed"
+              variants={dropdownVariants}
+              className="absolute right-4 z-10 mt-2 w-60 origin-top-right rounded-md border border-slate-400 bg-white shadow-md"
+            >
+              <div className="py-1">
+                {list.map((val) => (
+                  <div
+                    key={val.id}
+                    className="flex cursor-pointer items-center gap-1 px-4 hover:bg-slate-200"
+                    onClick={val.click}
+                  >
+                    <span>{val.icon}</span>
+                    <span className="block p-2 text-sm">{val.name}</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </>
   );

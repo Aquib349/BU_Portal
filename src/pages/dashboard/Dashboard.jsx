@@ -43,7 +43,7 @@ function Dashboard() {
     } else {
       // Filter data based on search input
       const filteredData = RequestData?.SubmittedRequests?.filter((val) =>
-        val.RequestTitle?.toLowerCase()?.includes(inputValue)
+        val.RequestTitle?.toLowerCase()?.includes(inputValue),
       );
       setFilteredData(filteredData);
     }
@@ -60,7 +60,7 @@ function Dashboard() {
     try {
       const response = await axios.get(
         `${api}/api/accounts/${account_id}/portal/bookmarks?userId=ThfohBn4`,
-        { headers }
+        { headers },
       );
       setBookmarkData(response.data);
     } catch (error) {
@@ -111,7 +111,7 @@ function Dashboard() {
           </div>
         </Modal>
       )} */}
-      <div className="dashboard-component px-6 no-scrollbar">
+      <div className="dashboard-component no-scrollbar px-6">
         <div className="p-2">
           <div className="pt-2">
             {/* dashboard welcome screen */}
@@ -125,17 +125,18 @@ function Dashboard() {
               FilteredData={FilteredData}
               toggleModal={toggleModal}
               setFilteredData={setFilteredData}
+              setShowSpinner={setShowSpinner}
             />
 
             {/* All Bookmarks */}
             <div className="">
               <div className="px-1 pb-2">
-                <h1 className="text-xl font-semibold pt-6">My Bookmarks</h1>
-                <p className="text-slate-500 text-sm">
+                <h1 className="pt-6 text-xl font-semibold">My Bookmarks</h1>
+                <p className="text-sm text-slate-500">
                   Your bookmarked contracts
                 </p>
               </div>
-              <div className="bg-white rounded shadow-md shadow-black/20 pb-2 border border-slate-200">
+              <div className="rounded border border-slate-200 bg-white pb-2 shadow-md shadow-black/20">
                 <Pagination
                   itemsPerPage={10}
                   data={BookmarkData}

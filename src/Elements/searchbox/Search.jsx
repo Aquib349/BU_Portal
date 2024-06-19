@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { IoSearchSharp } from "react-icons/io5";
 import { GlobalSearchContext } from "../../context/GlobalSearchContext";
 import { useLocation, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const SearchBar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -37,19 +38,27 @@ const SearchBar = () => {
     handleGlobalSearch();
   };
 
+  const dropdownVariants = {
+    open: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 300, damping: 24 },
+    },
+    closed: { opacity: 0, y: -20, transition: { duration: 0.2 } },
+  };
+
   return (
     <div className="search-box text-sm">
       <form className="w-[600px]" onSubmit={handleSearch}>
-        <div className="flex">
+        <div className="relative flex">
           <button
             type="button"
-            className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center
-             text-white rounded-s-3xl bg-blue-500"
+            className="z-10 inline-flex flex-shrink-0 items-center rounded-s-3xl bg-blue-500 px-4 py-2.5 text-center text-sm font-medium text-white"
             onClick={toggleDropdown}
           >
             {DropDownName}
             <svg
-              className="w-2.5 h-2.5 ms-2.5"
+              className="ms-2.5 h-2.5 w-2.5"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -64,17 +73,19 @@ const SearchBar = () => {
               />
             </svg>
           </button>
-          {showDropdown && (
-            <div className="z-10 absolute border border-slate-200 bg-white divide-y divide-gray-100 rounded-lg w-44 dropdown-menu mt-12">
-              <ul
-                className="py-2 text-sm text-gray-700"
-                aria-labelledby="dropdown-button"
-              >
+          <motion.div
+            initial="closed"
+            animate={showDropdown ? "open" : "closed"}
+            variants={dropdownVariants}
+            className="absolute left-0 top-full z-20 mt-3 rounded-md w-44 bg-white shadow-lg"
+          >
+            {showDropdown && (
+              <ul className="py-2 text-sm text-gray-700">
                 {data.map((item) => (
                   <li key={item.id}>
                     <button
                       type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100"
+                      className="inline-flex w-full px-4 py-2 hover:bg-gray-200"
                       onClick={() => {
                         setDropDownValue(item.value);
                         setDropDownName(item.name);
@@ -86,24 +97,23 @@ const SearchBar = () => {
                   </li>
                 ))}
               </ul>
-            </div>
-          )}
+            )}
+          </motion.div>
           <div className="relative w-full">
             <input
               type="text"
               value={searchText}
               id="search-dropdown"
-              className="block p-2.5 w-full z-20 text-sm text-gray-900 rounded-e-3xl border-s-gray-50 border-s-2
-               border border-gray-300 outline-none"
+              className="z-20 block w-full rounded-e-3xl border border-s-2 border-gray-300 border-s-gray-50 p-2.5 text-sm text-gray-900 outline-none"
               placeholder="Search Contracts, Documents and Counterparties ..."
               onChange={(e) => setSearchText(e.target.value)}
               required
             />
             <button
               type="submit"
-              className="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-black rounded-e-lg outline-none"
+              className="absolute right-0 top-0 h-full rounded-e-lg p-2.5 text-sm font-medium text-black outline-none"
             >
-              <IoSearchSharp className="w-5 h-5 text-blue-600" />
+              <IoSearchSharp className="h-5 w-5 text-blue-600" />
               <span className="sr-only">Search</span>
             </button>
           </div>

@@ -15,6 +15,7 @@
     BusinessArea,
     RequestType,
     EditRequestMetadataValue,
+    setBusinessAreaName
   }) {
     
     return (
@@ -26,6 +27,7 @@
               isMultiArea={IsMultiBusinessAreaRoute}
               RequestBusinessAreas={RequestBusinessAreas}
               setBusinessArea={setBusinessArea}
+              setBusinessAreaName={setBusinessAreaName}
               BusinessArea={BusinessArea}
             />
             <div className="flex flex-col py-2">
@@ -95,6 +97,7 @@
     validationErrors: PropTypes.object,
     validateField: PropTypes.func,
     setBusinessArea: PropTypes.func,
+    setBusinessAreaName:PropTypes.func,
     BusinessArea: PropTypes.string,
     RequestType: PropTypes.string,
     EditRequestMetadataValue: PropTypes.object,

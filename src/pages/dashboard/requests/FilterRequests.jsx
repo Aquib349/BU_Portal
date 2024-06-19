@@ -10,6 +10,7 @@ import { UserContext } from "../../../context/UserContext";
 import { RequestContext } from "../../../context/RequestContext";
 import { RequestTypesContext } from "../../../context/RequestTypesContext";
 import { StatusContext } from "../../../context/StatusContext";
+import { motion, AnimatePresence } from "framer-motion";
 
 function FilterRequests({ setFilteredData }) {
   const { RequestData } = useContext(RequestContext);
@@ -17,7 +18,7 @@ function FilterRequests({ setFilteredData }) {
   const { AllRequestTypes } = useContext(RequestTypesContext);
   const { AllStatus } = useContext(StatusContext);
   const [filteredData, setFilteredDataInternal] = useState(
-    RequestData?.SubmittedRequests || []
+    RequestData?.SubmittedRequests || [],
   );
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(null);
@@ -32,21 +33,21 @@ function FilterRequests({ setFilteredData }) {
     if (status.length > 0) {
       const statusValues = status.map((s) => s.value.toLowerCase());
       data = data.filter((request) =>
-        statusValues.includes(request.Status.toLowerCase())
+        statusValues.includes(request.Status.toLowerCase()),
       );
     }
 
     if (users.length > 0) {
       const userValues = users.map((u) => u.value.toLowerCase());
       data = data.filter((request) =>
-        userValues.includes(request.AssignedTo.toLowerCase())
+        userValues.includes(request.AssignedTo.toLowerCase()),
       );
     }
 
     if (type.length > 0) {
       const typeValues = type.map((t) => t.value.toLowerCase());
       data = data.filter((request) =>
-        typeValues.includes(request.RequestType.toLowerCase())
+        typeValues.includes(request.RequestType.toLowerCase()),
       );
     }
 
@@ -68,7 +69,7 @@ function FilterRequests({ setFilteredData }) {
       const updatedData = applyFilters(status, assignedTo, requestType, date);
       setFilteredDataInternal(updatedData);
     },
-    [assignedTo, requestType, date, RequestData]
+    [assignedTo, requestType, date, RequestData],
   );
 
   const handleAssignedTo = useCallback(
@@ -77,7 +78,7 @@ function FilterRequests({ setFilteredData }) {
       const updatedData = applyFilters(requestStatus, user, requestType, date);
       setFilteredDataInternal(updatedData);
     },
-    [requestStatus, requestType, date, RequestData]
+    [requestStatus, requestType, date, RequestData],
   );
 
   const handleRequestType = useCallback(
@@ -86,7 +87,7 @@ function FilterRequests({ setFilteredData }) {
       const updatedData = applyFilters(requestStatus, assignedTo, type, date);
       setFilteredDataInternal(updatedData);
     },
-    [requestStatus, assignedTo, date, RequestData]
+    [requestStatus, assignedTo, date, RequestData],
   );
 
   const handleRequestDate = useCallback(
@@ -96,21 +97,30 @@ function FilterRequests({ setFilteredData }) {
         requestStatus,
         assignedTo,
         requestType,
-        date
+        date,
       );
       setFilteredDataInternal(updatedData);
     },
-    [requestStatus, assignedTo, requestType, RequestData]
+    [requestStatus, assignedTo, requestType, RequestData],
   );
 
   useEffect(() => {
     setFilteredData(filteredData);
   }, [filteredData, setFilteredData]);
 
+  const dropdownVariants = {
+    open: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 300, damping: 24 },
+    },
+    closed: { opacity: 0, y: -20, transition: { duration: 0.2 } },
+  };
+
   return (
     <div className="relative inline-block text-left">
       <div
-        className="text-sm font-bold flex justify-center items-center gap-1 text-slate-500"
+        className="flex cursor-pointer items-center justify-center gap-1 text-sm font-bold text-slate-500"
         onClick={() => setShow(!show)}
       >
         <span>
@@ -119,64 +129,70 @@ function FilterRequests({ setFilteredData }) {
         <span>Filter</span>
       </div>
 
-      <div
-        className={`absolute border right-0 z-10 mt-4 pb-8 w-80 rounded bg-slate-100 ${
-          show ? "static border border-slate-500" : "hidden"
-        }`}
-      >
-        <div className="relative">
-          <div
-            className="absolute top-1 right-1 font-bold"
-            onClick={() => setShow(!show)}
+      <AnimatePresence>
+        {show && (
+          <motion.div
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={dropdownVariants}
+            className="absolute right-0 z-10 mt-4 w-80 rounded border border-slate-200 bg-gray-200 pb-8"
           >
-            <RxCross2 />
-          </div>
-        </div>
-        <div className="py-1 px-2">
-          <form className="text-sm">
-            <div className="flex flex-col pt-1">
-              <span>Request Status</span>
-              <Select
-                defaultValue={requestStatus}
-                onChange={handleRequestStatus}
-                options={AllStatus}
-                isMulti={true}
-                className="css-control text-black bg-white"
-              />
+            <div className="relative">
+              <div
+                className="absolute right-1 top-1 cursor-pointer font-bold"
+                onClick={() => setShow(!show)}
+              >
+                <RxCross2 />
+              </div>
             </div>
-            <div className="flex flex-col pt-2">
-              <span>Assigned To</span>
-              <Select
-                defaultValue={assignedTo}
-                onChange={handleAssignedTo}
-                options={AllUser}
-                isMulti={true}
-                className="css-control text-black bg-white"
-              />
+            <div className="px-2 py-1">
+              <form className="text-sm">
+                <div className="flex flex-col pt-1">
+                  <span>Request Status</span>
+                  <Select
+                    defaultValue={requestStatus}
+                    onChange={handleRequestStatus}
+                    options={AllStatus}
+                    isMulti={true}
+                    className="css-control bg-white text-black"
+                  />
+                </div>
+                <div className="flex flex-col pt-2">
+                  <span>Assigned To</span>
+                  <Select
+                    defaultValue={assignedTo}
+                    onChange={handleAssignedTo}
+                    options={AllUser}
+                    isMulti={true}
+                    className="css-control bg-white text-black"
+                  />
+                </div>
+                <div className="flex flex-col pt-2">
+                  <span>Request Type</span>
+                  <Select
+                    defaultValue={requestType}
+                    onChange={handleRequestType}
+                    options={AllRequestTypes}
+                    isMulti={true}
+                    className="css-control bg-white text-black"
+                  />
+                </div>
+                <div className="flex flex-col pt-2">
+                  <span>Request By Date</span>
+                  <DatePicker
+                    className="w-full rounded-md border border-slate-400 p-2 text-sm outline-blue-400"
+                    selected={date}
+                    dateFormat="MM/dd/yyyy"
+                    onChange={handleRequestDate}
+                    placeholderText="Pick date"
+                  />
+                </div>
+              </form>
             </div>
-            <div className="flex flex-col pt-2">
-              <span>Request Type</span>
-              <Select
-                defaultValue={requestType}
-                onChange={handleRequestType}
-                options={AllRequestTypes}
-                isMulti={true}
-                className="css-control text-black bg-white"
-              />
-            </div>
-            <div className="flex flex-col pt-2">
-              <span>Request By Date</span>
-              <DatePicker
-                className="p-2 text-sm rounded-md border w-full border-slate-400 outline-blue-400"
-                selected={date}
-                dateFormat="MM/dd/yyyy"
-                onChange={handleRequestDate}
-                placeholderText="Pick date"
-              />
-            </div>
-          </form>
-        </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

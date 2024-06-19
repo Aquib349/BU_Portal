@@ -13,18 +13,19 @@ function AllRequest({
   FilteredData,
   toggleModal,
   setFilteredData,
+  setShowSpinner,
 }) {
   return (
     <>
       <div className="AllRequest-component">
         <div className="px-1 pb-2">
           <h1 className="text-xl font-semibold">My Requests</h1>
-          <p className="text-slate-500 text-sm">
+          <p className="text-sm text-slate-500">
             Your submitted contract request
           </p>
         </div>
-        <div className="requests bg-white pt-2 rounded-sm shadow-md shadow-black/20 pb-2 border border-slate-200">
-          <div className="search-filter grid grid-cols-6 gap-2 items-center p-2">
+        <div className="requests rounded-sm border border-slate-200 bg-white pb-2 pt-2 shadow-md shadow-black/20">
+          <div className="search-filter grid grid-cols-6 items-center gap-2 p-2">
             <div className="col-span-4">
               <input
                 type="search"
@@ -32,36 +33,30 @@ function AllRequest({
                 value={SearchInput}
                 id="search-request"
                 placeholder="Search"
-                className="border border-slate-400 p-2 rounded-md w-full outline-blue-400 text-sm bg-gray-50"
+                className="w-full rounded-md border border-slate-400 bg-gray-50 p-2 text-sm outline-blue-400"
                 onChange={SearchRequests}
               />
             </div>
-            <div
-              className="flex justify-center items-center border border-slate-400 rounded-md cursor-pointer
-                 bg-gray-50 p-2"
-            >
+            <div className="flex cursor-pointer items-center justify-center rounded-md border border-slate-400 bg-gray-50 p-2">
               {/* filter */}
               <FilterRequests setFilteredData={setFilteredData} />
             </div>
             <div className="">
               <Link to={"newRequest"}>
-                <button
-                  className="py-2 px-0 border border-blue-500 hover:bg-blue-600 hover:text-white 
-                    rounded-md text-sm w-full"
-                >
+                <button className="w-full rounded-md border border-blue-500 px-0 py-2 text-sm hover:bg-blue-600 hover:text-white">
                   + New Request
                 </button>
               </Link>
             </div>
           </div>
           <div className="grid grid-cols-5 gap-x-2 p-2">
-            <div className="border border-slate-400 rounded px-2 pt-5">
+            <div className="rounded border border-slate-400 px-2 pt-5">
               <StatusAnalysis data={AllRequestStatus} />
             </div>
-            <div className="col-span-4 border border-slate-400 rounded py-2">
+            <div className="col-span-4 rounded border border-slate-400 py-2">
               <div className="flex gap-8 px-2 pb-1">
                 <div className="flex items-center gap-2">
-                  <div className="text-blue-600 text-2xl">
+                  <div className="text-2xl text-blue-600">
                     <TbCirclesRelation />
                   </div>
                   <small className="text-md font-semibold">
@@ -87,7 +82,11 @@ function AllRequest({
                 toggleModal={toggleModal}
                 itemsPerPage={8}
                 renderComponent={({ data, toggleModal }) => (
-                  <Requests currentItems={data} toggleModal={toggleModal} />
+                  <Requests
+                    currentItems={data}
+                    toggleModal={toggleModal}
+                    setShowSpinner={setShowSpinner}
+                  />
                 )}
               />
             </div>
