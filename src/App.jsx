@@ -14,6 +14,7 @@ import GlobalSearchProvider from "./context/GlobalSearchContext";
 import { Toaster } from "react-hot-toast";
 import EditRequestProvider from "./context/EditRequestContext";
 import NewHomePage from "./pages/NewHomePage";
+import Errorhandling from "./pages/error handling/Errorhandlin";
 
 function App() {
   return (
@@ -72,6 +73,10 @@ const Router = createBrowserRouter([
       {
         path: "new",
         element: <NewHomePage />,
+      },
+      {
+        path: "error",
+        element: <Errorhandling />,
       },
     ],
   },

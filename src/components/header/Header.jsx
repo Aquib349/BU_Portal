@@ -7,11 +7,13 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const [showModal, setShowModal] = useState(false);
   const [NotificationData, setNotificationData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
@@ -114,7 +116,7 @@ function Header() {
                   </motion.div>
                 </motion.button>
                 <motion.ul
-                  className="absolute mt-5 w-44 text-sm bg-white shadow-lg"
+                  className="absolute mt-5 w-44 bg-white text-sm shadow-lg"
                   variants={{
                     open: {
                       clipPath: "inset(0% 0% 0% 0% round 10px)",
@@ -140,18 +142,30 @@ function Header() {
                   <motion.li
                     className="px-4 py-2 text-gray-700 hover:bg-gray-100"
                     variants={itemVariants}
+                    onClick={() => {
+                      navigate("error");
+                      setIsOpen(false);
+                    }}
                   >
                     My Dashboard
                   </motion.li>
                   <motion.li
                     className="px-4 py-2 text-gray-700 hover:bg-gray-100"
                     variants={itemVariants}
+                    onClick={() => {
+                      navigate("error");
+                      setIsOpen(false);
+                    }}
                   >
                     Admin Dashboard
                   </motion.li>
                   <motion.li
                     className="px-4 py-2 text-gray-700 hover:bg-gray-100"
                     variants={itemVariants}
+                    onClick={() => {
+                      navigate("error");
+                      setIsOpen(false);
+                    }}
                   >
                     Global Insights
                   </motion.li>
