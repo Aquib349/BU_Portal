@@ -1,4 +1,3 @@
-import Dropdown from "../../Elements/Dropdown";
 import { FaBell, FaCircleUser } from "react-icons/fa6";
 import Notification from "./Notifications";
 import { useEffect, useState } from "react";
@@ -8,12 +7,14 @@ import toast from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useMsal } from "@azure/msal-react";
 
 function Header() {
   const [showModal, setShowModal] = useState(false);
   const [NotificationData, setNotificationData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { instance } = useMsal();
 
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
@@ -45,6 +46,15 @@ function Header() {
     }
   }
 
+  // function to handle the logout;
+  async function handleLogout() {
+    sessionStorage.clear();
+    localStorage.clear();
+    await instance.logoutRedirect().catch((e) => {
+      console.log(e);
+    });
+  }
+
   useEffect(() => {
     getUserNotification();
   }, []);
@@ -71,6 +81,7 @@ function Header() {
               <button
                 type="button"
                 className="mt-2 flex h-4 w-[4.5rem] items-center justify-center rounded border-2 border-red-500 p-2 text-[0.6rem] font-bold tracking-[0.05rem] text-red-600 hover:bg-red-500 hover:text-white"
+                onClick={handleLogout}
               >
                 LOGOUT
               </button>
