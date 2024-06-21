@@ -5,10 +5,10 @@ import PropTypes from "prop-types";
 function StatusAnalysis({ data }) {
   // all types of status
   const status = [
-    { id: 1, name: "Completed", color: "bg-[#2563eb]" },
+    { id: 1, name: "Request Completed", color: "bg-[#2563eb]" },
     { id: 2, name: "New", color: "bg-[#22c55e]" },
     { id: 3, name: "On Hold", color: "bg-[#eb2323]" },
-    { id: 4, name: "Awaiting", color: "bg-[#FEB019]" },
+    { id: 4, name: "Awaiting Approval", color: "bg-[#FEB019]" },
     { id: 5, name: "Approved", color: "bg-[#2563eb]" },
     { id: 6, name: "Cancelled", color: "bg-[#546E7A]" },
   ];
@@ -111,7 +111,7 @@ function StatusAnalysis({ data }) {
                 className="status-name-and-color flex gap-4 items-center text-sm py-1 px-6"
               >
                 <span className={`w-3 h-3 ${val.color} rounded-full`}></span>
-                <span className="">{val.name}</span>
+                <span className="text-sm">{val.name}</span>
               </div>
             ))}
           </div>
