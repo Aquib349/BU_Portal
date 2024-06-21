@@ -54,7 +54,7 @@ function Faqs() {
           {/* faqs */}
           {faq === "faq" && (
             <div className="faqs mt-4 rounded-md border-2 border-slate-200">
-              <Accordion heading="What is BU Portal" checked={true}>
+              <Accordion heading="What is BU Portal" checked={true} bgRequired={true}>
                 <p className="p-3 text-sm">
                   "BU Portal" is a specific term mentioned in a contract, you
                   should refer to the contract itself or any related

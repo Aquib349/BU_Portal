@@ -11,7 +11,9 @@ const RadioField = ({
   CommentRequired,
   initialValue,
 }) => {
-  const [RadioOptionValue, setRadioOptionValue] = useState(null);
+  const [RadioOptionValue, setRadioOptionValue] = useState(
+    initialValue || null,
+  );
 
   useEffect(() => {
     if (initialValue) {
@@ -33,15 +35,15 @@ const RadioField = ({
 
   return (
     <>
-      <label className="text-sm px-1">
+      <label className="px-1 text-sm">
         {title}
         {required === "true" && (
-          <span className="text-red-500 font-bold">*</span>
+          <span className="font-bold text-red-500">*</span>
         )}
       </label>
-      <div className="py-2 text-sm flex justify-between items-center">
-        <div className="flex px-2 items-center gap-8">
-          <label className="flex gap-1 items-center">
+      <div className="flex items-center justify-between py-2 text-sm">
+        <div className="flex items-center gap-8 px-2">
+          <label className="flex items-center gap-1">
             <input
               type="radio"
               value="Yes"
@@ -50,7 +52,7 @@ const RadioField = ({
             />
             Yes
           </label>
-          <label className="flex gap-1 items-center">
+          <label className="flex items-center gap-1">
             <input
               type="radio"
               value="No"
@@ -72,7 +74,7 @@ const RadioField = ({
       >
         <textarea
           name="comment"
-          className="border border-slate-300 w-full rounded-md text-sm p-2"
+          className="w-full rounded-md border border-slate-300 p-2 text-sm"
           placeholder="Add your comment.."
         />
       </div>

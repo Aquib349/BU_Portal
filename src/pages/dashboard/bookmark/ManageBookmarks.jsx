@@ -5,9 +5,6 @@ import { MdOutlineNoteAdd } from "react-icons/md";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaEyeSlash } from "react-icons/fa";
 import { useContext, useEffect, useRef, useState } from "react";
-import Modal from "../../../Elements/Modal";
-import ContractSummary from "./contract-summary/ContractSummary";
-import axios from "axios";
 import PropTypes from "prop-types";
 import { UserSubscription } from "../../../context/UserSubscriptionContext";
 import AddNote from "./Add contract note/AddNote";
@@ -16,18 +13,15 @@ import { motion, AnimatePresence } from "framer-motion";
 function ManageBookmarks({
   DeleteBookmark,
   ID,
-  setShowSpinner,
   title,
   object,
   FollowAndGetAlerts,
+  getContractSummary,
+  ContractID,
+  setContractID,
 }) {
-  const api = import.meta.env.VITE_API_URL;
-  const account_id = import.meta.env.VITE_USER_KEY;
   const [show, setShow] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [AddNoteModal, setAddNoteModal] = useState(false);
-  const [ContractID, setContractID] = useState("");
-  const [ContractDetails, setContractDetails] = useState({});
   const dropdownBookmark = useRef(null);
   const { userSub } = useContext(UserSubscription);
   const [followed, setFollowed] = useState(false);
@@ -39,6 +33,7 @@ function ManageBookmarks({
       click: () => {
         setShow(!show);
         getContractSummary(ID);
+        setContractID(ID);
       },
     },
     {
@@ -80,31 +75,6 @@ function ManageBookmarks({
     },
   ];
 
-  // function to handle the toggle state of modal
-  function toggleModal() {
-    setShowModal(!showModal);
-  }
-
-  // function to get the contract summary
-  async function getContractSummary(ID) {
-    setShowSpinner(true);
-
-    const headers = {
-      "eContracts-ApiKey":
-        "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
-    };
-
-    const response = await axios.get(
-      `${api}/api/accounts/${account_id}/portal/contractDetails?contractId=${ID}`,
-      { headers },
-    );
-    if (response.status === 200) {
-      setShowSpinner(false);
-      setShowModal(!showModal);
-    }
-    setContractDetails(response.data);
-  }
-
   useEffect(() => {
     const closeDropdown = (event) => {
       if (
@@ -140,17 +110,6 @@ function ManageBookmarks({
 
   return (
     <>
-      {showModal && (
-        <Modal
-          heading={"Contract Summary"}
-          toggleModal={toggleModal}
-          set_Width={true}
-        >
-          <div className="p-2">
-            <ContractSummary ContractDetails={ContractDetails} />
-          </div>
-        </Modal>
-      )}
       {/* add note modal */}
       <AddNote
         AddNoteModal={AddNoteModal}

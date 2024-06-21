@@ -25,7 +25,6 @@ function App() {
   const account_id = import.meta.env.VITE_USER_KEY;
 
   const { accounts } = useMsal();
-  console.log(accounts);
 
   useEffect(() => {
     const headers = {

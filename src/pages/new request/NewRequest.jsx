@@ -7,6 +7,7 @@ import NewRequestForm from "./NewRequestForm";
 import axios from "axios";
 import { EditReqeustContext } from "../../context/EditRequestContext";
 import useXmlConverter from "../../customhooks/useXmlConverter";
+import { useNavigate } from "react-router-dom";
 
 const NewRequest = () => {
   const api = import.meta.env.VITE_API_URL;
@@ -20,13 +21,18 @@ const NewRequest = () => {
   const [LoadSpinner, setLoadSpinner] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   const [fieldValues, setFieldValues] = useState({});
-  // console.log(ConfigData)
+
+  const [ContractAreaAdministrators, setContractAreaAdministrators] =
+    useState("");
+  const [BusinessAreaOwners, setBusinessAreaOwners] = useState("");
+  const [BusinessAreaPath, setBusinessAreaPath] = useState("");
 
   // edit Request context
   const [EditRequestMetadataValue, setEditRequestMetadataValue] = useState({});
   const { EditRequest, EditRequestMode, setEditRequestMode } =
     useContext(EditReqeustContext);
   const jsonResult = useXmlConverter(EditRequest);
+  const navigate = useNavigate();
 
   // function to handle the request-types
   const handleRequestType = useCallback(async (event) => {
@@ -137,7 +143,9 @@ const NewRequest = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setEditRequestMode(false);
+    // setLoadSpinner(true);
     const formData = new FormData();
+    const user = localStorage.getItem("username");
 
     // Validate all fields before submission
     DynamicForm.forEach(({ FieldName, Required }) => {
@@ -150,69 +158,68 @@ const NewRequest = () => {
       let QueryString = convertToQueryString(fieldValues);
       QueryString += "&CreatedFromPortal=YES";
       QueryString += "&AutoIncrmentNumber=";
-      QueryString += "&CreatedBy=Santosh Dutta"; // dynamic
-      QueryString += "&ModifiedBy=Santosh Dutta"; // dynamic
+      QueryString += `&CreatedBy=${user}`;
+      QueryString += `&ModifiedBy=${user}`;
       QueryString += "&InRecycleBin=";
       QueryString += `&ContractArea=${encodeURIComponent(BusinessAreaName)}`;
-      QueryString +=
-        "&ContractAreaAdministrators=Alok Jain;Ankit CAA; Hariharan N"; // to get after selecting business area
-      QueryString += "&BusinessAreaOwners=Alok Jain;Ankit BAO;Vishnu Karma"; // dynamic
-      QueryString += `&BusinessAreaPath=${encodeURIComponent(`${BusinessAreaName} > ${BusinessArea}`)}`;
+      QueryString += `&ContractAreaAdministrators=${ContractAreaAdministrators}`;
+      QueryString += `&BusinessAreaOwners=${BusinessAreaOwners}`;
+      QueryString += `&BusinessAreaPath=${encodeURIComponent(BusinessAreaPath)}`;
       QueryString += "&IsDraft=";
-      QueryString += "&Submittedby=Santosh Dutta"; // dynamic
+      QueryString += `&Submittedby=${user}`;
 
       // Append the querystring and accountID fields to the FormData object
       formData.append("SearializeControls", QueryString);
       formData.append("AccountID", account_id);
 
-      // Log FormData contents
+      // log all the values
       for (let [key, value] of formData.entries()) {
         console.log(key, value);
       }
 
       // POST request to create the new request
-      try {
-        const headers = {
-          "Content-Type": "multipart/form-data",
-          "eContracts-ApiKey":
-            "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
-        };
-        const config = {
-          headers: headers,
-          processData: false,
-        };
-        const response = await axios.post(
-          `${api}/api/accounts/${account_id}/Requests`,
-          formData,
-          config,
-        );
-        if (response.status === 200 || response.status === 201) {
-          toast.success("Form submitted successfully", {
-            duration: 1000,
-            position: "top-center",
-            style: {
-              backgroundColor: "black",
-              color: "white",
-              fontSize: "0.8rem",
-            },
-          });
-          setFieldValues({});
-        }
-      } catch (error) {
-        console.log(error);
-        // Optionally display an error
-        toast.error("Submission failed. Please try again.", {
-          duration: 1500,
-          position: "top-center",
-          style: {
-            backgroundColor: "black",
-            color: "white",
-            fontSize: "0.8rem",
-          },
-        });
-      }
+      // try {
+      //   const headers = {
+      //     "Content-Type": "multipart/form-data",
+      //     "eContracts-ApiKey":
+      //       "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
+      //   };
+      //   const config = {
+      //     headers: headers,
+      //     processData: false,
+      //   };
+      //   const response = await axios.post(
+      //     `${api}/api/accounts/${account_id}/Requests`,
+      //     formData,
+      //     config,
+      //   );
+      //   if (response.status === 200 || response.status === 201) {
+      //     setLoadSpinner(false);
+      //     toast.success("Form submitted successfully", {
+      //       duration: 1000,
+      //       position: "top-center",
+      //       style: {
+      //         backgroundColor: "black",
+      //         color: "white",
+      //         fontSize: "0.8rem",
+      //       },
+      //     });
+      //     setFieldValues({});
+      //   }
+      //   navigate(`/requestDetail/${response.data}`);
+      // } catch (error) {
+      //   console.log(error);
+      //   toast.error("Submission failed. Please try again.", {
+      //     duration: 1500,
+      //     position: "top-center",
+      //     style: {
+      //       backgroundColor: "black",
+      //       color: "white",
+      //       fontSize: "0.8rem",
+      //     },
+      //   });
+      // }
     } else {
-      // Form is invalid, show errors
       toast.error("Please fill all the required fields", {
         duration: 1500,
         position: "top-center",
@@ -261,6 +268,9 @@ const NewRequest = () => {
             BusinessArea={BusinessArea}
             RequestType={RequestType}
             EditRequestMetadataValue={EditRequestMetadataValue}
+            setContractAreaAdministrators={setContractAreaAdministrators}
+            setBusinessAreaOwners={setBusinessAreaOwners}
+            setBusinessAreaPath={setBusinessAreaPath}
           />
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { FaBell, FaCircleUser } from "react-icons/fa6";
 import Notification from "./Notifications";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SearchBar from "../../Elements/searchbox/Search";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -15,6 +15,7 @@ function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { instance } = useMsal();
+  const dropdownBookmark = useRef(null);
 
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
@@ -59,6 +60,22 @@ function Header() {
     getUserNotification();
   }, []);
 
+  useEffect(() => {
+    const closeDropdown = (event) => {
+      if (
+        dropdownBookmark.current &&
+        !dropdownBookmark.current.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("click", closeDropdown);
+
+    return () => {
+      document.removeEventListener("click", closeDropdown);
+    };
+  }, []);
+
   function handleShowProfile() {
     toast.custom((t) => (
       <div className="flex w-[100vw] justify-end">
@@ -100,7 +117,10 @@ function Header() {
       <div className="Header-component sticky top-0 z-20 flex h-16 items-center bg-white shadow-md shadow-slate-300">
         <div className="main m-auto w-[95%]">
           <div className="grid grid-cols-4 items-center">
-            <div className="dropdown-menu flex items-center gap-4">
+            <div
+              className="dropdown-menu flex items-center gap-4"
+              ref={dropdownBookmark}
+            >
               <img src="/assets/logo.gif" alt="logo" className="w-[130px]" />
               <motion.nav
                 initial={false}

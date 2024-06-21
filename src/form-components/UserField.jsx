@@ -12,8 +12,23 @@ const UserField = ({
   validate,
   initialValue,
 }) => {
-  const [UserselectedOption, setUserSelectedOption] = useState(null);
+  const [userSelectedOption, setUserSelectedOption] = useState(null);
   const { AllUser } = useContext(UserContext);
+
+  const handleChange = (selectedOption) => {
+    let concatenatedLabels = "";
+    if (multi) {
+      concatenatedLabels = selectedOption
+        ? selectedOption.map((option) => option.label).join("; ")
+        : "";
+      setUserSelectedOption(selectedOption);
+    } else {
+      concatenatedLabels = selectedOption ? selectedOption.label : "";
+      setUserSelectedOption(selectedOption);
+    }
+
+    validate(fieldname, concatenatedLabels, required);
+  };
 
   useEffect(() => {
     if (initialValue && AllUser) {
@@ -31,39 +46,26 @@ const UserField = ({
 
   useEffect(() => {
     if (validate) {
-      validate(fieldname, UserselectedOption, required);
-    }
-  }, []);
-
-  const handleChange = (selectedOption) => {
-    let concatenatedLabels = "";
-    if (multi) {
-      concatenatedLabels = selectedOption
-        ? selectedOption.map((option) => option.label).join("; ")
+      const concatenatedLabels = userSelectedOption
+        ? multi
+          ? userSelectedOption.map((option) => option.label).join("; ")
+          : userSelectedOption.label
         : "";
-      setUserSelectedOption(selectedOption);
-    } else {
-      concatenatedLabels = selectedOption ? selectedOption.label : "";
-      setUserSelectedOption(selectedOption);
+      validate(fieldname, concatenatedLabels, required);
     }
-
-    validate(fieldname, concatenatedLabels, required);
-  };
+  }, [userSelectedOption, multi, fieldname, required]);
 
   return (
     <div className="pb-3">
       <label className="text-sm">
         {title}
-        {required === "true" && (
-          <span className={`text-red-500 font-bold`}>*</span>
-        )}
+        {required && <span className="font-bold text-red-500">*</span>}
       </label>
       <Select
-        defaultValue={UserselectedOption}
+        value={userSelectedOption}
         onChange={handleChange}
         options={AllUser}
         isMulti={multi}
-        value={UserselectedOption}
       />
       <small className="text-slate-500">{baseline}</small>
     </div>
@@ -71,11 +73,10 @@ const UserField = ({
 };
 
 UserField.propTypes = {
-  multi: PropTypes.bool,
-  options: PropTypes.array,
   title: PropTypes.string,
+  multi: PropTypes.bool,
   baseline: PropTypes.string,
-  required: PropTypes.string,
+  required: PropTypes.any,
   fieldname: PropTypes.string,
   validate: PropTypes.func,
   initialValue: PropTypes.string,

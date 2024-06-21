@@ -1,36 +1,53 @@
-import { IoIosArrowDown } from "react-icons/io";
 import PropTypes from "prop-types";
+import { Transition } from "@headlessui/react";
+import { useState } from "react";
+import { IoIosArrowDown } from "react-icons/io";
 
-function Accordion({ heading, children, checked }) {
+function Accordion({ heading, children, checked, bgRequired }) {
+  const [isOpen, setIsOpen] = useState(checked);
+  const toggleAccordion = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <>
-      <div className={`relative overflow-hidden`}>
-        <input
-          type="checkbox"
-          className="absolute top-0 inset-x-0 w-full h-10 opacity-0 peer"
-          defaultChecked={checked}
-        />
-        <div className="px-2">
-          <span className="flex items-center h-[40px]">{heading}</span>
+    <div className="rounded-xl">
+      <h2>
+        <div className="relative w-full p-3 text-left font-medium text-gray-500 outline-none">
+          <span>{heading}</span>
+          <span
+            className={`absolute right-3 top-5 transform cursor-pointer transition-transform duration-300 ${
+              isOpen ? "rotate-180" : ""
+            }`}
+            onClick={toggleAccordion}
+          >
+            <IoIosArrowDown />
+          </span>
         </div>
-        <div className="absolute top-3 right-3 transition-transform duration-300 rotate-0 peer-checked:rotate-180">
-          <IoIosArrowDown />
+      </h2>
+      <Transition
+        show={isOpen}
+        enter="transition-max-height duration-300 ease-in-out"
+        enterFrom="max-h-0"
+        enterTo="max-h-screen"
+        leave="transition-max-height duration-300 ease-in-out"
+        leaveFrom="max-h-screen"
+        leaveTo="max-h-0"
+      >
+        <div className="transition-max-height overflow-hidden duration-500 ease-in-out">
+          <div
+            className={`bg-white-100 border-t border-gray-200 p-2 py-2 ${bgRequired ? "bg-slate-50" : ""}`}
+          >
+            {children}
+          </div>
         </div>
-        <div
-          className={`max-h-0 peer-checked:max-h-[300px]
-          transition-all ease-in-out duration-500 bg-slate-100 overflow-auto`}
-        >
-          {children}
-        </div>
-      </div>
-    </>
+      </Transition>
+    </div>
   );
 }
 
 Accordion.propTypes = {
-  heading: PropTypes.string.isRequired,
-  children: PropTypes.any.isRequired,
-  checked: PropTypes.bool.isRequired,
+  heading: PropTypes.any,
+  children: PropTypes.any,
 };
 
 export default Accordion;

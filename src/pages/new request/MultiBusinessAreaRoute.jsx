@@ -9,6 +9,9 @@ function MultiBusinessAreaRoute({
   setBusinessArea,
   BusinessArea,
   setBusinessAreaName,
+  setContractAreaAdministrators,
+  setBusinessAreaOwners,
+  setBusinessAreaPath,
 }) {
   const [showModal, setShowModal] = useState(false);
 
@@ -26,6 +29,9 @@ function MultiBusinessAreaRoute({
             showModal={showModal}
             setShowModal={setShowModal}
             RequestBusinessAreas={RequestBusinessAreas}
+            setContractAreaAdministrators={setContractAreaAdministrators}
+            setBusinessAreaOwners={setBusinessAreaOwners}
+            setBusinessAreaPath={setBusinessAreaPath}
           />
         </Modal>
       )}
@@ -61,6 +67,9 @@ MultiBusinessAreaRoute.propTypes = {
   RequestBusinessAreas: PropTypes.array.isRequired,
   setBusinessArea: PropTypes.func,
   setBusinessAreaName: PropTypes.func,
+  setContractAreaAdministrators:PropTypes.func,
+  setBusinessAreaOwners:PropTypes.func,
+  setBusinessAreaPath:PropTypes.func,
 };
 
 export default MultiBusinessAreaRoute;

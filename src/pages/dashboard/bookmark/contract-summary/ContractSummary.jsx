@@ -1,10 +1,15 @@
 import Documents from "./Documents";
 import KeyProvision from "./KeyProvision";
-import Notes from "./Notes";
+import Notes from "./notes/Notes";
 import StatusUpdates from "./StatusUpdates";
 import PropTypes from "prop-types";
 
-const ContractSummary = ({ ContractDetails }) => {
+const ContractSummary = ({
+  ContractDetails,
+  ContractID,
+  getContractSummary,
+  loading
+}) => {
   const {
     ContractTitle,
     Description,
@@ -108,7 +113,12 @@ const ContractSummary = ({ ContractDetails }) => {
           <KeyProvision KeyProvisionDetail={ContractDetails?.KeyProvisions} />
 
           {/* notes */}
-          <Notes NotesDetail={ContractDetails?.Notes} />
+          <Notes
+            NotesDetail={ContractDetails?.Notes}
+            ContractID={ContractID}
+            getContractSummary={getContractSummary}
+            loading={loading}
+          />
         </div>
       </div>
     </>
@@ -117,6 +127,8 @@ const ContractSummary = ({ ContractDetails }) => {
 
 ContractSummary.propTypes = {
   ContractDetails: PropTypes.object,
+  ContractID: PropTypes.string,
+  getContractSummary: PropTypes.func,
 };
 
 export default ContractSummary;

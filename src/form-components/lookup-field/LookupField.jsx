@@ -28,17 +28,19 @@ const LookupField = ({
   const [CounterParty, setCounterparty] = useState([]);
   const [ProjectName, setProjectName] = useState([]);
   const [SelectedProjectName, setSelectedProjectName] = useState(
-    initialValue || ""
+    initialValue || "",
   );
   const [SelectedProjectTask, setSelectedProjectTask] = useState(
-    initialValue || ""
+    initialValue || "",
   );
-  const [SelectedCounterPartyName, setSelectedCounterPartyName] = useState("");
+  const [SelectedCounterPartyName, setSelectedCounterPartyName] = useState(
+    initialValue || "",
+  );
 
   useEffect(() => {
     if (initialValue) {
       const initialOption = options.find(
-        (option) => option.label === initialValue
+        (option) => option.label === initialValue,
       );
       if (initialOption) {
         setLookupValue(initialOption);
@@ -57,7 +59,7 @@ const LookupField = ({
     try {
       const response = await axios.get(
         `${api}/api/accounts/${account_id}/project`,
-        { headers }
+        { headers },
       );
       setProjectName(response.data);
     } catch (error) {
@@ -70,7 +72,7 @@ const LookupField = ({
     try {
       const response = await axios.get(
         `${api}/api/accounts/${account_id}/counterparty`,
-        { headers }
+        { headers },
       );
       setCounterparty(response.data);
     } catch (error) {
@@ -106,7 +108,7 @@ const LookupField = ({
         <label className="text-sm">
           {title}
           {required === "true" && (
-            <span className={`text-red-500 font-bold`}>*</span>
+            <span className={`font-bold text-red-500`}>*</span>
           )}
         </label>
         <ProjectLookUp
@@ -126,7 +128,7 @@ const LookupField = ({
         <label className="text-sm">
           {title}
           {required === "true" && (
-            <span className={`text-red-500 font-bold`}>*</span>
+            <span className={`font-bold text-red-500`}>*</span>
           )}
         </label>
         <CounterpartyLookUp
@@ -144,7 +146,7 @@ const LookupField = ({
         <label className="text-sm">
           {title}
           {required === "true" && (
-            <span className={`text-red-500 font-bold`}>*</span>
+            <span className={`font-bold text-red-500`}>*</span>
           )}
         </label>
         <Select

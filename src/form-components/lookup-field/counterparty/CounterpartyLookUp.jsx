@@ -17,9 +17,8 @@ function CounterpartyLookUp({
   const [AllChecked, setAllChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
   const [SelectedCounterParty, setSelectedCounterParty] = useState([]);
-  const [SelectedCounterPartyValue, setSelectedCounterPartyValue] = useState(
-    initialValue || ""
-  );
+  const [SelectedCounterPartyValue, setSelectedCounterPartyValue] =
+    useState("");
   const [filteredCounterParty, setFilteredCounterParty] = useState([]);
   const [IsEdited, setIsEdited] = useState(false);
 
@@ -77,6 +76,7 @@ function CounterpartyLookUp({
 
   // Effect to handle initial value
   useEffect(() => {
+    setSelectedCounterPartyValue(initialValue);
     if (initialValue && CounterParty.length > 0 && !IsEdited) {
       // Split the initialValue string into individual Counterparty names
       const initialCounterpartyNames = initialValue.split(";");
@@ -87,7 +87,7 @@ function CounterpartyLookUp({
       initialCounterpartyNames.forEach((name) => {
         // Find the Counterparty data that matches the name
         const initialCounterparty = CounterParty.find(
-          (counterparty) => counterparty.CounterpartyName === name.trim()
+          (counterparty) => counterparty.CounterpartyName === name.trim(),
         );
 
         // If a matching Counterparty is found, add it to the list
@@ -129,9 +129,10 @@ function CounterpartyLookUp({
         >
           {/* pick the counterparty type */}
           <div className="main-project">
-            <div className="show-entries-search flex justify-between items-center py-3">
+            <div className="show-entries-search flex items-center justify-between py-3">
               {/* items per page to show */}
               <CounterPartyPerPage setItemsPerPage={setItemsPerPage} />
+
               {/* search input counterparty */}
               <SearchCounterParty
                 setFilteredCounterParty={setFilteredCounterParty}
@@ -183,12 +184,12 @@ function CounterpartyLookUp({
         <input
           type="text"
           value={SelectedCounterPartyValue}
-          className="border border-slate-300 text-sm p-2 rounded-l-md w-full outline-blue-200 text-black"
+          className="w-full rounded-l-md border border-slate-300 p-2 text-sm text-black outline-blue-200"
           readOnly
         />
         <div>
           <span
-            className="text-blue-600 text-sm py-2 px-6 rounded-r-md border border-blue-500 bg-blue-50 cursor-pointer"
+            className="cursor-pointer rounded-r-md border border-blue-500 bg-blue-50 px-6 py-2 text-sm text-blue-600"
             onClick={() => setShowModal(!showModal)}
           >
             Browse

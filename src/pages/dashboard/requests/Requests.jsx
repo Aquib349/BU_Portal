@@ -79,10 +79,14 @@ function Requests({ toggleModal, currentItems, setShowSpinner }) {
                     <tr className="border-t border-slate-400 text-center text-sm">
                       {/* Columns for original row */}
                       <td className="px-3 text-start">{index + 1}</td>
-                      <td className="w-3/12 text-start">
-                        {val.RequestTitle.length > 40
-                          ? val.RequestTitle?.slice(0, 25) + "..."
-                          : val.RequestTitle}
+                      <td className="w-3/12 text-start hover:text-blue-600 hover:font-semibold hover:scale-105 transition-all duration-500 ease-in-out">
+                        <span>
+                          <Link to={`requestDetail/${val.RowKey}`}>
+                            {val.RequestTitle.length > 40
+                              ? val.RequestTitle?.slice(0, 25) + "..."
+                              : val.RequestTitle}
+                          </Link>
+                        </span>
                       </td>
                       <td>
                         <Status status={val.Status} />

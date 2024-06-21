@@ -44,7 +44,7 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
         const task = ProjectTask.find((task) => task.RowKey === key);
         return `${task.TaskDescription.replace(
           /(.*)\((.*)\)/,
-          "$1:$2"
+          "$1:$2",
         )},${task.TaskDescription.replace("(Default Task)", "")}:${
           task.TaskID
         }`;
@@ -71,6 +71,7 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
 
       let initialCheckedTasks = {};
       const projectTaskText = initialValue?.Metadata?.ProjectTask?._text;
+      console.log(projectTaskText);
 
       if (projectTaskText) {
         projectTaskText?.split(";").forEach((task) => {
@@ -84,7 +85,6 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
           }
         });
       }
-
       setCheckedTasks(initialCheckedTasks);
 
       // Set initial selected task
@@ -95,20 +95,21 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
           if (taskItem) {
             return `${taskItem.TaskDescription.replace(
               /(.*)\((.*)\)/,
-              "$1:$2"
+              "$1:$2",
             )}:${taskItem.TaskID}`;
           } else {
             return "";
           }
-        })
+        }),
       );
+
       const uniqueTaskDescriptions = Array.from(selectedTaskDescriptions)
         .filter((desc) => desc !== "")
         .join(";");
       setSelectedProjectTask(uniqueTaskDescriptions);
       setSelectedTasks(uniqueTaskDescriptions);
     }
-  }, [jsonResult, ProjectTask, setSelectedProjectTask]);
+  }, [jsonResult, ProjectTask]);
 
   return (
     <>
@@ -122,7 +123,7 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
           <div className="project-task pt-4">
             {ProjectTask.map((val) => (
               <div key={val.RowKey} className="main text-sm">
-                <div className="project-task-name bg-slate-200 p-2 flex items-center gap-2">
+                <div className="project-task-name flex items-center gap-2 bg-slate-200 p-2">
                   <input
                     type="checkbox"
                     name="task_name"
@@ -133,7 +134,7 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
                     {val.TaskDescription.replace("(Default Task)", "")}
                   </span>
                 </div>
-                <div className="project-task-detail p-2 flex items-center gap-2 pl-8">
+                <div className="project-task-detail flex items-center gap-2 p-2 pl-8">
                   <input
                     type="checkbox"
                     name="task_desc"
@@ -160,12 +161,12 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
           <input
             type="text"
             value={SelectedTask}
-            className="border border-slate-400 text-sm p-2 rounded-l-md w-full outline-blue-200 text-black bg-gray-200"
+            className="w-full rounded-l-md border border-slate-400 bg-gray-200 p-2 text-sm text-black outline-blue-200"
             readOnly
           />
           <div>
             <span
-              className="text-blue-600 text-sm py-2 px-6 rounded-r-md border border-blue-500 bg-blue-50 cursor-pointer"
+              className="cursor-pointer rounded-r-md border border-blue-500 bg-blue-50 px-6 py-2 text-sm text-blue-600"
               onClick={toggleProjectTaskModal}
             >
               Browse
