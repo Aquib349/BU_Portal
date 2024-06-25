@@ -45,7 +45,7 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
         return `${task.TaskDescription.replace(
           /(.*)\((.*)\)/,
           "$1:$2",
-        )},${task.TaskDescription.replace("(Default Task)", "")}:${
+        )};${task.TaskDescription.replace("(Default Task)", "")}:${
           task.TaskID
         }`;
       });
@@ -71,12 +71,17 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
 
       let initialCheckedTasks = {};
       const projectTaskText = initialValue?.Metadata?.ProjectTask?._text;
-      console.log(projectTaskText);
 
       if (projectTaskText) {
-        projectTaskText?.split(";").forEach((task) => {
-          const [description, id] = task.split(":");
-          const taskItem = ProjectTask.find((t) => t.TaskID === id);
+        const TaskArray = projectTaskText.split(";");
+
+        TaskArray.forEach((task) => {
+          const [TaskName, TaskDescription] = task
+            .split(":")
+            .map((item) => item.trim());
+          const taskItem = ProjectTask.find((t) =>
+            t.TaskDescription.includes(TaskName),
+          );
           if (taskItem) {
             initialCheckedTasks[taskItem.RowKey] = {
               nameChecked: true,
@@ -91,12 +96,16 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
       const selectedTaskDescriptions = new Set(
         projectTaskText?.split(";").map((task) => {
           const [description, id] = task.split(":");
-          const taskItem = ProjectTask.find((t) => t.TaskID === id);
+          const taskItem = ProjectTask.find((t) =>
+            t.TaskDescription.includes(description),
+          );
           if (taskItem) {
-            return `${taskItem.TaskDescription.replace(
+            return `${taskItem.TaskDescription?.replace(
               /(.*)\((.*)\)/,
               "$1:$2",
-            )}:${taskItem.TaskID}`;
+            )};${taskItem.TaskDescription?.replace("(Default Task)", "")}:${
+              taskItem.TaskID
+            }`;
           } else {
             return "";
           }
@@ -127,7 +136,9 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
                   <input
                     type="checkbox"
                     name="task_name"
-                    checked={checkedTasks[val.RowKey]?.nameChecked || false}
+                    defaultChecked={
+                      checkedTasks[val.RowKey]?.nameChecked || false
+                    }
                     onChange={() => selectProjectTask(val.RowKey, "name")}
                   />
                   <span>
@@ -138,7 +149,9 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
                   <input
                     type="checkbox"
                     name="task_desc"
-                    checked={checkedTasks[val.RowKey]?.descChecked || false}
+                    defaultChecked={
+                      checkedTasks[val.RowKey]?.descChecked || false
+                    }
                     onChange={() => selectProjectTask(val.RowKey, "desc")}
                   />
                   <span>

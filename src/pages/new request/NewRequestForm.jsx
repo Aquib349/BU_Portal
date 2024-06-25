@@ -10,13 +10,10 @@ function NewRequestForm({
   validationErrors,
   validateField,
   setBusinessArea,
-  setBusinessAreaName,
   BusinessArea,
   RequestType,
   EditRequestMetadataValue,
-  setContractAreaAdministrators,
-  setBusinessAreaOwners,
-  setBusinessAreaPath,
+  getDetail
 }) {
   return (
     <>
@@ -41,18 +38,15 @@ function NewRequestForm({
                 IsMultiBusinessAreaRoute={val.IsMultiBusinessAreaRoute}
                 RequestBusinessAreas={val.RequestBusinessAreas}
                 handleRequestType={handleRequestType}
-                RequestTypes={val.RequestTypes}
+                RequestTypes={val.RequestTypes} // intersect and show
                 DynamicForm={DynamicForm}
                 validationErrors={validationErrors}
                 validateField={validateField}
                 setBusinessArea={setBusinessArea}
-                setBusinessAreaName={setBusinessAreaName}
                 BusinessArea={BusinessArea}
                 RequestType={RequestType}
                 EditRequestMetadataValue={EditRequestMetadataValue}
-                setContractAreaAdministrators={setContractAreaAdministrators}
-                setBusinessAreaOwners={setBusinessAreaOwners}
-                setBusinessAreaPath={setBusinessAreaPath}
+                getDetail={getDetail}
               />
             </Accordion>
           ))}
@@ -70,13 +64,9 @@ NewRequestForm.propTypes = {
   validationErrors: PropTypes.object,
   validateField: PropTypes.func,
   setBusinessArea: PropTypes.func,
-  setBusinessAreaName: PropTypes.func,
   BusinessArea: PropTypes.string,
   RequestType: PropTypes.string,
   EditRequestMetadataValue: PropTypes.object,
-  setContractAreaAdministrators:PropTypes.func,
-  setBusinessAreaOwners:PropTypes.func,
-  setBusinessAreaPath:PropTypes.func,
 };
 
 export default NewRequestForm;

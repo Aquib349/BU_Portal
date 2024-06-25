@@ -16,13 +16,14 @@ function EditRequestProvider({ children }) {
 
   const [EditRequestMode, setEditRequestMode] = useState(false);
   const [EditRequest, setEditRequest] = useState("");
+  const [RequestID, setRequestID] = useState("");
 
   // function to get the business area to edit the request
   async function EditRequestMetaData(RowKey) {
     try {
       const response = await axios.get(
         `${api}/api/accounts/${account_id}/Requests/IRequestDetails?requestid=${RowKey}`,
-        { headers }
+        { headers },
       );
       // console.log(response.data);
       setEditRequest(response.data);
@@ -38,6 +39,8 @@ function EditRequestProvider({ children }) {
         setEditRequestMode,
         EditRequestMode,
         setEditRequest,
+        RequestID,
+        setRequestID,
       }}
     >
       {children}

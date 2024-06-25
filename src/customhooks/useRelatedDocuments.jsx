@@ -19,7 +19,7 @@ function useRelatedDocuments(RowKey) {
     try {
       const response = await axios.get(
         `${api}/api/accounts/${account_id}/Requests/documents?requestid=${RowKey}`,
-        { headers }
+        { headers },
       );
       setLoader(false);
       return response.data;
@@ -34,7 +34,7 @@ function useRelatedDocuments(RowKey) {
       // Fetch or handle document data based on RowKey
       getRelatedDocument(RowKey).then((data) => setDocumentData(data));
     }
-  }, [RowKey]);
+  }, [RowKey, DocumentData]);
 
   return { DocumentData, loader, getRelatedDocument, setLoader };
 }

@@ -1,5 +1,5 @@
 import usePortalConfig from "../../customhooks/usePortalConfig";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import NewRequestShimmer from "../../shimmer/NewRequestShimmer";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../Elements/loading spinner/LoadingSpinner";
@@ -8,10 +8,20 @@ import axios from "axios";
 import { EditReqeustContext } from "../../context/EditRequestContext";
 import useXmlConverter from "../../customhooks/useXmlConverter";
 import { useNavigate } from "react-router-dom";
+import { convertToQueryString } from "../../constants/ConvertToQueryString";
+import { cleanAndDecodeData } from "../../constants/DecodeData";
+import { getUpdatedFieldValues } from "../../constants/SetAllFieldValues";
+import { fetchDynamicFormData } from "../../constants/CreateDynamicForm";
+import { fetchDetail } from "../../constants/GetRequestFormFieldDetails";
+import { validateFields } from "../../constants/ValidateFormFields";
 
 const NewRequest = () => {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
+  const headers = {
+    "eContracts-ApiKey":
+      "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
+  };
 
   const { ConfigData, loading } = usePortalConfig();
   const [BusinessAreaName, setBusinessAreaName] = useState("");
@@ -29,133 +39,88 @@ const NewRequest = () => {
 
   // edit Request context
   const [EditRequestMetadataValue, setEditRequestMetadataValue] = useState({});
-  const { EditRequest, EditRequestMode, setEditRequestMode } =
+  const { EditRequest, EditRequestMode, setEditRequestMode, RequestID } =
     useContext(EditReqeustContext);
   const jsonResult = useXmlConverter(EditRequest);
   const navigate = useNavigate();
 
   // function to handle the request-types
-  const handleRequestType = useCallback(async (event) => {
+  const handleRequestType = async (event) => {
     setRequestType(event.target.value);
     setLoadSpinner(true);
     await createDynamicForm(event.target.value);
-  }, []);
+  };
 
   // function to create a dynamic form based on the request type
   async function createDynamicForm(requestType) {
-    // console.log(requestType);
     setLoadSpinner(true);
-    try {
-      const headers = {
-        "eContracts-ApiKey":
-          "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
-      };
+    const filteredData = await fetchDynamicFormData(
+      requestType,
+      api,
+      account_id,
+      headers,
+    );
+    setLoadSpinner(false);
 
-      const response = await toast.promise(
-        axios.get(
-          `${api}/api/accounts/${account_id}/Requests/requesttypes/metadatas?requesttypename=${requestType}`,
-          { headers },
-        ),
-        {
-          loading: "Creating...",
-          success: <b>Successfully Created!</b>,
-          error: <b>Could not create. There might be some issue with API</b>,
-        },
-        {
-          position: "top-center",
-          style: {
-            backgroundColor: "black",
-            color: "white",
-            fontSize: "0.8rem",
-          },
-        },
-      );
-
-      if (response.status === 200) {
-        const Data = response.data;
-        const filteredData = Data.filter(
-          (item) =>
-            item.FieldDisplayName !== "Request Type" &&
-            item.FieldDisplayName !== "Business Area",
-        );
-        setDynamicForm(filteredData);
-      } else {
-        throw new Error("Could not create");
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadSpinner(false);
+    if (filteredData) {
+      setDynamicForm(filteredData);
     }
   }
 
-  // function to set the all the field values !!
+  // Function to set all the field values
   function SetAllFieldValues(fieldname, value) {
     setFieldValues((prevValues) => {
-      const updatedValues = { ...prevValues };
-
-      if (Array.isArray(value) && fieldname !== "Attachments") {
-        // If value is an array, iterate over each object in the array
-        value.forEach((field) => {
-          // Assuming each field object contains only one key-value pair
-          for (const key in field) {
-            if (field.hasOwnProperty(key)) {
-              updatedValues[`&${key}`] = encodeURIComponent(field[key]);
-            }
-          }
-        });
-      } else {
-        // If value is not an array, directly update using fieldname
-        updatedValues[`&${fieldname}`] = encodeURIComponent(value);
-      }
-
-      // Ensure RequestType and BusinessArea fields are set
-      updatedValues["&RequestType"] = encodeURIComponent(RequestType);
-      updatedValues["&BusinessArea"] = encodeURIComponent(BusinessArea);
-
+      const updatedValues = getUpdatedFieldValues(fieldname, value, prevValues);
       return updatedValues;
     });
   }
 
   // function to validate the form component
   const validateField = (fieldname, value, required) => {
-    setValidationErrors((prevErrors) => {
-      const errors = { ...prevErrors };
-      if (required === "true" && !value) {
-        errors[fieldname] = `${fieldname} is required.`;
-      } else {
-        delete errors[fieldname];
-      }
-      return errors;
-    });
+    const updatedErrors = validateFields(validationErrors, fieldname, value, required);
+    setValidationErrors(updatedErrors);
   };
 
-  // Function to convert fieldValues to query string
-  const convertToQueryString = (fieldValues) => {
-    return Object.keys(fieldValues)
-      .map(
-        (key) => `${key}=${fieldValues[key] !== null ? fieldValues[key] : ""}`,
-      )
-      .join("");
-  };
+  // function to get contractAdiministrator, businessareowner, businessareapath
+  async function getDetail(id, contractAreaName) {
+    setBusinessAreaName(contractAreaName);
+    const details = await fetchDetail(
+      api,
+      account_id,
+      headers,
+      id,
+      contractAreaName,
+    );
+
+    if (details) {
+      setBusinessAreaOwners(details.businessAreaOwners.Owner);
+      setBusinessAreaPath(details.businessAreaPath);
+      setContractAreaAdministrators(details.contractAreaAdministrators.Owner);
+    }
+  }
 
   // function to validate the form component on submit
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    console.log(fieldValues);
     setEditRequestMode(false);
-    // setLoadSpinner(true);
+    setLoadSpinner(true);
     const formData = new FormData();
     const user = localStorage.getItem("username");
 
     // Validate all fields before submission
     DynamicForm.forEach(({ FieldName, Required }) => {
-      validateField(FieldName, fieldValues[FieldName], Required);
+      const cleanedData = cleanAndDecodeData(fieldValues);
+      validateField(FieldName, cleanedData[FieldName], Required);
     });
 
     const hasErrors = Object.keys(validationErrors).length > 0;
     if (!hasErrors) {
       // Form is valid, proceed with submission
       let QueryString = convertToQueryString(fieldValues);
+      QueryString += `&RequestType=${RequestType}`;
+      QueryString += `&BusinessArea=${BusinessArea}`;
+
       QueryString += "&CreatedFromPortal=YES";
       QueryString += "&AutoIncrmentNumber=";
       QueryString += `&CreatedBy=${user}`;
@@ -166,59 +131,94 @@ const NewRequest = () => {
       QueryString += `&BusinessAreaOwners=${BusinessAreaOwners}`;
       QueryString += `&BusinessAreaPath=${encodeURIComponent(BusinessAreaPath)}`;
       QueryString += "&IsDraft=";
-      QueryString += `&Submittedby=${user}`;
-
-      // Append the querystring and accountID fields to the FormData object
-      formData.append("SearializeControls", QueryString);
-      formData.append("AccountID", account_id);
-
-      // log all the values
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
+      if (!EditRequestMode) {
+        QueryString += `&Submittedby=${user}`;
+      } else {
+        QueryString += `&Submittedby=${JSON.parse(jsonResult)?.Metadata?.Submittedby?._text}`;
       }
 
+      // Append the querystring and accountID fields to the FormData object
+      if (EditRequestMode) {
+        const formValues = QueryString.split("&");
+        for (let i = 0; i < formValues.length; i++) {
+          const key = formValues[i].split("=")[0];
+          const value = formValues[i].split("=")[1];
+          if (!formData.has(key)) {
+            formData.append(key, value);
+          }
+        }
+      } else {
+        formData.append("SearializeControls", QueryString);
+      }
+      formData.append("AccountID", account_id);
+
       // POST request to create the new request
-      // try {
-      //   const headers = {
-      //     "Content-Type": "multipart/form-data",
-      //     "eContracts-ApiKey":
-      //       "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
-      //   };
-      //   const config = {
-      //     headers: headers,
-      //     processData: false,
-      //   };
-      //   const response = await axios.post(
-      //     `${api}/api/accounts/${account_id}/Requests`,
-      //     formData,
-      //     config,
-      //   );
-      //   if (response.status === 200 || response.status === 201) {
-      //     setLoadSpinner(false);
-      //     toast.success("Form submitted successfully", {
-      //       duration: 1000,
-      //       position: "top-center",
-      //       style: {
-      //         backgroundColor: "black",
-      //         color: "white",
-      //         fontSize: "0.8rem",
-      //       },
-      //     });
-      //     setFieldValues({});
-      //   }
-      //   navigate(`/requestDetail/${response.data}`);
-      // } catch (error) {
-      //   console.log(error);
-      //   toast.error("Submission failed. Please try again.", {
-      //     duration: 1500,
-      //     position: "top-center",
-      //     style: {
-      //       backgroundColor: "black",
-      //       color: "white",
-      //       fontSize: "0.8rem",
-      //     },
-      //   });
-      // }
+      try {
+        const headers = {
+          "Content-Type": "multipart/form-data",
+          "eContracts-ApiKey":
+            "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
+        };
+        const config = {
+          headers: headers,
+          processData: false,
+        };
+        if (EditRequestMode) {
+          formData.append("RequestID", RequestID);
+
+          const response = await axios.put(
+            `${api}/api/accounts/${account_id}/Requests`,
+            formData,
+            config,
+          );
+          if (response.status === 200 || response.status === 201) {
+            setLoadSpinner(false);
+            toast.success("Edited successfully", {
+              duration: 1000,
+              position: "top-center",
+              style: {
+                backgroundColor: "black",
+                color: "white",
+                fontSize: "0.8rem",
+              },
+            });
+            setEditRequestMode(false);
+            setFieldValues({});
+            navigate(`/requestDetail/${RequestID}`);
+          }
+        } else {
+          const response = await axios.post(
+            `${api}/api/accounts/${account_id}/Requests`,
+            formData,
+            config,
+          );
+          if (response.status === 200 || response.status === 201) {
+            setLoadSpinner(false);
+            toast.success("Form submitted successfully", {
+              duration: 1000,
+              position: "top-center",
+              style: {
+                backgroundColor: "black",
+                color: "white",
+                fontSize: "0.8rem",
+              },
+            });
+            setFieldValues({});
+            navigate(`/requestDetail/${response.data}`);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Submission failed. Please try again.", {
+          duration: 1500,
+          position: "top-center",
+          style: {
+            backgroundColor: "black",
+            color: "white",
+            fontSize: "0.8rem",
+          },
+        });
+      }
     } else {
       toast.error("Please fill all the required fields", {
         duration: 1500,
@@ -234,13 +234,23 @@ const NewRequest = () => {
 
   // creating dynamic form for to edit the reqeust !!
   useEffect(() => {
-    if (EditRequestMode && jsonResult != "") {
+    if (EditRequestMode && jsonResult != "" && ConfigData.length > 0) {
       setEditRequestMetadataValue(JSON.parse(jsonResult));
       setRequestType(JSON.parse(jsonResult)?.Metadata?.RequestType?._text);
       setBusinessArea(JSON.parse(jsonResult)?.Metadata?.BusinessArea?._text);
       createDynamicForm(JSON.parse(jsonResult)?.Metadata?.RequestType?._text);
+      const BsArea = ConfigData.map((val) =>
+        val.RequestBusinessAreas.find(
+          (bs) =>
+            bs.businessArea ==
+            JSON.parse(jsonResult)?.Metadata?.BusinessArea?._text,
+        ),
+      );
+      if (BsArea) {
+        getDetail(BsArea[0].id, BsArea[0].name);
+      }
     }
-  }, [jsonResult, EditRequestMode]);
+  }, [jsonResult, EditRequestMode, ConfigData]);
 
   if (loading) {
     return (
@@ -255,7 +265,6 @@ const NewRequest = () => {
       {LoadSpinner && <LoadingSpinner />}
       <div className="newrequest-component">
         <div className="main">
-          {/* new request form */}
           <NewRequestForm
             ConfigData={ConfigData}
             handleFormSubmit={handleFormSubmit}
@@ -264,13 +273,10 @@ const NewRequest = () => {
             validationErrors={validationErrors}
             validateField={SetAllFieldValues}
             setBusinessArea={setBusinessArea}
-            setBusinessAreaName={setBusinessAreaName}
             BusinessArea={BusinessArea}
             RequestType={RequestType}
             EditRequestMetadataValue={EditRequestMetadataValue}
-            setContractAreaAdministrators={setContractAreaAdministrators}
-            setBusinessAreaOwners={setBusinessAreaOwners}
-            setBusinessAreaPath={setBusinessAreaPath}
+            getDetail={getDetail}
           />
         </div>
       </div>

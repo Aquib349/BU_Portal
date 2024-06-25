@@ -8,7 +8,7 @@ function Errorhandling() {
           <div class="row">
             <div class="col-sm-12 col-md-12 mb-5 mt-5">
               <svg
-                className="fixed h-[100vh] w-full overflow-hidden"
+                className="fixed top-[30%] h-[40vh] w-full overflow-hidden"
                 viewBox="0 0 636 324"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"

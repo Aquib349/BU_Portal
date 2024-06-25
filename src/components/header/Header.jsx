@@ -6,8 +6,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useMsal } from "@azure/msal-react";
+import { TiHome } from "react-icons/ti";
 
 function Header() {
   const [showModal, setShowModal] = useState(false);
@@ -16,6 +17,7 @@ function Header() {
   const navigate = useNavigate();
   const { instance } = useMsal();
   const dropdownBookmark = useRef(null);
+  const location = useLocation();
 
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
@@ -94,7 +96,7 @@ function Header() {
             </div>
             <div className="px-6 leading-4">
               <h1 className="font-bold">Hello</h1>
-              <h1 className="text-sm">Santosh Dutta</h1>
+              <h1 className="text-sm">{localStorage.getItem("username")}</h1>
               <button
                 type="button"
                 className="mt-2 flex h-4 w-[4.5rem] items-center justify-center rounded border-2 border-red-500 p-2 text-[0.6rem] font-bold tracking-[0.05rem] text-red-600 hover:bg-red-500 hover:text-white"
@@ -232,6 +234,17 @@ function Header() {
             </div>
           </div>
         </div>
+        {location.pathname !== "/" && (
+          <div
+            className="home-button absolute left-8 top-20 flex cursor-pointer items-center justify-center"
+            onClick={() => navigate("/")}
+          >
+            <span className="flex flex-col items-center text-xl">
+              <TiHome />
+              <span className="text-xs font-medium">Home</span>
+            </span>
+          </div>
+        )}
       </div>
       <Notification
         showModal={showModal}

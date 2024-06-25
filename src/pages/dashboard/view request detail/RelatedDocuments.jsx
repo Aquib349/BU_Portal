@@ -33,8 +33,6 @@ function RelatedDocuments({ status, RowKey }) {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
 
-  const [show, setShow] = useState(false);
-  // const [overWrite, setOverWrite] = useState(false);
   const [Loading, setLoading] = useState(true);
   const { DocumentData, loader, getRelatedDocument, setLoader } =
     useRelatedDocuments(RowKey);
@@ -43,7 +41,7 @@ function RelatedDocuments({ status, RowKey }) {
     request,
     successMessage,
     errorMessage,
-    callback
+    callback,
   ) => {
     let toastId;
 
@@ -85,10 +83,11 @@ function RelatedDocuments({ status, RowKey }) {
       const documentExists = DocumentData.some(
         (item) =>
           item.DocumentUrl?.split("/").pop().toLowerCase() ===
-          newDocumentName.toLowerCase()
+          newDocumentName.toLowerCase(),
       );
 
       const uploadDocument = async (overWrite = false) => {
+        const user = localStorage.getItem("username");
         const headers = {
           "eContracts-ApiKey":
             "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
@@ -108,36 +107,36 @@ function RelatedDocuments({ status, RowKey }) {
         formData.append("DocumentType", "Not Available");
         const filename = file.name.substr(0, file.name.lastIndexOf("."));
         formData.append("DocumentName", filename);
-        formData.append("CreatedBy", "Santosh Dutta");
-        formData.append("ModifiedBy", "Santosh Dutta");
+        formData.append("CreatedBy", `${user}`);
+        formData.append("ModifiedBy", `${user}`);
 
         await handleRequest(
           () =>
             axios.post(
               `${api}/api/accounts/${account_id}/Requests/documents`,
               formData,
-              { headers }
+              { headers },
             ),
           "Document Uploaded successfully",
           "Failed to upload document.",
-          getRelatedDocument
+          getRelatedDocument,
         );
       };
 
       if (documentExists) {
         toast.custom((t) => (
-          <div className="flex items-center justify-center w-[100vw] h-screen overflow-hidden fixed top-0 bg-black/50 z-20">
+          <div className="fixed top-0 z-20 flex h-screen w-[100vw] items-center justify-center overflow-hidden bg-black/50">
             <div
               className={`${
                 t.visible ? "animate-enter" : "animate-leave"
-              } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex flex-col ring-1 ring-black ring-opacity-5`}
+              } pointer-events-auto flex w-full max-w-md flex-col rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5`}
             >
               <div className="flex border-b">
-                <div className="flex-1 w-0 p-4">
+                <div className="w-0 flex-1 p-4">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 pt-0.5">
                       <div className="">
-                        <FaFileCircleExclamation className="text-red-600 text-3xl" />
+                        <FaFileCircleExclamation className="text-3xl text-red-600" />
                       </div>
                     </div>
                     <div className="ml-3 flex-1">
@@ -151,18 +150,18 @@ function RelatedDocuments({ status, RowKey }) {
                 <div className="flex border-l border-gray-200">
                   <button
                     onClick={() => toast.dismiss(t.id)}
-                    className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                    className="flex w-full items-center justify-center rounded-none rounded-r-lg border border-transparent p-4 text-sm font-medium text-indigo-600 hover:text-indigo-500"
                   >
                     Close
                   </button>
                 </div>
               </div>
               {/* check for overWrite */}
-              <div className="flex items-center pl-16 py-2 gap-6 text-white text-sm">
+              <div className="flex items-center gap-6 py-2 pl-16 text-sm text-white">
                 <p className="text-black">Do You Want to Overwrite?</p>
                 <button
                   type="button"
-                  className="w-8 h-2 p-3 rounded bg-green-500 flex justify-center items-center"
+                  className="flex h-2 w-8 items-center justify-center rounded bg-green-500 p-3"
                   onClick={async () => {
                     toast.dismiss(t.id);
                     await uploadDocument(true);
@@ -172,7 +171,7 @@ function RelatedDocuments({ status, RowKey }) {
                 </button>
                 <button
                   type="button"
-                  className="w-8 h-2 p-3 rounded bg-blue-600 flex justify-center items-center"
+                  className="flex h-2 w-8 items-center justify-center rounded bg-blue-600 p-3"
                   onClick={() => toast.dismiss(t.id)}
                 >
                   No
@@ -203,11 +202,11 @@ function RelatedDocuments({ status, RowKey }) {
       () =>
         axios.delete(
           `${api}/api/accounts/${account_id}/Requests/documentsdelete?documentid=${id}`,
-          { headers }
+          { headers },
         ),
       "Document removed successfully",
       "Failed to delete document.",
-      getRelatedDocument
+      getRelatedDocument,
     );
   }
 
@@ -234,8 +233,7 @@ function RelatedDocuments({ status, RowKey }) {
               />
               <label
                 htmlFor="fileInput"
-                className="px-2 py-2 border border-slate-500 text-slate-500 hover:bg-slate-500
-              hover:text-white rounded text-xs cursor-pointer"
+                className="cursor-pointer rounded border border-slate-500 px-2 py-2 text-xs text-slate-500 hover:bg-slate-500 hover:text-white"
               >
                 +Upload
               </label>
@@ -249,7 +247,7 @@ function RelatedDocuments({ status, RowKey }) {
             {DocumentData.map((val) => (
               <div
                 key={val.RowKey}
-                className="relative flex items-center justify-between text-sm pt-4"
+                className="relative flex items-center justify-between pt-4 text-sm"
               >
                 <div className="flex items-center gap-2">
                   <span className="text-lg">
@@ -258,12 +256,12 @@ function RelatedDocuments({ status, RowKey }) {
                   <span>{val.DocumentName}</span>
                 </div>
                 <div className="flex items-center gap-4 px-2">
-                  <span className="text-lg cursor-pointer text-slate-500 px-2">
+                  <span className="cursor-pointer px-2 text-lg text-slate-500">
                     <LuView
                       onClick={() => handleViewDocument(val.DocumentUrl)}
                     />
                   </span>
-                  <span className="text-lg cursor-pointer text-slate-500">
+                  <span className="cursor-pointer text-lg text-slate-500">
                     <RiDeleteBin6Fill
                       onClick={() =>
                         deleteDocument(val.RowKey, val.DocumentName)

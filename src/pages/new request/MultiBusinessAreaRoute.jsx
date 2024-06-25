@@ -8,10 +8,7 @@ function MultiBusinessAreaRoute({
   RequestBusinessAreas,
   setBusinessArea,
   BusinessArea,
-  setBusinessAreaName,
-  setContractAreaAdministrators,
-  setBusinessAreaOwners,
-  setBusinessAreaPath,
+  getDetail
 }) {
   const [showModal, setShowModal] = useState(false);
 
@@ -25,13 +22,10 @@ function MultiBusinessAreaRoute({
         <Modal toggleModal={toggleModal} heading="Business Area Picker">
           <BusinessAreaPicker
             setBusinessArea={setBusinessArea}
-            setBusinessAreaName={setBusinessAreaName}
             showModal={showModal}
             setShowModal={setShowModal}
             RequestBusinessAreas={RequestBusinessAreas}
-            setContractAreaAdministrators={setContractAreaAdministrators}
-            setBusinessAreaOwners={setBusinessAreaOwners}
-            setBusinessAreaPath={setBusinessAreaPath}
+            getDetail={getDetail}
           />
         </Modal>
       )}
@@ -66,10 +60,6 @@ MultiBusinessAreaRoute.propTypes = {
   isMultiArea: PropTypes.bool.isRequired,
   RequestBusinessAreas: PropTypes.array.isRequired,
   setBusinessArea: PropTypes.func,
-  setBusinessAreaName: PropTypes.func,
-  setContractAreaAdministrators:PropTypes.func,
-  setBusinessAreaOwners:PropTypes.func,
-  setBusinessAreaPath:PropTypes.func,
 };
 
 export default MultiBusinessAreaRoute;

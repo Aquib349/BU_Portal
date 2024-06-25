@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import DynamicForms from "../../components/DynamicForms";
 import MultiBusinessAreaRoute from "./MultiBusinessAreaRoute";
 import PropTypes from "prop-types";
@@ -15,11 +16,9 @@ function BusinessAreaDynamicRequestForm({
   BusinessArea,
   RequestType,
   EditRequestMetadataValue,
-  setBusinessAreaName,
-  setContractAreaAdministrators,
-  setBusinessAreaOwners,
-  setBusinessAreaPath,
+  getDetail,
 }) {
+  const navigate = useNavigate();
   return (
     <>
       <div className="primary-fields bg-white px-4 py-2 pb-2">
@@ -29,11 +28,8 @@ function BusinessAreaDynamicRequestForm({
             isMultiArea={IsMultiBusinessAreaRoute}
             RequestBusinessAreas={RequestBusinessAreas}
             setBusinessArea={setBusinessArea}
-            setBusinessAreaName={setBusinessAreaName}
             BusinessArea={BusinessArea}
-            setContractAreaAdministrators={setContractAreaAdministrators}
-            setBusinessAreaOwners={setBusinessAreaOwners}
-            setBusinessAreaPath={setBusinessAreaPath}
+            getDetail={getDetail}
           />
           <div className="flex flex-col py-2">
             <label>
@@ -73,7 +69,7 @@ function BusinessAreaDynamicRequestForm({
             <button
               type="button"
               className="flex items-center justify-center rounded-sm bg-slate-500 px-8 py-2 text-white"
-              onClick={() => {}}
+              onClick={() => navigate("/")}
             >
               Cancel
             </button>
@@ -100,13 +96,9 @@ BusinessAreaDynamicRequestForm.propTypes = {
   validationErrors: PropTypes.object,
   validateField: PropTypes.func,
   setBusinessArea: PropTypes.func,
-  setBusinessAreaName: PropTypes.func,
   BusinessArea: PropTypes.string,
   RequestType: PropTypes.string,
   EditRequestMetadataValue: PropTypes.object,
-  setContractAreaAdministrators:PropTypes.func,
-  setBusinessAreaOwners:PropTypes.func,
-  setBusinessAreaPath:PropTypes.func,
 };
 
 export default BusinessAreaDynamicRequestForm;

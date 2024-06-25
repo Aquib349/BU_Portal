@@ -15,6 +15,7 @@ import RequestDetailShimmer from "../../../shimmer/RequestDetailShimmer";
 function ViewRequestDetail() {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
+  
   const [Data, setData] = useState({});
   const [StatusUpdates, setStatusUpdates] = useState([]);
   const { RowKey } = useParams();

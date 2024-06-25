@@ -37,17 +37,6 @@ const LookupField = ({
     initialValue || "",
   );
 
-  useEffect(() => {
-    if (initialValue) {
-      const initialOption = options.find(
-        (option) => option.label === initialValue,
-      );
-      if (initialOption) {
-        setLookupValue(initialOption);
-      }
-    }
-  }, [initialValue, options]);
-
   // if the field type is normal lookup
   const handleChange = (selectedOption) => {
     setLookupValue(selectedOption);
@@ -140,6 +129,21 @@ const LookupField = ({
       </div>
     );
   }
+
+  useEffect(() => {
+    if (initialValue) {
+      const initialOption = options.find(
+        (option) => option.label === initialValue,
+      );
+      if (initialOption) {
+        setLookupValue(initialOption);
+      }
+      if (validate) {
+        validate(fieldname, initialOption.label, required);
+      }
+    }
+  }, [initialValue, options]);
+
   return (
     <>
       <div className="pb-3">

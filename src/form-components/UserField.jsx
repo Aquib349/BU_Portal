@@ -19,7 +19,7 @@ const UserField = ({
     let concatenatedLabels = "";
     if (multi) {
       concatenatedLabels = selectedOption
-        ? selectedOption.map((option) => option.label).join("; ")
+        ? selectedOption.map((option) => option.label).join(";")
         : "";
       setUserSelectedOption(selectedOption);
     } else {
@@ -48,7 +48,7 @@ const UserField = ({
     if (validate) {
       const concatenatedLabels = userSelectedOption
         ? multi
-          ? userSelectedOption.map((option) => option.label).join("; ")
+          ? userSelectedOption.map((option) => option.label).join(";")
           : userSelectedOption.label
         : "";
       validate(fieldname, concatenatedLabels, required);
