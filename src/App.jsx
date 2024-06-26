@@ -38,9 +38,12 @@ function App() {
           `${api}/api/accounts/${account_id}/users?userid=&office365emailid=${accounts[0].username}`,
           { headers },
         );
+        // console.log(response.data);
         // localStorage.setItem("user_detail", JSON.stringify(response.data));
         localStorage.setItem("username", response.data.UserName);
         localStorage.setItem("userType", response.data.UserType);
+        localStorage.setItem("userEmail", response.data.O365EmailID);
+        localStorage.setItem("userID", response.data.RowKey);
       } catch (error) {
         console.log(error);
       }
