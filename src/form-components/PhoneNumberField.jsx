@@ -23,7 +23,7 @@ const PhoneNumberField = ({
     if (validate) {
       validate(fieldname, PhoneValue, required);
     }
-  }, []);
+  }, [validate, fieldname, required]);
 
   const handleChange = (value) => {
     setPhoneValue(value);
@@ -35,7 +35,7 @@ const PhoneNumberField = ({
       <label className="text-sm">
         {title}
         {required === "true" && (
-          <span className="text-red-500 font-bold">*</span>
+          <span className="font-bold text-red-500">*</span>
         )}
       </label>
       <PhoneInput

@@ -23,6 +23,7 @@ const RequestProvider = ({ children }) => {
     };
     const RequestStatus = [];
     try {
+      const user = localStorage.getItem("username");
       const headers = {
         "Content-Type": "application/json",
         "eContracts-ApiKey":
@@ -30,9 +31,9 @@ const RequestProvider = ({ children }) => {
       };
 
       const response = await axios.post(
-        `${api}/api/accounts/${account_id}/portal/submittedRequests?username=Santosh Dutta`,
+        `${api}/api/accounts/${account_id}/portal/submittedRequests?username=${user}`,
         {},
-        { headers }
+        { headers },
       );
 
       const requests = response.data.SubmittedRequests;

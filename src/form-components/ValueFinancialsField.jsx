@@ -22,7 +22,7 @@ const ValueFinancialsField = ({
     if (validate) {
       validate(fieldname, ValueFinancials, required);
     }
-  }, []);
+  }, [validate, required, fieldname]);
 
   const handleChange = (e) => {
     const newValue = parseFloat(e.target.value);
@@ -35,14 +35,14 @@ const ValueFinancialsField = ({
       <label className="text-sm">
         {title}
         {required === "true" && (
-          <span className="text-red-500 font-bold">*</span>
+          <span className="font-bold text-red-500">*</span>
         )}
       </label>
       <input
         type="number"
         name={name}
         value={ValueFinancials}
-        className="p-2 text-sm rounded-md border border-slate-400 outline-blue-500 w-full"
+        className="w-full rounded-md border border-slate-400 p-2 text-sm outline-blue-500"
         onChange={handleChange}
       />
       <small className="text-slate-500">{baseline}</small>

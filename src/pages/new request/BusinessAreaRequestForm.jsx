@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import DynamicForms from "../../components/DynamicForms";
 import MultiBusinessAreaRoute from "./MultiBusinessAreaRoute";
 import PropTypes from "prop-types";
+import Alerts from "../../Elements/Alerts";
+import { useState } from "react";
 
 function BusinessAreaDynamicRequestForm({
   handleFormSubmit,
@@ -18,9 +20,17 @@ function BusinessAreaDynamicRequestForm({
   EditRequestMetadataValue,
   getDetail,
 }) {
-  const navigate = useNavigate();
+  const [showAlert, setShowAlert] = useState(false);
   return (
     <>
+      {showAlert && (
+        <Alerts
+          heading="Are you sure, You want to cancel this request"
+          link="/"
+          setShowAlert={setShowAlert}
+          showAlert={showAlert}
+        />
+      )}
       <div className="primary-fields bg-white px-4 py-2 pb-2">
         <form onSubmit={handleFormSubmit}>
           {/* multi business area route */}
@@ -69,7 +79,9 @@ function BusinessAreaDynamicRequestForm({
             <button
               type="button"
               className="flex items-center justify-center rounded-sm bg-slate-500 px-8 py-2 text-white"
-              onClick={() => navigate("/")}
+              onClick={() => {
+                setShowAlert(true);
+              }}
             >
               Cancel
             </button>

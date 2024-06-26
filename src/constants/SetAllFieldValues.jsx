@@ -1,5 +1,4 @@
 export function getUpdatedFieldValues(fieldname, value, prevValues) {
-  console.log(fieldname + " " + ":" + value);
   const updatedValues = { ...prevValues };
 
   if (Array.isArray(value) && fieldname !== "Attachments") {

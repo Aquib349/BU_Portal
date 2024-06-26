@@ -22,7 +22,7 @@ const FileUpload = ({ title, baseline, required, fieldname, validate }) => {
     if (validate) {
       validate(fieldname, UploadFile, required);
     }
-  }, []);
+  }, [validate, fieldname, required]);
 
   return (
     <>
@@ -45,13 +45,12 @@ const FileUpload = ({ title, baseline, required, fieldname, validate }) => {
         <label className="text-sm">
           {title}
           {required === "true" && (
-            <span className="text-red-500 font-bold">*</span>
+            <span className="font-bold text-red-500">*</span>
           )}
         </label>
-        <div className="flex flex-col border border-slate-400 rounded p-2">
+        <div className="flex flex-col rounded border border-slate-400 p-2">
           <div
-            className="border border-slate-400 flex items-center text-xs p-2 w-2/12 my-1 rounded cursor-pointer 
-            font-medium bg-gray-600 text-white"
+            className="my-1 flex w-2/12 cursor-pointer items-center rounded border border-slate-400 bg-gray-600 p-2 text-xs font-medium text-white"
             onClick={() => setShow(!show)}
           >
             +Upload file
@@ -66,7 +65,7 @@ const FileUpload = ({ title, baseline, required, fieldname, validate }) => {
                 <button
                   type="button"
                   onClick={() => handleFileDelete(file)}
-                  className="text-red-600 hover:text-red-800 text-lg"
+                  className="text-lg text-red-600 hover:text-red-800"
                 >
                   <MdDeleteForever />
                 </button>

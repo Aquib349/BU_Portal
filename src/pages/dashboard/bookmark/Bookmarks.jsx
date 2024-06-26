@@ -35,6 +35,9 @@ const errorToastOptions = {
 const Bookmarks = ({ BookmarkData, getAllBookmarks, setShowSpinner }) => {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
+  const user = localStorage.getItem("username");
+  const userID = localStorage.getItem("userID");
+  const userEmail = localStorage.getItem("userEmail");
 
   const [loading, setLoading] = useState(true);
   const [ContractDetails, setContractDetails] = useState({});
@@ -78,7 +81,7 @@ const Bookmarks = ({ BookmarkData, getAllBookmarks, setShowSpinner }) => {
       () =>
         axios.delete(`${api}/api/accounts/${account_id}/portal/bookmark`, {
           headers,
-          params: { id, userId: "ThfohBn4" },
+          params: { id, userId: userID },
         }),
       "Bookmark removed successfully",
       "Failed to delete bookmark.",
@@ -91,8 +94,8 @@ const Bookmarks = ({ BookmarkData, getAllBookmarks, setShowSpinner }) => {
       Title: title,
       Object: object,
       ObjectId: objectId,
-      UserName: "Santosh Dutta",
-      UserEmailId: "santoshdutta@econtracts.onmicrosoft.com",
+      UserName: user,
+      UserEmailId: userEmail,
     };
 
     await handleRequest(

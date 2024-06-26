@@ -11,6 +11,7 @@ function UserSubscriptionProvider({ children }) {
 
   // function to get all the contract which is subscribed by user !!
   async function getUserSubscription() {
+    const user = localStorage.getItem("username");
     const headers = {
       "Content-Type": "application/json",
       "eContracts-ApiKey":
@@ -18,8 +19,8 @@ function UserSubscriptionProvider({ children }) {
     };
     try {
       const response = await axios.get(
-        `${api}/api/accounts/${account_id}/portal/subscriptions?userName=Santosh Dutta`,
-        { headers }
+        `${api}/api/accounts/${account_id}/portal/subscriptions?userName=${user}`,
+        { headers },
       );
       if (response.status === 404) {
         setUserSub([]);

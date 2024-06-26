@@ -14,6 +14,7 @@ import { EditReqeustContext } from "../../context/EditRequestContext";
 function Dashboard() {
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
+  const userID = localStorage.getItem("userID");
 
   const [ShowSpinner, setShowSpinner] = useState(false);
   const [BookmarkData, setBookmarkData] = useState([]);
@@ -59,7 +60,7 @@ function Dashboard() {
 
     try {
       const response = await axios.get(
-        `${api}/api/accounts/${account_id}/portal/bookmarks?userId=ThfohBn4`,
+        `${api}/api/accounts/${account_id}/portal/bookmarks?userId=${userID}`,
         { headers },
       );
       setBookmarkData(response.data);

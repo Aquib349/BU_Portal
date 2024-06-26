@@ -25,7 +25,7 @@ const RadioField = ({
     if (validate) {
       validate(fieldname, RadioOptionValue, required);
     }
-  }, []);
+  }, [validate, fieldname, required]);
 
   const handleChange = (e) => {
     const { value } = e.target;

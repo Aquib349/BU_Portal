@@ -18,6 +18,7 @@ function Header() {
   const { instance } = useMsal();
   const dropdownBookmark = useRef(null);
   const location = useLocation();
+  const userType = localStorage.getItem("userType");
 
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
@@ -32,6 +33,7 @@ function Header() {
   };
 
   async function getUserNotification() {
+    const user = localStorage.getItem("username");
     const headers = {
       "Content-Type": "application/json",
       "eContracts-ApiKey":
@@ -40,7 +42,7 @@ function Header() {
 
     try {
       const response = await axios.get(
-        `${api}/api/accounts/${account_id}/portal/myAlerts?userName=Santosh Dutta`,
+        `${api}/api/accounts/${account_id}/portal/myAlerts?userName=${user}`,
         { headers },
       );
       setNotificationData(response.data);
@@ -124,86 +126,89 @@ function Header() {
               ref={dropdownBookmark}
             >
               <img src="/assets/logo.gif" alt="logo" className="w-[130px]" />
-              <motion.nav
-                initial={false}
-                animate={isOpen ? "open" : "closed"}
-                className="relative"
-              >
-                <motion.button
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => setIsOpen(!isOpen)}
-                  className="flex items-center gap-2 rounded border border-slate-200 px-2 py-1 text-xs"
-                >
-                  Navigate To
-                  <motion.div
-                    variants={{
-                      open: { rotate: 180 },
-                      closed: { rotate: 0 },
-                    }}
-                    transition={{ duration: 0.2 }}
-                    style={{ originY: 0.55 }}
+              {userType.split(";").length > 1 &&
+                userType.split(";")[0] !== "Portal User" && (
+                  <motion.nav
+                    initial={false}
+                    animate={isOpen ? "open" : "closed"}
+                    className="relative"
                   >
-                    <svg width="10" height="10" viewBox="0 0 20 20">
-                      <path d="M0 7 L 20 7 L 10 16" />
-                    </svg>
-                  </motion.div>
-                </motion.button>
-                <motion.ul
-                  className="absolute mt-5 w-44 bg-white text-sm shadow-lg"
-                  variants={{
-                    open: {
-                      clipPath: "inset(0% 0% 0% 0% round 10px)",
-                      transition: {
-                        type: "spring",
-                        bounce: 0,
-                        duration: 0.7,
-                        delayChildren: 0.3,
-                        staggerChildren: 0.05,
-                      },
-                    },
-                    closed: {
-                      clipPath: "inset(10% 50% 90% 50% round 10px)",
-                      transition: {
-                        type: "spring",
-                        bounce: 0,
-                        duration: 0.3,
-                      },
-                    },
-                  }}
-                  style={{ pointerEvents: isOpen ? "auto" : "none" }}
-                >
-                  <motion.li
-                    className="px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    variants={itemVariants}
-                    onClick={() => {
-                      navigate("error");
-                      setIsOpen(false);
-                    }}
-                  >
-                    My Dashboard
-                  </motion.li>
-                  <motion.li
-                    className="px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    variants={itemVariants}
-                    onClick={() => {
-                      navigate("error");
-                      setIsOpen(false);
-                    }}
-                  >
-                    Admin Dashboard
-                  </motion.li>
-                  <motion.li
-                    className="px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    variants={itemVariants}
-                    onClick={() => {
-                      navigate("error");
-                      setIsOpen(false);
-                    }}
-                  >
-                    Global Insights
-                  </motion.li>
-                </motion.ul>
-              </motion.nav>
+                    <motion.button
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => setIsOpen(!isOpen)}
+                      className="flex items-center gap-2 rounded border border-slate-200 px-2 py-1 text-xs"
+                    >
+                      Navigate To
+                      <motion.div
+                        variants={{
+                          open: { rotate: 180 },
+                          closed: { rotate: 0 },
+                        }}
+                        transition={{ duration: 0.2 }}
+                        style={{ originY: 0.55 }}
+                      >
+                        <svg width="10" height="10" viewBox="0 0 20 20">
+                          <path d="M0 7 L 20 7 L 10 16" />
+                        </svg>
+                      </motion.div>
+                    </motion.button>
+                    <motion.ul
+                      className="absolute mt-5 w-44 bg-white text-sm shadow-lg"
+                      variants={{
+                        open: {
+                          clipPath: "inset(0% 0% 0% 0% round 10px)",
+                          transition: {
+                            type: "spring",
+                            bounce: 0,
+                            duration: 0.7,
+                            delayChildren: 0.3,
+                            staggerChildren: 0.05,
+                          },
+                        },
+                        closed: {
+                          clipPath: "inset(10% 50% 90% 50% round 10px)",
+                          transition: {
+                            type: "spring",
+                            bounce: 0,
+                            duration: 0.3,
+                          },
+                        },
+                      }}
+                      style={{ pointerEvents: isOpen ? "auto" : "none" }}
+                    >
+                      <motion.li
+                        className="px-4 py-2 text-gray-700 hover:bg-gray-100"
+                        variants={itemVariants}
+                        onClick={() => {
+                          navigate("error");
+                          setIsOpen(false);
+                        }}
+                      >
+                        My Dashboard
+                      </motion.li>
+                      <motion.li
+                        className="px-4 py-2 text-gray-700 hover:bg-gray-100"
+                        variants={itemVariants}
+                        onClick={() => {
+                          navigate("error");
+                          setIsOpen(false);
+                        }}
+                      >
+                        Admin Dashboard
+                      </motion.li>
+                      <motion.li
+                        className="px-4 py-2 text-gray-700 hover:bg-gray-100"
+                        variants={itemVariants}
+                        onClick={() => {
+                          navigate("error");
+                          setIsOpen(false);
+                        }}
+                      >
+                        Global Insights
+                      </motion.li>
+                    </motion.ul>
+                  </motion.nav>
+                )}
             </div>
             <div className="global-search col-span-2 flex items-center justify-center">
               {/* other nav items */}
@@ -234,17 +239,15 @@ function Header() {
             </div>
           </div>
         </div>
-        {location.pathname !== "/" && (
-          <div
-            className="home-button absolute left-8 top-20 flex cursor-pointer items-center justify-center"
-            onClick={() => navigate("/")}
-          >
-            <span className="flex flex-col items-center text-xl">
-              <TiHome />
-              <span className="text-xs font-medium">Home</span>
-            </span>
-          </div>
-        )}
+        <div
+          className={`home-button absolute top-20 flex cursor-pointer items-center justify-center ${location.pathname !== "/" ? "left-8" : "left-[-100%]"} transition-all duration-700 ease-in-out`}
+          onClick={() => navigate("/")}
+        >
+          <span className="flex flex-col items-center text-xl">
+            <TiHome className="text-blue-600" />
+            <span className="text-xs font-medium">Home</span>
+          </span>
+        </div>
       </div>
       <Notification
         showModal={showModal}

@@ -27,7 +27,7 @@ const Datepicker = ({
       const formattedDate = date ? format(date, "MM/dd/yyyy") : null;
       validate(fieldname, formattedDate, required);
     }
-  }, [date]);
+  }, [date, validate, fieldname, required]);
 
   return (
     <>
@@ -35,11 +35,11 @@ const Datepicker = ({
         <label className="text-sm">
           {title}
           {required === "true" && (
-            <span className="text-red-500 font-bold">*</span>
+            <span className="font-bold text-red-500">*</span>
           )}
         </label>
         <DatePicker
-          className="p-2 text-sm rounded-md border w-full border-slate-400 outline-blue-400"
+          className="w-full rounded-md border border-slate-400 p-2 text-sm outline-blue-400"
           selected={date}
           dateFormat="MM/dd/yyyy"
           onChange={(date) => {

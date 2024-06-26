@@ -16,7 +16,7 @@ const ChoiceField = ({
   useEffect(() => {
     if (initialValue) {
       const initialOption = options.find(
-        (option) => option.label === initialValue
+        (option) => option.label === initialValue,
       );
       if (initialOption) {
         setChoiceOption(initialOption);
@@ -28,7 +28,7 @@ const ChoiceField = ({
     if (validate) {
       validate(fieldname, ChoiceOption ? ChoiceOption.label : null, required);
     }
-  }, []);
+  }, [validate, fieldname, required]);
 
   const handleChange = (selectedOption) => {
     setChoiceOption(selectedOption);
@@ -41,11 +41,11 @@ const ChoiceField = ({
         <label className="text-sm">
           {title}
           {required === "true" && (
-            <span className={`text-red-500 font-bold`}>*</span>
+            <span className={`font-bold text-red-500`}>*</span>
           )}
         </label>
         <Select
-          className={`p-2 text-sm rounded-md border w-full border-slate-400 outline-blue-400`}
+          className={`w-full rounded-md border border-slate-400 p-2 text-sm outline-blue-400`}
           defaultValue={ChoiceOption}
           onChange={handleChange}
           options={options}

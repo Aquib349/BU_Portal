@@ -32,7 +32,7 @@ const MultiChoiceDropdown = ({
     if (validate) {
       validate(fieldname, MultiSelectValue, required);
     }
-  }, []);
+  }, [validate, fieldname, required]);
 
   const handleChange = (selectedOption) => {
     // setUserSelectedOption(selectedOption);
@@ -44,7 +44,7 @@ const MultiChoiceDropdown = ({
       setMultiSelectValue(
         selectedOption
           ? selectedOption.map((option) => option.label).join(";")
-          : ""
+          : "",
       );
     } else {
       concatenatedLabels = selectedOption ? selectedOption.label : "";
@@ -60,7 +60,7 @@ const MultiChoiceDropdown = ({
         <label className="text-sm">
           {title}
           {required === "true" && (
-            <span className={`text-red-500 font-bold`}>*</span>
+            <span className={`font-bold text-red-500`}>*</span>
           )}
         </label>
         <Select
@@ -68,7 +68,7 @@ const MultiChoiceDropdown = ({
           onChange={handleChange}
           options={options}
           isMulti={multi}
-          className="css-control text-black bg-white"
+          className="css-control bg-white text-black"
         />
         <small className="text-slate-500">{baseline}</small>
       </div>

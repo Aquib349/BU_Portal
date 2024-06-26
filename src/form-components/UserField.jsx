@@ -53,13 +53,15 @@ const UserField = ({
         : "";
       validate(fieldname, concatenatedLabels, required);
     }
-  }, [userSelectedOption, multi, fieldname, required]);
+  }, [userSelectedOption, multi, fieldname, required, validate]);
 
   return (
     <div className="pb-3">
       <label className="text-sm">
         {title}
-        {required && <span className="font-bold text-red-500">*</span>}
+        {required === "true" && (
+          <span className="font-bold text-red-500">*</span>
+        )}
       </label>
       <Select
         value={userSelectedOption}

@@ -32,6 +32,7 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
           descChecked: !prevState[taskId]?.descChecked,
         };
       }
+      console.log(newState);
       return newState;
     });
   };
@@ -136,7 +137,7 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
                   <input
                     type="checkbox"
                     name="task_name"
-                    defaultChecked={
+                    checked={
                       checkedTasks[val.RowKey]?.nameChecked || false
                     }
                     onChange={() => selectProjectTask(val.RowKey, "name")}
@@ -149,7 +150,7 @@ function ProjectTaskLookUp({ ProjectTask, baseline, setSelectedProjectTask }) {
                   <input
                     type="checkbox"
                     name="task_desc"
-                    defaultChecked={
+                    checked={
                       checkedTasks[val.RowKey]?.descChecked || false
                     }
                     onChange={() => selectProjectTask(val.RowKey, "desc")}

@@ -32,7 +32,7 @@ const LookupMultiSelect = ({
     if (validate) {
       validate(fieldname, LookupMultiValue, required);
     }
-  }, []);
+  }, [validate, fieldname, required]);
 
   const handleChange = (selectedOption) => {
     setLookupMultiValue(selectedOption);
@@ -44,7 +44,7 @@ const LookupMultiSelect = ({
         <label className="text-sm">
           {title}
           {required === "true" && (
-            <span className={`text-red-500 font-bold`}>*</span>
+            <span className={`font-bold text-red-500`}>*</span>
           )}
         </label>
         <Select

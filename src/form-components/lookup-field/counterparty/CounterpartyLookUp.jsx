@@ -76,7 +76,6 @@ function CounterpartyLookUp({
 
   // Effect to handle initial value
   useEffect(() => {
-    setSelectedCounterPartyValue(initialValue);
     if (initialValue && CounterParty.length > 0 && !IsEdited) {
       // Split the initialValue string into individual Counterparty names
       const initialCounterpartyNames = initialValue.split(";");

@@ -15,21 +15,21 @@ const HyperLinkField = ({
     if (validate) {
       validate(fieldname, EnteredUrl, required);
     }
-  }, []);
+  }, [validate, fieldname, required]);
   return (
     <>
       <div className="flex flex-col pb-3">
         <label className="text-sm">
           {title}
           {required === "true" && (
-            <span className={`text-red-500 font-bold`}>*</span>
+            <span className={`font-bold text-red-500`}>*</span>
           )}
         </label>
         <input
           type="text"
           name={name}
           value={EnteredUrl}
-          className={`p-2 text-sm rounded-md border w-full border-slate-400 outline-blue-400`}
+          className={`w-full rounded-md border border-slate-400 p-2 text-sm outline-blue-400`}
           onChange={(e) => {
             setEnteredUrl(e.target.value);
             validate(fieldname, e.target.value, required);

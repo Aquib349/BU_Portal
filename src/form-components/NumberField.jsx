@@ -22,21 +22,21 @@ const NumberField = ({
     if (validate) {
       validate(fieldname, NumberFieldValue, required);
     }
-  }, []);
+  }, [validate, fieldname, required]);
   return (
     <>
       <div className="flex flex-col pb-3">
         <label className="text-sm">
           {title}
           {required === "true" && (
-            <span className={`text-red-500 font-bold`}>*</span>
+            <span className={`font-bold text-red-500`}>*</span>
           )}
         </label>
         <input
           type="number"
           name={name}
           value={NumberFieldValue}
-          className="p-2 text-sm rounded-md border border-slate-400 outline-blue-500 w-full"
+          className="w-full rounded-md border border-slate-400 p-2 text-sm outline-blue-500"
           onChange={(e) => {
             setNumberFieldValue(e.target.value);
             validate(fieldname, e.target.value, required);

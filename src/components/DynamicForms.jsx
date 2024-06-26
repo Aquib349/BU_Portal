@@ -28,6 +28,7 @@ function DynamicForms({
   validateField,
   EditRequestMetadataValue,
 }) {
+  // console.log(validationErrors);
   // Use state for component rendering
   const [componentsToRender, setComponentsToRender] = useState([]);
   const { AllStatus } = useContext(StatusContext);

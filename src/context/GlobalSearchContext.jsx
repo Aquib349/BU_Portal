@@ -17,7 +17,7 @@ const GlobalSearchProvider = ({ children }) => {
 
   // function to handle the global search
   const handleGlobalSearch = useCallback(async () => {
-    console.log(SearchQuery);
+    const userType = localStorage.getItem("userType");
     setDataLoading(true);
     const headers = {
       "Content-Type": "application/json",
@@ -30,12 +30,12 @@ const GlobalSearchProvider = ({ children }) => {
           `${api}/api/accounts/${account_id}/portal/contractSearch?customquery=` +
             "&searchkeyword=" +
             encodeURIComponent(
-              `${DropDownValue}: ${searchText || SearchQuery}`
+              `${DropDownValue}: ${searchText || SearchQuery}`,
             ) +
             `&MatchExact=Exact Keyword` +
-            `&userType=Global Contract Owner;Account Owner;Contract Area Administrator;Business Area Owner;Business User;Portal User` +
+            `&userType=${userType}` +
             `&sortBy=${sort}`,
-          { headers }
+          { headers },
         );
         setGlobalSearchData(response.data);
       } else if (DropDownValue === "DocumentName") {
@@ -44,9 +44,9 @@ const GlobalSearchProvider = ({ children }) => {
             `customquery=` +
             `&searchkeyword=${DropDownValue}: ${searchText || SearchQuery}` +
             `&MatchExact=Exact Keyword` +
-            `&userType=Global Contract Owner;Account Owner;Contract Area Administrator;Business Area Owner;Business User;Portal User` +
+            `&userType=${userType}` +
             `&sortBy=${sort}`,
-          { headers }
+          { headers },
         );
         setGlobalSearchData(response.data);
       } else if (DropDownValue === "CounterpartyName") {
@@ -56,7 +56,7 @@ const GlobalSearchProvider = ({ children }) => {
             `&searchkeyword=${DropDownValue}: ${searchText || SearchQuery}` +
             `&MatchExact=Exact Keyword` +
             `&sortBy=${sort}`,
-          { headers }
+          { headers },
         );
         setGlobalSearchData(response.data);
       }

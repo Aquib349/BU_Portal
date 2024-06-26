@@ -75,12 +75,6 @@ const NewRequest = () => {
     });
   }
 
-  // function to validate the form component
-  const validateField = (fieldname, value, required) => {
-    const updatedErrors = validateFields(validationErrors, fieldname, value, required);
-    setValidationErrors(updatedErrors);
-  };
-
   // function to get contractAdiministrator, businessareowner, businessareapath
   async function getDetail(id, contractAreaName) {
     setBusinessAreaName(contractAreaName);
@@ -95,27 +89,36 @@ const NewRequest = () => {
     if (details) {
       setBusinessAreaOwners(details.businessAreaOwners.Owner);
       setBusinessAreaPath(details.businessAreaPath);
-      setContractAreaAdministrators(details.contractAreaAdministrators.Owner);
+      setContractAreaAdministrators(details.contractAreaAdministrators);
     }
   }
 
   // function to validate the form component on submit
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(fieldValues);
     setEditRequestMode(false);
-    setLoadSpinner(true);
     const formData = new FormData();
     const user = localStorage.getItem("username");
 
     // Validate all fields before submission
+    let tempErrors = {};
     DynamicForm.forEach(({ FieldName, Required }) => {
       const cleanedData = cleanAndDecodeData(fieldValues);
-      validateField(FieldName, cleanedData[FieldName], Required);
+      tempErrors = validateFields(
+        tempErrors,
+        FieldName,
+        cleanedData[FieldName],
+        Required,
+      );
     });
 
-    const hasErrors = Object.keys(validationErrors).length > 0;
+    // Update state with collected errors
+    setValidationErrors(tempErrors);
+
+    const hasErrors = Object.keys(tempErrors).length > 0;
+
     if (!hasErrors) {
+      setLoadSpinner(true);
       // Form is valid, proceed with submission
       let QueryString = convertToQueryString(fieldValues);
       QueryString += `&RequestType=${RequestType}`;
@@ -127,7 +130,7 @@ const NewRequest = () => {
       QueryString += `&ModifiedBy=${user}`;
       QueryString += "&InRecycleBin=";
       QueryString += `&ContractArea=${encodeURIComponent(BusinessAreaName)}`;
-      QueryString += `&ContractAreaAdministrators=${ContractAreaAdministrators}`;
+      QueryString += `&ContractAreaAdministrators=${ContractAreaAdministrators.Owner}`;
       QueryString += `&BusinessAreaOwners=${BusinessAreaOwners}`;
       QueryString += `&BusinessAreaPath=${encodeURIComponent(BusinessAreaPath)}`;
       QueryString += "&IsDraft=";
