@@ -19,20 +19,22 @@ function StatusProvider({ children }) {
     try {
       const response = await axios.get(
         `${api}/api/accounts/${account_id}/Requests/requeststatus`,
-        { headers }
+        { headers },
       );
       //   console.log(response.data);
       if (response.data) {
         // Extract usernames from the user data
-        const usernamesFromApi = response.data?.map(
-          (status) => status.RequestStatus
-        );
+        const usernamesFromApi = response.data
+          .map((status) => status.RequestStatus)
+          .flat()
+          .filter((name) => name !== "Custom(Not Configured)");
 
         // Convert usernames to the desired format
-        const options = usernamesFromApi?.map((status) => ({
+        const options = usernamesFromApi.map((status) => ({
           value: status.toLowerCase(),
           label: status.charAt(0).toUpperCase() + status.slice(1),
         }));
+
         setAllStatus(options);
       }
     } catch (error) {

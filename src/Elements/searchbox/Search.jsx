@@ -30,7 +30,6 @@ const SearchBar = () => {
     e.preventDefault();
 
     if (location.pathname !== "/globalSearch") {
-      console.log(location.pathname);
       navigate("/globalSearch");
     }
     setSearchQuery(searchText);
@@ -77,7 +76,7 @@ const SearchBar = () => {
             initial="closed"
             animate={showDropdown ? "open" : "closed"}
             variants={dropdownVariants}
-            className="absolute left-0 top-full z-20 mt-3 rounded-md w-44 bg-white shadow-lg"
+            className="absolute left-0 top-full z-20 mt-3 w-44 rounded-md bg-white shadow-lg"
           >
             {showDropdown && (
               <ul className="py-2 text-sm text-gray-700">

@@ -8,7 +8,7 @@ const ContractSummary = ({
   ContractDetails,
   ContractID,
   getContractSummary,
-  loading
+  loading,
 }) => {
   const {
     ContractTitle,
@@ -102,7 +102,11 @@ const ContractSummary = ({
           </div>
 
           {/* contract status updates */}
-          <StatusUpdates Status={Status} Stage={Stage} />
+          <StatusUpdates
+            Status={Status}
+            Stage={Stage}
+            ID={ContractID}
+          />
 
           {/* Docouments */}
           <Documents

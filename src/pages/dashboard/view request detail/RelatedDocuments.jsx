@@ -4,14 +4,12 @@ import PropTypes from "prop-types";
 import useRelatedDocuments from "../../../customhooks/useRelatedDocuments";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { LuView } from "react-icons/lu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GetFileIcon from "../../../constants/FileExtensionName";
 import SpinnerTwo from "../../../Elements/spinner2/SpinnerTwo";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { FaFileCircleExclamation } from "react-icons/fa6";
-import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
-import Modal from "../../../Elements/Modal";
 
 const toastOptions = {
   position: "top-center",
@@ -38,13 +36,6 @@ function RelatedDocuments({ status, RowKey }) {
   const [Loading, setLoading] = useState(true);
   const { DocumentData, loader, getRelatedDocument, setLoader } =
     useRelatedDocuments(RowKey);
-  const [DocumentLink, setDocumentLink] = useState([]);
-  const [DocumentName, setDocumentName] = useState("");
-  const [showDocument, setShowDocument] = useState(false);
-
-  const toggleModal = () => {
-    setShowDocument(!showDocument);
-  };
 
   const handleRequest = async (
     request,
@@ -228,18 +219,6 @@ function RelatedDocuments({ status, RowKey }) {
 
   return (
     <>
-      {showDocument && (
-        <Modal
-          heading={DocumentName}
-          toggleModal={toggleModal}
-          set_Width={true}
-        >
-          <DocViewer
-            // pluginRenderers={DocViewerRenderers}
-            documents={DocumentLink}
-          />
-        </Modal>
-      )}
       <div className="related-documents">
         <div className="main flex justify-between">
           <div className="flex items-center text-lg">
@@ -285,12 +264,7 @@ function RelatedDocuments({ status, RowKey }) {
                 </div>
                 <div className="flex items-center gap-4 px-2">
                   <span className="cursor-pointer px-2 text-lg text-slate-500">
-                    <LuView
-                      onClick={() => {
-                        handleViewDocument(val.DocumentName, val.DocumentUrl);
-                        setShowDocument(!showDocument);
-                      }}
-                    />
+                    <LuView />
                   </span>
                   <span className="cursor-pointer text-lg text-slate-500">
                     <RiDeleteBin6Fill

@@ -14,7 +14,7 @@ import {
 
 // Function to extract file extension from URL
 const getFileExtension = (url) => {
-  return url.split(".").pop().toLowerCase();
+  return url?.split(".").pop().toLowerCase();
 };
 
 // Function to get the appropriate file icon based on the file extension

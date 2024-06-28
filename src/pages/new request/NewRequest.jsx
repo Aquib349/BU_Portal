@@ -8,12 +8,12 @@ import axios from "axios";
 import { EditReqeustContext } from "../../context/EditRequestContext";
 import useXmlConverter from "../../customhooks/useXmlConverter";
 import { useNavigate } from "react-router-dom";
-import { convertToQueryString } from "../../constants/ConvertToQueryString";
-import { cleanAndDecodeData } from "../../constants/DecodeData";
-import { getUpdatedFieldValues } from "../../constants/SetAllFieldValues";
-import { fetchDynamicFormData } from "../../constants/CreateDynamicForm";
-import { fetchDetail } from "../../constants/GetRequestFormFieldDetails";
-import { validateFields } from "../../constants/ValidateFormFields";
+import { convertToQueryString } from "../../constants/new request functions/ConvertToQueryString";
+import { cleanAndDecodeData } from "../../constants/new request functions/DecodeData";
+import { getUpdatedFieldValues } from "../../constants/new request functions/SetAllFieldValues";
+import { fetchDynamicFormData } from "../../constants/new request functions/CreateDynamicForm";
+import { fetchDetail } from "../../constants/new request functions/GetRequestFormFieldDetails";
+import { validateFields } from "../../constants/new request functions/ValidateFormFields";
 
 const NewRequest = () => {
   const api = import.meta.env.VITE_API_URL;

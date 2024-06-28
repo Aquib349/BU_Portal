@@ -10,11 +10,11 @@ import SpinnerTwo from "../../Elements/spinner2/SpinnerTwo";
 
 function CounterpartyResult({ DATA }) {
   const { DataLoading } = useContext(GlobalSearchContext);
-  console.log(DATA);
+
   return (
     <>
       <div className="">
-        <div className="bg-white shadow rounded p-4">
+        <div className="rounded bg-white p-4 shadow">
           {DataLoading ? (
             <>
               <SpinnerTwo />
@@ -32,35 +32,35 @@ function CounterpartyResult({ DATA }) {
                     }
                   />
                   <div className="flex-grow">
-                    <div className="flex gap-2 items-center">
+                    <div className="flex items-center gap-2">
                       <span className="text-lg">
                         <LuUsers2 />
                       </span>
-                      <p className="font-medium text-lg">
+                      <p className="text-lg font-medium">
                         {result.CounterpartyName}
                       </p>
                     </div>
-                    <div className="flex gap-6 items-center">
+                    <div className="flex items-center gap-6">
                       <div className="flex items-center">
-                        <div className="flex gap-2 items-center">
-                          <span className="text-md pl-7 cursor-pointer text-slate-400">
+                        <div className="flex items-center gap-2">
+                          <span className="text-md cursor-pointer pl-7 text-slate-400">
                             <Tooltip
                               message="Counterparty Type"
                               header={<GrDocumentText />}
                             />
                           </span>
-                          <small className="text-gray-500 text-sm pt-1">
+                          <small className="pt-1 text-sm text-gray-500">
                             {result.CounterpartyType}
                           </small>
                         </div>
-                        <div className="flex gap-2 items-center">
-                          <span className="text-md pl-7 cursor-pointer text-slate-400">
+                        <div className="flex items-center gap-2">
+                          <span className="text-md cursor-pointer pl-7 text-slate-400">
                             <Tooltip
                               message="Regional"
                               header={<MdOutlineAccountBalance />}
                             />
                           </span>
-                          <small className="text-gray-500 text-sm pt-1">
+                          <small className="pt-1 text-sm text-gray-500">
                             {result.IsGlobal === "No" ? "Regional" : "Global"}
                           </small>
                         </div>
