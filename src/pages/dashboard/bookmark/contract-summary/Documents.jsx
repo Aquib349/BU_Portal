@@ -41,9 +41,9 @@ function Documents({ DocumentDetails }) {
                       <span>{GetFileIcon(val.DocumentUrl)}</span>
                       <span>{val.DocumentUrl.split("/").pop()}</span>
                     </div>
-                    <div className="flex items-center gap-4 pl-14 text-xl">
+                    <div className="flex items-center gap-4 pl-16 text-xl">
                       <Tooltip
-                        message="Document Types  "
+                        message="Document Types"
                         header={<CiFileOn />}
                       />
                       <div className="px-2 text-xl">

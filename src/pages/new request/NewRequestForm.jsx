@@ -13,7 +13,8 @@ function NewRequestForm({
   BusinessArea,
   RequestType,
   EditRequestMetadataValue,
-  getDetail
+  getDetail,
+  ContractAreaAdministrators
 }) {
   return (
     <>
@@ -47,6 +48,7 @@ function NewRequestForm({
                 RequestType={RequestType}
                 EditRequestMetadataValue={EditRequestMetadataValue}
                 getDetail={getDetail}
+                ContractAreaAdministrators={ContractAreaAdministrators}
               />
             </Accordion>
           ))}
@@ -67,6 +69,7 @@ NewRequestForm.propTypes = {
   BusinessArea: PropTypes.string,
   RequestType: PropTypes.string,
   EditRequestMetadataValue: PropTypes.object,
+  ContractAreaAdministrators:PropTypes.object
 };
 
 export default NewRequestForm;

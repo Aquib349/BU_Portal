@@ -33,7 +33,7 @@ const NewRequest = () => {
   const [fieldValues, setFieldValues] = useState({});
 
   const [ContractAreaAdministrators, setContractAreaAdministrators] =
-    useState("");
+    useState(null);
   const [BusinessAreaOwners, setBusinessAreaOwners] = useState("");
   const [BusinessAreaPath, setBusinessAreaPath] = useState("");
 
@@ -280,6 +280,7 @@ const NewRequest = () => {
             RequestType={RequestType}
             EditRequestMetadataValue={EditRequestMetadataValue}
             getDetail={getDetail}
+            ContractAreaAdministrators={ContractAreaAdministrators}
           />
         </div>
       </div>

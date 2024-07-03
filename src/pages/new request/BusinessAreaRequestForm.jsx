@@ -3,7 +3,7 @@ import DynamicForms from "../../components/DynamicForms";
 import MultiBusinessAreaRoute from "./MultiBusinessAreaRoute";
 import PropTypes from "prop-types";
 import Alerts from "../../Elements/Alerts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function BusinessAreaDynamicRequestForm({
   handleFormSubmit,
@@ -19,8 +19,28 @@ function BusinessAreaDynamicRequestForm({
   RequestType,
   EditRequestMetadataValue,
   getDetail,
+  ContractAreaAdministrators,
 }) {
   const [showAlert, setShowAlert] = useState(false);
+  const [RTypes, setRTypes] = useState([]);
+
+  useEffect(() => {
+    if (ContractAreaAdministrators && ContractAreaAdministrators.RequestType) {
+      const typesArray = ContractAreaAdministrators.RequestType.split(";").map(
+        (type) => type.trim(),
+      );
+
+      // Create a set of types from the split string
+      const typesSet = new Set(typesArray);
+
+      // Filter the dataArray to only include objects whose type is in the set
+      const intersectedArray = RequestTypes.filter((item) =>
+        typesSet.has(item.type),
+      );
+
+      setRTypes(intersectedArray);
+    }
+  }, [ContractAreaAdministrators, RequestTypes]);
   return (
     <>
       {showAlert && (
@@ -55,7 +75,7 @@ function BusinessAreaDynamicRequestForm({
               <option value="" disabled>
                 -select-
               </option>
-              {RequestTypes.map((req) => (
+              {RTypes.map((req) => (
                 <option key={req.id} value={req.type}>
                   {req.type}
                 </option>
@@ -111,6 +131,7 @@ BusinessAreaDynamicRequestForm.propTypes = {
   BusinessArea: PropTypes.string,
   RequestType: PropTypes.string,
   EditRequestMetadataValue: PropTypes.object,
+  ContractAreaAdministrators: PropTypes.object,
 };
 
 export default BusinessAreaDynamicRequestForm;

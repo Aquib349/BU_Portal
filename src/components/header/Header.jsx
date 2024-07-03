@@ -126,8 +126,8 @@ function Header() {
               ref={dropdownBookmark}
             >
               <img src="/assets/logo.gif" alt="logo" className="w-[130px]" />
-              {userType.split(";").length > 1 &&
-                userType.split(";")[0] !== "Portal User" && (
+              {userType?.split(";").length > 1 &&
+                userType?.split(";")[0] !== "Portal User" && (
                   <motion.nav
                     initial={false}
                     animate={isOpen ? "open" : "closed"}

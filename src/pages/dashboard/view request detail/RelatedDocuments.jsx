@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import useRelatedDocuments from "../../../customhooks/useRelatedDocuments";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { LuView } from "react-icons/lu";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import GetFileIcon from "../../../constants/FileExtensionName";
 import SpinnerTwo from "../../../Elements/spinner2/SpinnerTwo";
 import axios from "axios";
