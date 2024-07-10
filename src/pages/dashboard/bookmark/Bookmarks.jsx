@@ -63,7 +63,7 @@ const Bookmarks = ({ BookmarkData, getAllBookmarks, setShowSpinner }) => {
       if (response.status === 200 || response.status === 201) {
         setLoading(false);
         callback();
-        toast.success(successMessage, { ...toastOptions, duration: 1200 });
+        toast.success(successMessage, { ...toastOptions, duration: 1500 });
       }
     } catch (error) {
       console.error(errorMessage, error);
@@ -194,6 +194,7 @@ const Bookmarks = ({ BookmarkData, getAllBookmarks, setShowSpinner }) => {
                     </span>
                   </div>
                   <ManageBookmarks
+                    ObjectID={val.ObjectID}
                     ID={val.ObjectID}
                     title={val.Title}
                     object={val.Object}

@@ -1,6 +1,6 @@
 import { FaBell, FaCircleUser } from "react-icons/fa6";
 import Notification from "./Notifications";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import SearchBar from "../../Elements/searchbox/Search";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMsal } from "@azure/msal-react";
 import { TiHome } from "react-icons/ti";
+import { UserSubscription } from "../../context/UserSubscriptionContext";
 
 function Header() {
   const [showModal, setShowModal] = useState(false);
@@ -19,6 +20,7 @@ function Header() {
   const dropdownBookmark = useRef(null);
   const location = useLocation();
   const userType = localStorage.getItem("userType");
+  const { getUserSubscription } = useContext(UserSubscription);
 
   const api = import.meta.env.VITE_API_URL;
   const account_id = import.meta.env.VITE_USER_KEY;
@@ -220,7 +222,10 @@ function Header() {
               <div className="relative cursor-pointer">
                 <span className="text-[1.1rem]">
                   <FaBell
-                    onClick={() => setShowModal(!showModal)}
+                    onClick={() => {
+                      setShowModal(!showModal);
+                      getUserSubscription();
+                    }}
                     className="cursor-pointer"
                   />
                 </span>

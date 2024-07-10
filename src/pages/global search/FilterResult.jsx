@@ -3,103 +3,99 @@ import { motion, AnimatePresence } from "framer-motion";
 import Select from "react-select";
 import { RxCross2 } from "react-icons/rx";
 import { useCallback, useEffect, useState } from "react";
-import axios from "axios";
 import { HiMiniAdjustmentsVertical } from "react-icons/hi2";
+import { FetchFilter } from "../../constants/Globalsearch functions/FetchFilter";
 
-function FilterResult({ Data, setGlobalFilteredData }) {
-  const api = import.meta.env.VITE_API_URL;
-  const account_id = import.meta.env.VITE_USER_KEY;
-  const headers = {
-    "Content-Type": "application/json",
-    "eContracts-ApiKey":
-      "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
-  };
-
+function FilterResult({ Data, setGlobalFilteredData, DropDownValue }) {
   const [ContractTypeData, setContractTypeData] = useState([]);
   const [ContractStatusData, setContractStatusData] = useState([]);
+  const [GlobalorRegional, setGlobalorRegional] = useState([]);
 
-  const [ContractType, setContractType] = useState([]);
-  const [ContractStatus, setContractStatus] = useState([]);
+  const [Type, setType] = useState([]);
+  const [Status, setStatus] = useState([]);
+  const [GRCounterParty, setGRCounterparty] = useState([]);
   const [InternalFilter, setInternalFilter] = useState(Data || []);
   const [show, setShow] = useState(false);
 
   // function to fetch the data of contract type and contract status !!
   async function fetchData() {
     try {
-      const response1 = await axios.get(
-        `${api}/api/accounts/${account_id}/contracttypescorenometadata`,
-        { headers },
-      );
-
-      const type = response1.data.map((ct) => ({
-        value: ct.ContractType?.toLowerCase(),
-        label: ct.ContractType,
-      }));
+      const { type, status, GlobalorRegional } =
+        await FetchFilter(DropDownValue);
       setContractTypeData(type);
-
-      const response2 = await axios.get(
-        `${api}/api/accounts/${account_id}/contractstatusesbyCLM`,
-        { headers },
-      );
-
-      const filteredStatuses = [
-        ...new Set(
-          response2.data.allStatus.filter(
-            (status) => !status.includes("Amendment") && status !== "Approved",
-          ),
-        ),
-      ];
-
-      const status = filteredStatuses.map((cs) => ({
-        value: cs?.toLowerCase(),
-        label: cs,
-      }));
       setContractStatusData(status);
+      setGlobalorRegional(GlobalorRegional);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching data:", error);
     }
   }
 
   // filter to apply on global search result
-  const applyFilters = (type, status) => {
+  const applyFilters = (type, status, gr) => {
     let data = Data || [];
 
-    if (type.length > 0) {
-      const contractType = type.map((s) => s.value?.toLowerCase());
-      data = data.filter((cType) =>
-        contractType.includes(cType.ContractType?.toLowerCase()),
-      );
-    }
+    const filterByTypeAndStatus = (itemType, itemStatus) => {
+      const filteredData = data.filter((item) => {
+        const typeMatch =
+          type.length === 0 ||
+          type.some(
+            (t) => t.value.toLowerCase() === item[itemType]?.toLowerCase(),
+          );
+        const statusMatch =
+          status.length === 0 ||
+          status.some(
+            (s) => s.value.toLowerCase() === item[itemStatus]?.toLowerCase(),
+          );
+        const grMatch =
+          gr.length === 0 ||
+          gr.some(
+            (g) => g.value.toLowerCase() === item.IsGlobal?.toLowerCase(),
+          );
 
-    if (status.length > 0) {
-      const contractStatus = status.map((u) => u.value?.toLowerCase());
-      data = data.filter((cStatus) =>
-        contractStatus.includes(cStatus.Status?.toLowerCase()),
-      );
-    }
+        return typeMatch && statusMatch && grMatch;
+      });
 
-    return data;
+      return filteredData;
+    };
+
+    switch (DropDownValue) {
+      case "ContractTitle":
+        return filterByTypeAndStatus("ContractType", "Status");
+      case "DocumentName":
+        return filterByTypeAndStatus("DocumentType", "DocumentStatus");
+      case "CounterpartyName":
+        return filterByTypeAndStatus("CounterpartyType", "Status");
+      default:
+        return data;
+    }
   };
 
   // function to handle contract type
   const handleContractType = useCallback(
     (Ctype) => {
-      setContractType(Ctype);
-      const updatedData = applyFilters(Ctype, ContractStatus);
+      setType(Ctype);
+      const updatedData = applyFilters(Ctype, Status, []);
       setInternalFilter(updatedData);
     },
-    [ContractStatus, Data],
+    [Status, Data],
   );
 
   // function to handle contract status
   const handleContractStatus = useCallback(
     (Cstatus) => {
-      setContractStatus(Cstatus);
-      const updatedData = applyFilters(ContractType, Cstatus);
+      setStatus(Cstatus);
+      const updatedData = applyFilters(Type, Cstatus, []);
       setInternalFilter(updatedData);
     },
-    [ContractType, Data],
+    [Type, Data],
   );
+
+  // function to handle the global or regional of counterparty
+  function handleGlobalorRegional(GR) {
+    setGRCounterparty(GR);
+    const updatedData = applyFilters(Type, Status, GR);
+    setInternalFilter(updatedData);
+  }
 
   const dropdownVariants = {
     open: {
@@ -112,7 +108,7 @@ function FilterResult({ Data, setGlobalFilteredData }) {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [DropDownValue]);
 
   useEffect(() => {
     setGlobalFilteredData(InternalFilter);
@@ -150,19 +146,49 @@ function FilterResult({ Data, setGlobalFilteredData }) {
               <div className="px-2 py-1">
                 <form className="text-sm">
                   <div className="flex flex-col pt-1">
-                    <span>Contract Type</span>
+                    <span>
+                      {DropDownValue === "ContractTitle"
+                        ? "Contract"
+                        : DropDownValue === "DocumentName"
+                          ? "Document"
+                          : DropDownValue === "CounterpartyName"
+                            ? "Counterparty"
+                            : ""}{" "}
+                      Type
+                    </span>
                     <Select
-                      defaultValue={ContractType}
+                      defaultValue={Type}
                       onChange={handleContractType}
                       options={ContractTypeData}
                       isMulti={true}
                       className="css-control bg-white text-black"
                     />
                   </div>
+                  {DropDownValue === "CounterpartyName" && (
+                    <div className="flex flex-col pt-2">
+                      <span>Counterparty Regional or Global</span>
+                      <Select
+                        defaultValue={GRCounterParty}
+                        onChange={handleGlobalorRegional}
+                        options={GlobalorRegional}
+                        isMulti={true}
+                        className="css-control bg-white text-black"
+                      />
+                    </div>
+                  )}
                   <div className="flex flex-col pt-2">
-                    <span>Contract Status</span>
+                    <span>
+                      {DropDownValue === "ContractTitle"
+                        ? "Contract"
+                        : DropDownValue === "DocumentName"
+                          ? "Document"
+                          : DropDownValue === "CounterpartyName"
+                            ? "Counterparty"
+                            : ""}{" "}
+                      Status
+                    </span>
                     <Select
-                      defaultValue={ContractStatus}
+                      defaultValue={Status}
                       onChange={handleContractStatus}
                       options={ContractStatusData}
                       isMulti={true}

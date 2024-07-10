@@ -4,11 +4,22 @@ import { useContext, useEffect, useState } from "react";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { UserSubscription } from "../../context/UserSubscriptionContext";
 import { FaEyeSlash } from "react-icons/fa";
+import { UnSubscribe } from "../../constants/UnSubscribe";
 
 function Notification({ showModal, setShowModal, NotificationData }) {
   const handleDrawerClose = () => setShowModal(false);
   const [Active, setActive] = useState("unread");
-  const { userSub } = useContext(UserSubscription);
+  const { userSub, getUserSubscription } = useContext(UserSubscription);
+
+  // function to unscribe the contracts
+  async function handleUnSubscribe(id) {
+    const res = UnSubscribe(id);
+    res.then((result) => {
+      if (result === "Deleted") {
+        getUserSubscription();
+      }
+    });
+  }
 
   useEffect(() => {
     // Prevent scrolling when the modal is open
@@ -23,7 +34,7 @@ function Notification({ showModal, setShowModal, NotificationData }) {
     <>
       {showModal && (
         <div
-          className="fixed inset-0 z-30 bg-black/70 bg-opacity-50  transition-opacity"
+          className="fixed inset-0 z-30 bg-black/70 bg-opacity-50 transition-opacity"
           onClick={handleDrawerClose}
         ></div>
       )}
@@ -31,35 +42,33 @@ function Notification({ showModal, setShowModal, NotificationData }) {
       {/* Sidebar */}
       <div
         id="drawer-right-example"
-        className={`fixed top-0 right-0 z-40 w-[25rem] transition-transform
-         duration-300 ease-in-out ${
-           showModal ? "translate-x-0" : "translate-x-full"
-         }`}
+        className={`fixed right-0 top-0 z-40 w-[25rem] transition-transform duration-300 ease-in-out ${
+          showModal ? "translate-x-0" : "translate-x-full"
+        }`}
         tabIndex="-1"
         aria-labelledby="drawer-right-label"
       >
-        <div className="p-2 bg-slate-100 fixed w-full top-0">
+        <div className="fixed top-0 w-full bg-slate-100 p-2">
           <h5
             id="drawer-right-label"
-            className="inline-flex items-center mb-2 pt-2 text-base font-semibold"
+            className="mb-2 inline-flex items-center pt-2 text-base font-semibold"
           >
             Alerts
           </h5>
           <button
             type="button"
             onClick={handleDrawerClose}
-            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute
-           top-2.5 right-2.5 inline-flex items-center justify-center"
+            className="absolute right-2.5 top-2.5 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900"
           >
-            <RxCross2 className="w-5 h-5" />
+            <RxCross2 className="h-5 w-5" />
           </button>
         </div>
-        <div className="fixed w-full top-14">
-          <div className="text-sm grid grid-cols-2 items-center text-center">
+        <div className="fixed top-14 w-full">
+          <div className="grid grid-cols-2 items-center text-center text-sm">
             <span
-              className={`rounded-sm cursor-pointer font-medium py-1 border ${
+              className={`cursor-pointer rounded-sm border py-1 font-medium ${
                 Active === "unread"
-                  ? "bg-blue-600 text-white border-blue-600"
+                  ? "border-blue-600 bg-blue-600 text-white"
                   : "border-slate-500 bg-white"
               }`}
               onClick={() => setActive("unread")}
@@ -67,9 +76,9 @@ function Notification({ showModal, setShowModal, NotificationData }) {
               Unread
             </span>
             <span
-              className={`py-1 cursor-pointer font-medium border ${
+              className={`cursor-pointer border py-1 font-medium ${
                 Active === "contracts"
-                  ? "bg-blue-600 text-white border-blue-600"
+                  ? "border-blue-600 bg-blue-600 text-white"
                   : "border-slate-500 bg-white"
               }`}
               onClick={() => setActive("contracts")}
@@ -86,7 +95,7 @@ function Notification({ showModal, setShowModal, NotificationData }) {
               return (
                 <div
                   key={val.RowKey}
-                  className={`leading-5 border-b border-slate-200 py-2 px-3 mb-2 mt-2 cursor-pointer text-sm ${
+                  className={`mb-2 mt-2 cursor-pointer border-b border-slate-200 px-3 py-2 text-sm leading-5 ${
                     Active === "unread" ? "static" : "hidden"
                   }`}
                 >
@@ -94,7 +103,7 @@ function Notification({ showModal, setShowModal, NotificationData }) {
                     {val.NotificationTitle.slice(0, 40)}
                     ...
                   </p>
-                  <small className="text-blue-500 text-[0.8rem]">
+                  <small className="text-[0.8rem] text-blue-500">
                     {timeAgo}
                   </small>
                 </div>
@@ -103,7 +112,7 @@ function Notification({ showModal, setShowModal, NotificationData }) {
             {userSub.map((val) => (
               <div
                 key={val.RowKey}
-                className={`flex justify-between border-b border-slate-200 py-2 px-3 mb-2 mt-2 cursor-pointer text-sm ${
+                className={`mb-2 mt-2 flex cursor-pointer justify-between border-b border-slate-200 px-3 py-2 text-sm ${
                   Active === "contracts" ? "static" : "hidden"
                 }`}
               >
@@ -112,7 +121,7 @@ function Notification({ showModal, setShowModal, NotificationData }) {
                   ...
                 </p>
                 <span>
-                  <FaEyeSlash />
+                  <FaEyeSlash onClick={() => handleUnSubscribe(val.RowKey)} />
                 </span>
               </div>
             ))}

@@ -1,4 +1,4 @@
-import { createContext, useState, useCallback } from "react";
+import { createContext, useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 
@@ -26,46 +26,39 @@ const GlobalSearchProvider = ({ children }) => {
         "4oTDTxvMgJjbGtZJdFAnwBCroe8uoVGvk+0fR3bHzeqs9KDPOJAzuzvXh9TSuiUvl7r2dhNhaNOcv598qie65A==",
     };
     try {
+      const searchParams = {
+        customquery: "",
+        searchkeyword: `${DropDownValue}: ${searchText || SearchQuery}`,
+        MatchExact: "Exact Keyword",
+        userType,
+        sortBy: sort,
+      };
+      let endpoint = "";
+
       if (DropDownValue === "ContractTitle") {
-        const response = await axios.get(
-          `${api}/api/accounts/${account_id}/portal/contractSearch?customquery=` +
-            "&searchkeyword=" +
-            encodeURIComponent(
-              `${DropDownValue}: ${searchText || SearchQuery}`,
-            ) +
-            `&MatchExact=Exact Keyword` +
-            `&userType=${userType}` +
-            `&sortBy=${sort}`,
-          { headers },
-        );
-        setGlobalSearchData(response.data.ContractSearch);
-        setGlobalFilteredData(response.data.ContractSearch);
+        endpoint = "contractSearch";
       } else if (DropDownValue === "DocumentName") {
-        const response = await axios.get(
-          `${api}/api/accounts/${account_id}/portal/documentSearch?` +
-            `customquery=` +
-            `&searchkeyword=${DropDownValue}: ${searchText || SearchQuery}` +
-            `&MatchExact=Exact Keyword` +
-            `&userType=${userType}` +
-            `&sortBy=${sort}`,
-          { headers },
-        );
-        setGlobalSearchData(response.data.DocumentSearch);
-        setGlobalFilteredData(response.data.DocumentSearch);
+        endpoint = "documentSearch";
       } else if (DropDownValue === "CounterpartyName") {
-        const response = await axios.get(
-          `${api}/api/accounts/${account_id}/portal/counterpartySearch?` +
-            `customquery=` +
-            `&searchkeyword=${DropDownValue}: ${searchText || SearchQuery}` +
-            `&MatchExact=Exact Keyword` +
-            `&sortBy=${sort}`,
-          { headers },
-        );
-        setGlobalSearchData(response.data.CounterpartySearch);
-        setGlobalFilteredData(response.data.CounterpartySearch);
+        endpoint = "counterpartySearch";
       }
+
+      const response = await axios.get(
+        `${api}/api/accounts/${account_id}/portal/${endpoint}`,
+        { headers, params: searchParams },
+      );
+
+      const responseDataKey =
+        DropDownValue === "ContractTitle"
+          ? "ContractSearch"
+          : DropDownValue === "DocumentName"
+            ? "DocumentSearch"
+            : "CounterpartySearch";
+
+      setGlobalSearchData(response.data[responseDataKey]);
+      setGlobalFilteredData(response.data[responseDataKey]);
     } catch (error) {
-      console.error("Error fetching contract data:", error);
+      console.error("Error fetching data:", error);
     } finally {
       setDataLoading(false);
     }

@@ -9,9 +9,11 @@ import PropTypes from "prop-types";
 import { UserSubscription } from "../../../context/UserSubscriptionContext";
 import AddNote from "./Add contract note/AddNote";
 import { motion, AnimatePresence } from "framer-motion";
+import { UnSubscribe } from "../../../constants/UnSubscribe";
 
 function ManageBookmarks({
   DeleteBookmark,
+  ObjectID,
   ID,
   title,
   object,
@@ -23,8 +25,29 @@ function ManageBookmarks({
   const [show, setShow] = useState(false);
   const [AddNoteModal, setAddNoteModal] = useState(false);
   const dropdownBookmark = useRef(null);
-  const { userSub } = useContext(UserSubscription);
+  const { userSub, getUserSubscription } = useContext(UserSubscription);
   const [followed, setFollowed] = useState(false);
+
+  // function to unfollow the contracts
+  async function UnFollow(id) {
+    const user = userSub.find((val) => val.ObjectId === id);
+
+    if (user) {
+      const ID = user.RowKey;
+      try {
+        const result = await UnSubscribe(ID);
+        if (result === "Deleted") {
+          setFollowed(false);
+          getUserSubscription();
+        }
+      } catch (error) {
+        console.error("Error during unsubscribe:", error);
+      }
+    } else {
+      console.error("User not found");
+    }
+  }
+
   const list = [
     {
       id: 1,
@@ -52,6 +75,7 @@ function ManageBookmarks({
           icon: <FaEyeSlash />,
           click: () => {
             setShow(!show);
+            UnFollow(ObjectID);
           },
         }
       : {

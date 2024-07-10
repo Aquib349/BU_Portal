@@ -95,9 +95,9 @@ function ViewRequestDetail() {
         };
         const response = await axios.put(
           `${api}/api/accounts/${account_id}/Requests/changerequeststatus?requestid=${RowKey}&status=${Status.label}`,
+          {},
           config,
         );
-        console.log(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -105,7 +105,6 @@ function ViewRequestDetail() {
 
     // update a post
     try {
-      console.log(selectedUser);
       let statusPost = {};
       statusPost.ObjectId = RowKey;
       statusPost.Object = "Request";
@@ -117,18 +116,17 @@ function ViewRequestDetail() {
       statusPost.CCUsers = selectedUser;
       statusPost.CreatedBy = localStorage.getItem("username");
       statusPost.ModifiedBy = localStorage.getItem("username");
-      console.log(statusPost);
+      // console.log(statusPost);
 
       const response = await axios.post(
-        `${api}/accounts/${account_id}/statusPosts`,
+        `${api}/api/accounts/${account_id}/statusPosts`,
         statusPost,
         { headers },
       );
-      console.log(response.data);
-      // if (response) {
-      //   getStatusUpdates();
-      //   setShowModal(!showModal);
-      // }
+      if (response) {
+        getStatusUpdates();
+        setShowModal(!showModal);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -153,11 +151,7 @@ function ViewRequestDetail() {
           <div className="py-2 text-sm">
             <div className="flex flex-col">
               <label>Status</label>
-              <Select
-                value={Status}
-                onChange={setStatus}
-                options={AllStatus}
-              />
+              <Select value={Status} onChange={setStatus} options={AllStatus} />
             </div>
             <div className="flex flex-col py-3">
               <label>Post an update (250 char max)</label>

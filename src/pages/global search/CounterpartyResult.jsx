@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import { useContext } from "react";
 import { GlobalSearchContext } from "../../context/GlobalSearchContext";
 import SpinnerTwo from "../../Elements/spinner2/SpinnerTwo";
+import { statusColor } from "../../constants/StatusColor";
 
 function CounterpartyResult({ DATA }) {
   const { DataLoading } = useContext(GlobalSearchContext);
@@ -24,9 +25,11 @@ function CounterpartyResult({ DATA }) {
               {DATA.map((result) => (
                 <div key={result.RowKey} className="flex gap-4 border-b py-2">
                   <Tooltip
-                    message="New"
+                    message={result.Status}
                     header={
-                      <span className={`text-2xl`}>
+                      <span
+                        className={`text-2xl ${statusColor(result.Status)}`}
+                      >
                         <GoDotFill />
                       </span>
                     }

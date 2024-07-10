@@ -3,6 +3,7 @@ import Pagination from "../../Elements/Pagination";
 import SearchResult from "./SearchResult";
 import { GlobalSearchContext } from "../../context/GlobalSearchContext";
 import FilterResult from "./FilterResult";
+import GlobalFilterChange from "./GlobalFilterChange";
 
 const GlobalSearch = () => {
   const {
@@ -12,16 +13,14 @@ const GlobalSearch = () => {
     DropDownValue,
     handleGlobalSearch,
     SearchQuery,
-    setSearchText,
-    setSearchQuery,
-    searchText,
     GlobalFilteredData,
     setGlobalFilteredData,
   } = useContext(GlobalSearchContext);
+  const [text, setText] = useState(SearchQuery || "");
 
   const handleSearchChange = (e) => {
     const inputValue = e.target.value.toLowerCase();
-    setSearchQuery(inputValue);
+    setText(inputValue);
 
     if (inputValue.length === 0) {
       // If search input is empty, show all data
@@ -65,11 +64,12 @@ const GlobalSearch = () => {
         <div className="mb-4 flex items-center gap-5">
           <input
             type="search"
-            className="w-9/12 rounded border p-2 outline-none focus:ring-2"
+            className="w-7/12 rounded border p-2 outline-none focus:ring-2"
             placeholder="Search..."
-            value={SearchQuery}
+            value={text}
             onChange={handleSearchChange}
           />
+          <GlobalFilterChange />
           <div className="flex items-center gap-2">
             <span>Sort</span>
             <select
@@ -87,6 +87,7 @@ const GlobalSearch = () => {
           <FilterResult
             Data={GlobalSearchData}
             setGlobalFilteredData={setGlobalFilteredData}
+            DropDownValue={DropDownValue}
           />
         </div>
         {/* search results */}
